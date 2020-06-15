@@ -6,7 +6,7 @@ import { observer } from 'mobx-react'
 class App extends Component {
   render(){
   return (
-    <p>This template was created in 15.06.20 11:54</p>
+    <p>This template was created in 15.06.20 11:58 By Ananas</p>
   )}
 }
 
