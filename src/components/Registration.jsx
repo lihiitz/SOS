@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useState } from 'react'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +43,8 @@ const Registration = inject("userStore")(observer((props) => {
     setInputContact(inputVal)
   }
 
-  const registration = () => {
+  const registration = async () => {
+    debugger
     const user = {
       name: inputUser.name,
       phone: inputUser.phone,
@@ -52,7 +54,7 @@ const Registration = inject("userStore")(observer((props) => {
         contactPhone: inputContact.contactPhone
       }
     }
-    const newUser = props.userStore.registration(user)
+    const newUser =  props.userStore.registration(user)
     if (newUser === false) {
       alert('we cant registrate u now, sorry')
     } else {
@@ -65,9 +67,9 @@ const Registration = inject("userStore")(observer((props) => {
       <TextField id="phone" label="Phone" name='phone' onChange={handleInputUser} />
       <TextField id="password" label="Password" name='password' onChange={handleInputUser} />
       <TextField id="contactName" label="Contact Name" name='contactName' onChange={handleInputContact} />
-      <TextField id="contactPhone" label="Contact Name" name='contactPhone' onChange={handleInputContact} />
-
+      <TextField id="contactPhone" label="Contact Phone" name='contactPhone' onChange={handleInputContact} />
       <Button variant="contained" color="primary" disableElevation onClick={registration} >Registration</Button>
+      {props.isLoged ? <Redirect to='/main' /> : null}
     </form>
   );
 }))
