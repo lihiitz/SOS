@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx'
+import Axios from 'axios'
 const axios = require('axios')
 
 export class User {
@@ -76,6 +77,12 @@ export class User {
   @action addNewContact = async (name, phone) => {
     const contacts = { contacts: [{ name: name, phone: phone }] }
     // const response = await axios.put('http://localhost:3001/contactssettings', contacts)
+  }
+
+  @action handleSos = async () => {
+    const sos = await Axios.post(`http://localhost:3001/sos/5efb2c04d737ba204cd7f5b7`)
+    console.log(sos.data)
+    
   }
 
 }

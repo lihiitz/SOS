@@ -4,6 +4,7 @@ import './RedButton.css'
 
 const RedButton = inject("userStore")(observer((props) => {
   const sendSos = ()=> {
+    props.userStore.handleSos()
     alert("SOS")
   }
   return (

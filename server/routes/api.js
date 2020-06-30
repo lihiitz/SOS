@@ -30,7 +30,7 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
             res.send({ msg: err })
         }
         else {
-            res.send({ msg: "good", user })
+            res.send({ msg: "good", user: user[0] })
         }
     })
 })
@@ -47,9 +47,9 @@ router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
             formData: {
             }
           }
-          request(options, function (error, response) {
-            if (error){
-                res.send({msg: error})
+          request(options, function (err, response) {
+            if (err){
+                res.send({msg: err})
             }else{
                 res.send({msg: "good", obj: response})
             }
