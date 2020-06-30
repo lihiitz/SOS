@@ -13,7 +13,7 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      isLoged: true
+      isLoged: false
     }
   }
 
@@ -22,15 +22,22 @@ class App extends Component {
       isLoged: true
     })
     const user = this.props.userStore
+    debugger
     localStorage.setItem(`phone`, `${user.phone}`);
+
     localStorage.setItem(`password`, `${user.password}`);
   }
 
   componentDidMount() {
+    debugger
     const isUserinLocalstorage = localStorage.getItem('phone')
+
     console.log(isUserinLocalstorage)
     if (isUserinLocalstorage) {
-      this.props.userStore.login(localStorage.getItem('phone'), localStorage.getItem('password'))
+      const func = async () => {
+        this.props.userStore.login(localStorage.getItem('phone'), localStorage.getItem('password'))
+      }
+      func()
     }
   }
 
@@ -38,11 +45,11 @@ class App extends Component {
 
     return (
       <Router>
-        <Route path="/login" exact render={() => <Login login={this.login} isLoged={this.state.isLoged}/>} />
-        <Route path="/registration" exact render={() => <Registration login={this.login}  isLoged={this.state.isLoged}/>} />
+        <Route path="/login" exact render={() => <Login login={this.login} isLoged={this.state.isLoged} />} />
+        <Route path="/registration" exact render={() => <Registration login={this.login} isLoged={this.state.isLoged} />} />
         {this.state.isLoged ? <Route path="/main" exact render={() => <Main />} /> : null}
-       {/* <Route path="/main" exact render={() => <Main />} /> */}
-       <Route path="/profilesettings" exact render={() => <Profile />} />
+        {/* <Route path="/main" exact render={() => <Main />} /> */}
+        <Route path="/profilesettings" exact render={() => <Profile />} />
 
       </Router>
     );

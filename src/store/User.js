@@ -25,44 +25,46 @@ export class User {
       phone: phone,
       password: password
     }
-    // const response = await axios.post('http://localhost:3001/login', user)
-    const response = {
-      msg: 'good',
-      obj: {
-        _id: 'absbhdsjhagdbj',
-        name: "Nika",
-        phone: phone,
-        password: password,
-        contacts: [{ name: "fill", phone: '0543915915' }]
-      }
-    }
-    if (response.msg === 'good') {
-      const user = response.obj
+  const response = await axios.post('http://localhost:3001/login', user)
+    // const response = {
+    //   msg: 'good',
+    //   obj: {
+    //     _id: 'absbhdsjhagdbj',
+    //     name: "Nika",
+    //     phone: phone,
+    //     password: password,
+    //     contacts: [{ name: "fill", phone: '0543915915' }]
+    //   }
+    // }
+    if (response.data.msg === 'good') {
+      const user = response.data.user
       this.id = user._id
       this.name = user.name
       this.password = user.password
       this.phone = user.phone
       this.contacts = user.contacts
-    } if (response.msg === 'bad') {
+    } if (response.data.msg === 'bad') {
       return (false)
     }
   }
 
 
-  @action registration = (user) => {
-    // const response = await axios.post('http://localhost:3001/login', user)
-    const response = {
-      msg: 'good',
-      obj: {
-        _id: 'absbhdsjhagdbj',
-        name: user.name,
-        phone: user.phone,
-        password: user.password,
-        contacts: []
-      }
-    }
-    if (response.msg === 'good') {
-      const user = response.obj
+  @action registration = async (user) => {
+    const response = await axios.post('http://localhost:3001/registration', user)
+    debugger
+    // const response = {
+    //   msg: 'good',
+    //   obj: {
+    //     _id: 'absbhdsjhagdbj',
+    //     name: user.name,
+    //     phone: user.phone,
+    //     password: user.password,
+    //     contacts: []
+    //   }
+    // }
+    if (response.data.msg === 'good') {
+      const user = response.data.user
+      debugger
       this.id = user._id
       this.name = user.name
       this.password = user.password
@@ -75,7 +77,8 @@ export class User {
 
   @action addNewContact = async (name, phone) => {
     const contacts = { contacts: [{ name: name, phone: phone }] }
-    // const response = await axios.put('http://localhost:3001/contactssettings', contacts)
+    const id = this.id
+    const response = await axios.put(`http://localhost:3001/contactsSettings/${id}`, contacts)
   }
 
 }
