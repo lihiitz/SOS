@@ -83,7 +83,7 @@ export class User {
   }
 
   @action handleSos = async () => {
-    const sos = await Axios.post(`http://localhost:3001/sos/5efb2c04d737ba204cd7f5b7`)
+    const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`)
     console.log(sos.data)
     
   }
