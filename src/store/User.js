@@ -27,23 +27,14 @@ export class User {
       password: password
     }
   const response = await axios.post('http://localhost:3001/login', user)
-    // const response = {
-    //   msg: 'good',
-    //   obj: {
-    //     _id: 'absbhdsjhagdbj',
-    //     name: "Nika",
-    //     phone: phone,
-    //     password: password,
-    //     contacts: [{ name: "fill", phone: '0543915915' }]
-    //   }
-    // }
+
     if (response.data.msg === 'good') {
       const user = response.data.user
       this.id = user._id
       this.name = user.name
       this.password = user.password
       this.phone = user.phone
-      this.contacts = user.contacts
+      this.contacts.push(user.contacts)
     } if (response.data.msg === 'bad') {
       return (false)
     }
@@ -53,16 +44,7 @@ export class User {
   @action registration = async (user) => {
     const response = await axios.post('http://localhost:3001/registration', user)
     debugger
-    // const response = {
-    //   msg: 'good',
-    //   obj: {
-    //     _id: 'absbhdsjhagdbj',
-    //     name: user.name,
-    //     phone: user.phone,
-    //     password: user.password,
-    //     contacts: []
-    //   }
-    // }
+
     if (response.data.msg === 'good') {
       const user = response.data.user
       debugger

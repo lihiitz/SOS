@@ -6,6 +6,7 @@ import Login from './components/Login'
 import Registration from './components/Registration'
 import Main from './components/Main';
 import Profile from './components/Profile';
+import EnterPage from './components/EnterPage'
 
 @observer
 @inject('userStore')
@@ -45,6 +46,7 @@ class App extends Component {
 
     return (
       <Router>
+        <Route path="/" exact render={() => <EnterPage login={this.login} isLoged={this.state.isLoged} />} />
         <Route path="/login" exact render={() => <Login login={this.login} isLoged={this.state.isLoged} />} />
         <Route path="/registration" exact render={() => <Registration login={this.login} isLoged={this.state.isLoged} />} />
         {this.state.isLoged ? <Route path="/main" exact render={() => <Main />} /> : null}
