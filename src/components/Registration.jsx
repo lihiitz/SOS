@@ -44,17 +44,17 @@ const Registration = inject("userStore")(observer((props) => {
   }
 
   const registration = async () => {
-    debugger
+    // debugger
     const user = {
       name: inputUser.name,
       phone: inputUser.phone,
       password: inputUser.password,
-      contact: {
+      contacts: [{
         contactName: inputContact.contactName,
         contactPhone: inputContact.contactPhone
-      }
+      }]
     }
-    const newUser =  props.userStore.registration(user)
+    const newUser =  await props.userStore.registration(user)
     if (newUser === false) {
       alert('we cant registrate u now, sorry')
     } else {

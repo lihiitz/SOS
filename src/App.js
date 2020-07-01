@@ -23,14 +23,14 @@ class App extends Component {
       isLoged: true
     })
     const user = this.props.userStore
-    debugger
+    // debugger
     localStorage.setItem(`phone`, `${user.phone}`);
 
     localStorage.setItem(`password`, `${user.password}`);
   }
 
   componentDidMount() {
-    debugger
+    // debugger
     const isUserinLocalstorage = localStorage.getItem('phone')
 
     console.log(isUserinLocalstorage)
