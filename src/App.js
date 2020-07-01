@@ -22,25 +22,26 @@ class App extends Component {
     await this.setState({
       isLoged: true
     })
-    const user = this.props.userStore
+    // const user = this.props.userStore
     // debugger
-    localStorage.setItem(`phone`, `${user.phone}`);
-
-    localStorage.setItem(`password`, `${user.password}`);
+    // localStorage.setItem(`phone`, `${user.phone}`);
+    // localStorage.setItem(`password`, `${user.password}`);
   }
 
   componentDidMount() {
-    // debugger
     const isUserinLocalstorage = localStorage.getItem('phone')
-
-    console.log(isUserinLocalstorage)
     if (isUserinLocalstorage) {
       const func = async () => {
         this.props.userStore.login(localStorage.getItem('phone'), localStorage.getItem('password'))
+        this.setState({
+          isLoged: true
+        })
       }
       func()
     }
   }
+
+//TO DO ADD SMTH IF USER PASSWORD WRONG!
 
   render() {
 

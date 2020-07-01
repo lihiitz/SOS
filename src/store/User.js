@@ -29,12 +29,12 @@ export class User {
   const response = await axios.post('http://localhost:3001/login', user)
 
     if (response.data.msg === 'good') {
-      const user = response.data.user
-      this.id = user._id
-      this.name = user.name
-      this.password = user.password
-      this.phone = user.phone
-      this.contacts.push(user.contacts)
+      const userData = response.data.user
+      this.id = userData._id
+      this.name = userData.name
+      this.password = userData.password
+      this.phone = userData.phone
+      this.contacts=userData.contacts
     } if (response.data.msg === 'bad') {
       return (false)
     }
@@ -43,16 +43,15 @@ export class User {
 
   @action registration = async (user) => {
     const response = await axios.post('http://localhost:3001/registration', user)
-    debugger
 
     if (response.data.msg === 'good') {
-      const user = response.data.user
+      const userData = response.data.user
       debugger
-      this.id = user._id
-      this.name = user.name
-      this.password = user.password
-      this.phone = user.phone
-      this.contacts = user.contacts
+      this.id = userData._id
+      this.name = userData.name
+      this.password = userData.password
+      this.phone = userData.phone
+      this.contacts = userData.contacts
     } if (response.msg === 'bad') {
       return (false)
     }
