@@ -37,7 +37,7 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
 
 router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
     const user = await User.findById(req.params.id)
-    const numbers = user.contacts.map(c => c.phone)
+    const numbers = user.contacts.map(c => c.contactPhone)
     numbers.forEach(c => {
         const options = {
             'method': 'POST',
