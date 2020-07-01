@@ -4,7 +4,7 @@ const User = require(`../model/User`)
 const request = require('request')
 const cron = require('node-cron')
 
-const checkUserTimer = function(user){
+const checkUserTimer = async function(user){
 const now = new Date()
 const nowH = now.getHours()
 const nowM = now.getMinutes() 
@@ -27,7 +27,9 @@ const duration = user.timer.duration * 3600
 
 if (duration + startTotal < nowTotal){
     console.log("sos")
+    sosCall(user)
     user.timer.isOn = false
+    await user.save()
     
 }
 
@@ -37,7 +39,7 @@ if (duration + startTotal < nowTotal){
 const checkTimer = async function(){
     const users = await User.find()
     const task = cron.schedule('* * * * * *', () => {
-        console.log(`every 1 second`)
+        console.log(`check user timer every 1 second`)
         users.forEach(u => {
            if (u.timer.isOn){
                checkUserTimer(u)
@@ -96,8 +98,7 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
     })
 })
 
-router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
-    const user = await User.findById(req.params.id)
+const sosCall = function(user){
     const numbers = user.contacts.map(c => c.contactPhone)
     numbers.forEach(c => {
         const options = {
@@ -110,12 +111,17 @@ router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
         }
         request(options, function (err, response) {
             if (err) {
-                res.send({ msg: err })
+                return({ msg: err })
             } else {
-                res.send({ msg: "good", obj: response })
+                return({ msg: "good", obj: response })
             }
         })
     })
+}
+
+router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
+    const user = await User.findById(req.params.id)
+    res.send(sosCall(user))
 })
 
 router.put(`/profileSettings/:id`, function (req, res) { //body: {name: string and/or phone: string and/or password: string}
