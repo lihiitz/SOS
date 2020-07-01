@@ -34,6 +34,8 @@ const Login = inject("userStore")(observer((props) => {
 
   const login = () => {
     const result = props.userStore.login(input.phone, input.password)
+    localStorage.setItem(`phone`, `${input.phone}`);
+    localStorage.setItem(`password`, `${input.password}`);
     if (result === false) {
       alert('wrong password or phone')
     } else {

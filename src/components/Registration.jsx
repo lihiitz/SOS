@@ -58,6 +58,8 @@ const Registration = inject("userStore")(observer((props) => {
     if (newUser === false) {
       alert('we cant registrate u now, sorry')
     } else {
+      localStorage.setItem(`phone`, `${user.phone}`);
+      localStorage.setItem(`password`, `${user.password}`);
       props.login()
     }
   }
