@@ -22,6 +22,14 @@ router.post("/subscribe", (req, res) => {
       .catch(err => console.error(err))
   })
 
+  router.get("/serviceWorker", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "src", "service-worker.js"));
+  });
+  router.get("*", function response(req, res) {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  });
+
+
 const checkUserTimer = async function(user){
 const now = new Date()
 const nowH = now.getHours()

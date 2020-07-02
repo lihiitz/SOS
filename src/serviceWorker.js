@@ -1,9 +1,9 @@
 import Axios from 'axios'
 const axios = require('axios')
 
+
 // This optional code is used to register a service worker.
 // register() is not called by default.
-
 // This lets the app load faster on subsequent visits in production, and gives
 // it offline capabilities. However, it also means that developers (and users)
 // will only see deployed updates on subsequent visits to a page, after all the
@@ -160,6 +160,9 @@ async function send() {
   });
   console.log("Service Worker Registered...");
 
+  await navigator.serviceWorker.ready   //AWAITNG FOR SERVICEWORKER TO BE READY
+
+
   // Register Push
   console.log("Registering Push...");
   const subscription = await register.pushManager.subscribe({
@@ -174,6 +177,7 @@ async function send() {
   console.log("Sending Push...");
   await Axios.post("http://localhost:3001/subscribe", (subscription)
   );
+
   console.log("Push Sent...");
 }
 
