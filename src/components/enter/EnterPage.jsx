@@ -9,7 +9,6 @@ const EnterPage = (props) => {
 
   return (
     <div>
-
       {props.isLoged ? <Redirect to='/main' /> : null}
       {/* <Link to='/login'><Button variant="contained" color="primary" disableElevation >LogIn</Button></Link> */}
       <Login  login={props.login} isLoged={props.isLoged} />

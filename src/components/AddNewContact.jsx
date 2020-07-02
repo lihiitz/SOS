@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import { useState } from 'react'
 import { inject, observer } from 'mobx-react'
-import AppBar from './Topic'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,10 +36,9 @@ const AddNewContact = inject("userStore")(observer((props) => {
 
   return (
     <div>
-      <AppBar />
       <form className={classes.root} noValidate autoComplete="off">
+        <TextField id="name" label="Name" name='name' onChange={handleInput} />
         <TextField id="phone" label="Phone" name='phone' onChange={handleInput} />
-        <TextField id="password" label="Password" name='password' onChange={handleInput} />
         <Button variant="contained" color="primary" disableElevation onClick={addNewContact}>Add New Contact</Button>
       </form>
     </div>

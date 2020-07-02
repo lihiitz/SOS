@@ -20,7 +20,6 @@ class CountDown extends Component {
 
   count() {
     let now = new Date().getTime();
-
     let t = this.deadline - now;
     let days = Math.floor(t / (1000 * 60 * 60 * 24));
     let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

@@ -32,21 +32,24 @@ const Login = inject("userStore")(observer((props) => {
     setInput(inputVal)
   }
 
-  const login = () => {
-    const result = props.userStore.login(input.phone, input.password)
-    localStorage.setItem(`phone`, `${input.phone}`);
-    localStorage.setItem(`password`, `${input.password}`);
+  const login = async() => {
+    const result =await props.userStore.login(input.phone, input.password)
+    debugger
     if (result === false) {
       alert('wrong password or phone')
     } else {
       props.login()
+      localStorage.setItem(`phone`, `${input.phone}`);
+      localStorage.setItem(`password`, `${input.password}`);
     }
+
+
   }
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
       <TextField id="phone" label="Phone" name='phone' onChange={handleInput} />
-      <TextField id="password" label="Password" name='password' onChange={handleInput} />
+      <TextField id="password" label="Password" name='password' onChange={handleInput} type="password" />
       <Button variant="contained" color="primary" disableElevation onClick={login}>LogIn</Button>
       {props.isLoged ? <Redirect to='/main' /> : null}
     </form>
