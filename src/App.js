@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import './App.css';
 import { inject, observer } from 'mobx-react'
 import { BrowserRouter as Router, Redirect, Link, Route } from 'react-router-dom'
-import Login from './components/Login'
-import Registration from './components/Registration'
-import Main from './components/Main';
+import Login from './components/enter/Login'
+import Registration from './components/enter/Registration'
 import Profile from './components/Profile';
-import EnterPage from './components/EnterPage'
+import EnterPage from './components/enter/EnterPage'
+import GreenButton from './components/GreenButton';
+import Timer from './components/Timer';
+import AddNewContact from './components/AddNewContact';
+import Main from './components/Main';
 
 @observer
 @inject('userStore')
@@ -41,18 +44,21 @@ class App extends Component {
     }
   }
 
-//TO DO ADD SMTH IF USER PASSWORD WRONG!
+  //TO DO ADD SMTH IF USER PASSWORD WRONG!
 
   render() {
 
     return (
       <Router>
         <Route path="/" exact render={() => <EnterPage login={this.login} isLoged={this.state.isLoged} />} />
-        <Route path="/login" exact render={() => <Login login={this.login} isLoged={this.state.isLoged} />} />
+        {/* <Route path="/login" exact render={() => <Login login={this.login} isLoged={this.state.isLoged} />} /> */}
         <Route path="/registration" exact render={() => <Registration login={this.login} isLoged={this.state.isLoged} />} />
         {this.state.isLoged ? <Route path="/main" exact render={() => <Main />} /> : null}
         {/* <Route path="/main" exact render={() => <Main />} /> */}
-        <Route path="/profilesettings" exact render={() => <Profile />} />
+        <Route path="/profile" exact render={() => <Profile />} />
+        <Route path="/timer" exact render={() => <Timer />} />
+        <Route path="/contacts" exact render={() => <AddNewContact />} />
+
 
       </Router>
     );
