@@ -53,7 +53,8 @@ const Registration = inject("userStore")(observer((props) => {
       contacts: [{
         contactName: inputContact.contactName,
         contactPhone: inputContact.contactPhone
-      }]
+      }],
+      timer: {isOn: false}
     }
     const newUser = await props.userStore.registration(user)
     if (newUser === false) {

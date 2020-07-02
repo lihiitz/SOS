@@ -23,6 +23,10 @@ const TimerInputs = inject("userStore")(observer((props) => {
   const [open, setOpen] = useState(false);
   const [isStart, setIsStart] = useState(false);
 
+  const stopTimerClick = () => {
+    props.userStore.stopTimer()
+  }
+
   const handleChange = (event) => {
     setHours(+event.target.value)
   };
@@ -64,10 +68,8 @@ const TimerInputs = inject("userStore")(observer((props) => {
         </Select>
       </FormControl>
       <GreenButton startCount={startCount} />
-      {/* <CountDown /> */}
-      {/* {isStart? <CountDown hours={hours} /> : null} */}
-      {/* {props.userStore.timer.isOn ? <CountDown hours={hours} /> : null} */}
       {props.userStore.timer.isOn ? <CountDown time={props.userStore.timer} /> : null}
+      <button onClick={stopTimerClick}>STOP TIMER</button>
     </div>
   )
 }))

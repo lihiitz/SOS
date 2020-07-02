@@ -6,7 +6,6 @@ const Timer = () => {
     <div>
       <TimerInputs />
 
-
     </div>
   )
 }

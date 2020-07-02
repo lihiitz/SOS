@@ -8,6 +8,7 @@ export class User {
   @observable password
   @observable contacts
   @observable timer
+  // @observable isLoged
 
   constructor() {
     this.id = ''
@@ -18,6 +19,7 @@ export class User {
     this.timer = { isOn: false }
     // this.isLoged = false
   }
+  
   @action updateUser = async (newName, newPhone, newPassword) => {
 
     const user = { name: newName, phone: newPhone, password: newPassword }
@@ -65,6 +67,7 @@ export class User {
       this.password = userData.password
       this.phone = userData.phone
       this.contacts = userData.contacts
+      this.timer = userData.timer
     } if (response.msg === 'bad') {
       return (false)
     }
@@ -84,10 +87,19 @@ export class User {
 
   @action greenSignal = async (hours) => {
     const id = this.id
-    // debugger
+    debugger
     const updatedUser = await Axios.post(`http://localhost:3001/timer/${id}`, { hours })
     if (updatedUser.data.msg === "good") {
       this.timer = updatedUser.data.user.timer
+    }
+  }
+
+  @action stopTimer = async () => {
+    const updatedUser = await Axios.post(`http://localhost:3001/stopTimer/${this.id}`)
+    if (updatedUser.data.msg === "good"){
+      this.timer = { isOn: false }
+    }else{
+      //
     }
   }
 

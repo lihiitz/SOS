@@ -32,10 +32,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const userPhoneFromLocalStorage = localStorage.getItem('phone')
-    if (userPhoneFromLocalStorage) {
+    const temp = localStorage.getItem('phone')
+    if (temp) {
       const func = async () => {
-        this.props.userStore.login(userPhoneFromLocalStorage, localStorage.getItem('password'))
+        this.props.userStore.login(localStorage.getItem('phone'), localStorage.getItem('password'))
         this.setState({
           isLoged: true
         })
