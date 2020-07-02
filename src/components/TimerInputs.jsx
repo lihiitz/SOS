@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -19,11 +19,12 @@ const useStyles = makeStyles((theme) => ({
 
 const TimerInputs = inject("userStore")(observer((props) => {
   const classes = useStyles();
-  const [hours, setHours] = React.useState('');
-  const [open, setOpen] = React.useState(false);
-  const [isStart, setIsStart] = React.useState(false);
+  const [hours, setHours] = useState('');
+  const [open, setOpen] = useState(false);
+  const [isStart, setIsStart] = useState(false);
+
   const handleChange = (event) => {
-    setHours(event.target.value);
+    setHours(+event.target.value)
   };
 
   const handleClose = () => {
@@ -32,10 +33,11 @@ const TimerInputs = inject("userStore")(observer((props) => {
 
   const handleOpen = () => {
     setOpen(true);
-  };
+  }
 
   const startCount = () => {
     setIsStart(true)
+    props.userStore.greenSignal(hours)
   }
 
   const hoursArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
@@ -61,9 +63,11 @@ const TimerInputs = inject("userStore")(observer((props) => {
           )}
         </Select>
       </FormControl>
-      <GreenButton hours={hours} startCount={startCount} />
+      <GreenButton startCount={startCount} />
       {/* <CountDown /> */}
-      {isStart? <CountDown hours={hours} /> : null}
+      {/* {isStart? <CountDown hours={hours} /> : null} */}
+      {/* {props.userStore.timer.isOn ? <CountDown hours={hours} /> : null} */}
+      {props.userStore.timer.isOn ? <CountDown time={props.userStore.timer} /> : null}
     </div>
   )
 }))

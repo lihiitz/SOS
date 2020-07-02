@@ -164,7 +164,7 @@ const checkUserTimer = async function(user){
         //do push notification
     }
     }
-    }
+    
     
     const checkTimer = async function(){
         const users = await User.find()

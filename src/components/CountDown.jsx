@@ -6,54 +6,56 @@ class CountDown extends Component {
     super(props)
     this.count = this.count.bind(this)
     this.state = {
-      days: 0,
       minutes: 0,
       hours: 0,
       seconds: 0,
       time_up: ""
     }
     this.x = null
-    this.deadline = null
+    this.startTotal = null
+    this.duration = null
 
   }
 
 
   count() {
-    let now = new Date().getTime();
+    // debugger
+    const now = new Date()
+    const nowH = now.getHours()
+    const nowM = now.getMinutes() 
+    const nowS = now.getSeconds() 
+    const nowTotal = (nowH * 3600) + (nowM * 60) + nowS
 
-    let t = this.deadline - now;
-    let days = Math.floor(t / (1000 * 60 * 60 * 24));
-    let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((t % (1000 * 60)) / 1000);
-    this.setState({ days, minutes, hours, seconds })
+    let t = this.duration - (nowTotal - this.startTotal)
+    let hours = Math.trunc(t / 3600)
+    t = t % 3600
+    let minutes = Math.trunc(t / 60)
+    t = t % 60
+    let seconds = Math.trunc(t)
+    this.setState({ minutes, hours, seconds })
     if (t < 0) {
       clearInterval(this.x);
-      this.setState({ days: 0, minutes: 0, hours: 0, seconds: 0, time_up: "Messages were sended" })
+      this.setState({ minutes: 0, hours: 0, seconds: 0, time_up: "Messages were sended" })
     }
   }
   componentDidMount() {
-    const inputHours = parseInt(this.props.hours)
-    const now = new Date()
-    const date = now.setHours(now.getHours() + inputHours);
-    this.deadline = date
-    // this.deadline = new Date('Wed Jul 01 2020 14:50:02 GMT+0300 (Israel Daylight Time)').getTime();
-
-    this.x = setInterval(this.count, 1000);
+    // debugger
+    const time = this.props.time
+    const startH = time.startTime.hours 
+    const startM = time.startTime.minutes
+    const startS = time.startTime.seconds
+    this.startTotal = (startH * 3600) + (startM * 60) + startS
+    this.duration = time.duration * 3600
+    this.x = setInterval(this.count, 1000)
   }
 
   render() {
-    const { days, seconds, hours, minutes, time_up } = this.state
+    const { seconds, hours, minutes, time_up } = this.state
     return (
       <div>
 
         <h1>We will send messages in:</h1>
         <div id="clockdiv">
-          <div>
-            <span className="days" id="day">{days}</span>
-            <div className="smalltext">Days</div>
-
-          </div>
           <div>
             <span className="hours" id="hour">{hours}</span>
             <div className="smalltext">Hours</div>
