@@ -22,79 +22,31 @@ router.post("/subscribe", (req, res) => {
       .catch(err => console.error(err))
   })
 
-const checkUserTimer = async function(user){
-const now = new Date()
-const nowH = now.getHours()
-const nowM = now.getMinutes() 
-const nowS = now.getSeconds() 
-const nowTotal = (nowH * 3600) + (nowM * 60) + nowS
-
-const startH = user.timer.startTime.hours 
-const startM = user.timer.startTime.minutes
-const startS = user.timer.startTime.seconds
-const startTotal = (startH * 3600) + (startM * 60) + startS
-
-const diff = nowTotal - startTotal//res is in seconds
-const diffH = Math.trunc(diff / 3600)
-const r = diff % 3600
-const diffM = Math.trunc(r / 60)
-
-    // console.log(diffH)
-    // console.log(diffM)
-const duration = user.timer.duration * 3600
-
-if (duration + startTotal < nowTotal){
-    console.log("sos")
-    //************************************************************************ */
-    //TESTING
-
-    //END TESTING******************************************************
-    sosCall(user)
-    user.timer.isOn = false
-    await user.save()
-    
-}
-
-    
-}
-
-const checkTimer = async function(){
-    const users = await User.find()
-    const task = cron.schedule('* * * * * *', () => {
-        // console.log(`check user timer every 1 second`)
-        users.forEach(u => {
-           if (u.timer.isOn){
-               checkUserTimer(u)
-           } 
-        })
-    }, {scheduled: false})
-    task.start()
-}
-
 router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
     const d = new Date()
-    // const hours = h + req.body.hours
     let user = await User.findById(req.params.id)
     user.timer.isOn = true
     user.timer.startTime = { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes() }
     user.timer.duration = req.body.hours
     // const test = '*/' + hours + ' * * *'
-    const test = '*/' + 2 + ' * * * * *'
-    // console.log(test)
-    const task = cron.schedule(test, () => {
-        console.log(`every ${req.body.hours} seconds`)
-        //do sos router
-    }, {scheduled: false})
-    task.start()
-    await user.save()
-    checkUserTimer(user)
-
-    res.send("ok")
+    // const test = '*/' + 2 + ' * * * * *'
+    // // console.log(test)
+    // const task = cron.schedule(test, () => {
+    //     console.log(`every ${req.body.hours} seconds`)
+    //     //do sos router
+    // }, {scheduled: false})
+    // task.start()
+    const updatedUser = await user.save()
+    if (updatedUser){
+        res.send({msg: "good", user: updatedUser})   
+    }else{
+        res.send({msg:"bad"})
+    }
 })
 
 router.post('/stopTimer/:id', async function (req, res) {
     let user = await User.findById(req.params.id)
-    user.timer2.stop()
+    user.timer.isOn = false
     res.send("ok")
 })
 
@@ -174,6 +126,56 @@ router.put(`/contactSettings/:id/:contactName`, async function (req, res) { // b
     await user.save()
     res.send(user)
 })
+
+const checkUserTimer = async function(user){
+    const now = new Date()
+    const nowH = now.getHours()
+    const nowM = now.getMinutes() 
+    const nowS = now.getSeconds() 
+    const nowTotal = (nowH * 3600) + (nowM * 60) + nowS
+    
+    const startH = user.timer.startTime.hours 
+    const startM = user.timer.startTime.minutes
+    const startS = user.timer.startTime.seconds
+    const startTotal = (startH * 3600) + (startM * 60) + startS
+    
+    // const diff = nowTotal - startTotal//res is in seconds
+    // const diffH = Math.trunc(diff / 3600)
+    // const r = diff % 3600
+    // const diffM = Math.trunc(r / 60)
+    
+        // console.log(diffH)
+        // console.log(diffM)
+    const duration = user.timer.duration * 3600
+    
+    if (duration + startTotal < nowTotal){
+        console.log("sos")
+        //************************************************************************ */
+        //TESTING
+    
+        //END TESTING******************************************************
+        sosCall(user)
+        user.timer.isOn = false
+        await user.save()
+    }else if (duration - 15 * 60 + startTotal <= nowTotal){
+        console.log("remainder 15 before timer ends")
+        //do push notification
+    }
+    }
+    }
+    
+    const checkTimer = async function(){
+        const users = await User.find()
+        const task = cron.schedule('* * * * * *', () => {
+            // console.log(`check user timer every 1 second`)
+            users.forEach(u => {
+               if (u.timer.isOn){
+                   checkUserTimer(u)
+               } 
+            })
+        }, {scheduled: false})
+        task.start()
+    }
 
 checkTimer()
 module.exports = router
