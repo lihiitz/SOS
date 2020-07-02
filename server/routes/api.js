@@ -11,7 +11,7 @@ webpush.setVapidDetails("mailto:test@test.com", publicVapidKey, privateVapidKey)
 
 router.post("/subscribe", (req, res) => {
     // Get pushSubscription object
-    const subscription = req.body
+    const subscription = req.body.subscription
     // Send 201 - resource created
     res.status(201).json({})
     // Create payload
@@ -21,6 +21,14 @@ router.post("/subscribe", (req, res) => {
       .sendNotification(subscription, payload)
       .catch(err => console.error(err))
   })
+
+  router.get("/serviceWorker", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "src", "service-worker.js"));
+  });
+  router.get("*", function response(req, res) {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  });
+
 
 const checkUserTimer = async function(user){
 const now = new Date()
