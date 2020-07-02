@@ -1,11 +1,13 @@
 const mongoose = require(`mongoose`)
 const Schema = mongoose.Schema
+const cron = require('node-cron')
 
 const userSchema = new Schema({
     name: String,
     phone: String,
     password: String,
-    contacts: []
+    contacts: [], // contact = {name: string, phone: string}
+    timer: {isOn: Boolean, duration: Number, startTime: {hours: Number, minutes: Number, seconds: Number}},
 })
 
 const User = mongoose.model(`User`, userSchema)
