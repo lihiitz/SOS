@@ -1,21 +1,18 @@
-import React from 'react';
+import React from 'react'
+import { useState } from 'react'
 import { inject, observer } from 'mobx-react'
-import Menu from './Menu';
 import RedButton from './RedButton';
-
-
+import Topic from './Topic'
 
 const Main = inject("userStore")(observer((props) => {
-
-
+  const user = props.userStore
   return (
     <div>
-      <Menu />
+      <Topic />
       <RedButton />
     </div>
-  );
+  )
 }))
-
 
 
 export default Main

@@ -7,6 +7,7 @@ export class User {
   @observable phone
   @observable password
   @observable contacts
+  @observable timer
 
   constructor() {
     this.id = ''
@@ -14,36 +15,37 @@ export class User {
     this.phone = ''
     this.password = ''
     this.contacts = []
-
+    this.timer = { isOn: false }
   }
-  @action updateUser = (newName, newPhone, newPassword) => {
-    this.name = newName
-    this.phone = newPhone
-    this.password = newPassword
+  @action updateUser = async (newName, newPhone, newPassword) => {
+
+    const user = { name: newName, phone: newPhone, password: newPassword }
+    const response = await axios.put(`http://localhost:3001/profile/${this.id}`, user)
+    if (response.data.msg === 'good') {
+      const userData = response.data.user
+      this.name = userData.name
+      this.phone = userData.phone
+      this.password = userData.password
+    }
+    if (response.data.msg === 'bad') {
+      return (false)
+    }
   }
   @action login = async (phone, password) => {
     const user = {
       phone: phone,
       password: password
     }
-  const response = await axios.post('http://localhost:3001/login', user)
-    // const response = {
-    //   msg: 'good',
-    //   obj: {
-    //     _id: 'absbhdsjhagdbj',
-    //     name: "Nika",
-    //     phone: phone,
-    //     password: password,
-    //     contacts: [{ name: "fill", phone: '0543915915' }]
-    //   }
-    // }
+    const response = await axios.post('http://localhost:3001/login', user)
+
     if (response.data.msg === 'good') {
-      const user = response.data.user
-      this.id = user._id
-      this.name = user.name
-      this.password = user.password
-      this.phone = user.phone
-      this.contacts = user.contacts
+      const userData = response.data.user
+      this.id = userData._id
+      this.name = userData.name
+      this.password = userData.password
+      this.phone = userData.phone
+      this.contacts = userData.contacts
+      this.timer = userData.timer
     } if (response.data.msg === 'bad') {
       return (false)
     }
@@ -52,25 +54,15 @@ export class User {
 
   @action registration = async (user) => {
     const response = await axios.post('http://localhost:3001/registration', user)
-    debugger
-    // const response = {
-    //   msg: 'good',
-    //   obj: {
-    //     _id: 'absbhdsjhagdbj',
-    //     name: user.name,
-    //     phone: user.phone,
-    //     password: user.password,
-    //     contacts: []
-    //   }
-    // }
+
     if (response.data.msg === 'good') {
-      const user = response.data.user
+      const userData = response.data.user
       debugger
-      this.id = user._id
-      this.name = user.name
-      this.password = user.password
-      this.phone = user.phone
-      this.contacts = user.contacts
+      this.id = userData._id
+      this.name = userData.name
+      this.password = userData.password
+      this.phone = userData.phone
+      this.contacts = userData.contacts
     } if (response.msg === 'bad') {
       return (false)
     }
@@ -85,7 +77,14 @@ export class User {
   @action handleSos = async () => {
     const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`)
     console.log(sos.data)
-    
+
+  }
+
+  @action greenSignal = async (hours) => {
+    const id = this.id
+    debugger
+    const green = await axios.post(`http://localhost:3001/timer/${id}`, hours)
+    this.timer = { isOn: true, startTime: { hour: 1, minutes: 1, seconds: 21 } }
   }
 
 }
