@@ -7,4 +7,5 @@ self.addEventListener("push", e => {
     body: "Notified by Traversy Media!",
     icon: "http://image.ibb.co/frYOFd/tmlogo.png"
   })
+  console.log("hello")
 })
