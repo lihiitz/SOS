@@ -1,6 +1,6 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
-// import '.../styles/RedButton.css'
+import '../styles/RedButton.css'
 
 const RedButton = inject("userStore")(observer((props) => {
   const sendSos = ()=> {
