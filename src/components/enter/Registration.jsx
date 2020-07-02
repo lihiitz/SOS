@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import { useState } from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +55,7 @@ const Registration = inject("userStore")(observer((props) => {
         contactPhone: inputContact.contactPhone
       }]
     }
-    const newUser =  await props.userStore.registration(user)
+    const newUser = await props.userStore.registration(user)
     if (newUser === false) {
       alert('we cant registrate u now, sorry')
     } else {
@@ -64,15 +65,18 @@ const Registration = inject("userStore")(observer((props) => {
     }
   }
   return (
-    <form className={classes.root} noValidate autoComplete="off">
-      <TextField id="name" label="Name" name='name' onChange={handleInputUser} />
-      <TextField id="phone" label="Phone" name='phone' onChange={handleInputUser} />
-      <TextField id="password" label="Password" name='password' onChange={handleInputUser} />
-      <TextField id="contactName" label="Contact Name" name='contactName' onChange={handleInputContact} />
-      <TextField id="contactPhone" label="Contact Phone" name='contactPhone' onChange={handleInputContact} />
-      <Button variant="contained" color="primary" disableElevation onClick={registration} >Registration</Button>
-      {props.isLoged ? <Redirect to='/main' /> : null}
-    </form>
+    <div>
+      <Link to='/'> <ArrowBackIosIcon /> </Link>
+      <form className={classes.root} noValidate autoComplete="off">
+        <TextField id="name" label="Name" name='name' onChange={handleInputUser} />
+        <TextField id="phone" label="Phone" name='phone' onChange={handleInputUser} />
+        <TextField id="password" label="Password" name='password' onChange={handleInputUser} />
+        <TextField id="contactName" label="Contact Name" name='contactName' onChange={handleInputContact} />
+        <TextField id="contactPhone" label="Contact Phone" name='contactPhone' onChange={handleInputContact} />
+        <Button variant="contained" color="primary" disableElevation onClick={registration} >Registration</Button>
+        {props.isLoged ? <Redirect to='/main' /> : null}
+      </form>
+    </div>
   );
 }))
 

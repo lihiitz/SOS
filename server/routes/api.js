@@ -146,8 +146,10 @@ router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
     res.send(sosCall(user))
 })
 
-router.put(`/profileSettings/:id`, function (req, res) { //body: {name: string and/or phone: string and/or password: string}
-    User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true }, function (err, user) {
+
+router.put(`/profile/:id`, function (req, res) { //body: {name: string and/or phone: string and/or password: string}
+    User.findOneAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, user) {
+
         if (err) {
             res.send({ msg: err })
         } else {
