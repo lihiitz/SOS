@@ -173,7 +173,7 @@ async function send() {
 
   // Send Push Notification
   console.log("Sending Push...");
-  await Axios.post("http://localhost:3001/subscribe", {subscription: JSON.stringify(subscription)});
+  await Axios.post("http://localhost:3001/subscribe", JSON.stringify(subscription));
   console.log("Push Sent...");
 }
 

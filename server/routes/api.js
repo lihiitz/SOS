@@ -11,7 +11,7 @@ webpush.setVapidDetails("mailto:test@test.com", publicVapidKey, privateVapidKey)
 
 router.post("/subscribe", (req, res) => {
     // Get pushSubscription object
-    const subscription = req.body.subscription
+    const subscription = req.body
     // Send 201 - resource created
     res.status(201).json({})
     // Create payload
