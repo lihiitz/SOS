@@ -2,18 +2,103 @@ const express = require('express')
 const router = express.Router()
 const User = require(`../model/User`)
 const request = require('request')
+const cron = require('node-cron')
+const webpush = require("web-push")
 
-const formatPhoneNumber = function(number){
-    let res = "+972" + number.slice(1)
-    return res
+const publicVapidKey ="BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo"
+const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
+webpush.setVapidDetails("mailto:test@test.com", publicVapidKey, privateVapidKey)
+
+router.post("/subscribe", (req, res) => {
+    // Get pushSubscription object
+    const subscription = req.body
+    // Send 201 - resource created
+    res.status(201).json({})
+    // Create payload
+    const payload = JSON.stringify({ title: "Push Test" })
+    // Pass object into sendNotification
+    webpush
+      .sendNotification(subscription, payload)
+      .catch(err => console.error(err))
+  })
+
+const checkUserTimer = async function(user){
+const now = new Date()
+const nowH = now.getHours()
+const nowM = now.getMinutes() 
+const nowS = now.getSeconds() 
+const nowTotal = (nowH * 3600) + (nowM * 60) + nowS
+
+const startH = user.timer.startTime.hours 
+const startM = user.timer.startTime.minutes
+const startS = user.timer.startTime.seconds
+const startTotal = (startH * 3600) + (startM * 60) + startS
+
+const diff = nowTotal - startTotal//res is in seconds
+const diffH = Math.trunc(diff / 3600)
+const r = diff % 3600
+const diffM = Math.trunc(r / 60)
+
+    // console.log(diffH)
+    // console.log(diffM)
+const duration = user.timer.duration * 3600
+
+if (duration + startTotal < nowTotal){
+    console.log("sos")
+    //************************************************************************ */
+    //TESTING
+
+    //END TESTING******************************************************
+    sosCall(user)
+    user.timer.isOn = false
+    await user.save()
+    
 }
 
+    
+}
+
+const checkTimer = async function(){
+    const users = await User.find()
+    const task = cron.schedule('* * * * * *', () => {
+        // console.log(`check user timer every 1 second`)
+        users.forEach(u => {
+           if (u.timer.isOn){
+               checkUserTimer(u)
+           } 
+        })
+    }, {scheduled: false})
+    task.start()
+}
+
+router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
+    const d = new Date()
+    // const hours = h + req.body.hours
+    let user = await User.findById(req.params.id)
+    user.timer.isOn = true
+    user.timer.startTime = { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes() }
+    user.timer.duration = req.body.hours
+    // const test = '*/' + hours + ' * * *'
+    const test = '*/' + 2 + ' * * * * *'
+    // console.log(test)
+    const task = cron.schedule(test, () => {
+        console.log(`every ${req.body.hours} seconds`)
+        //do sos router
+    }, {scheduled: false})
+    task.start()
+    await user.save()
+    checkUserTimer(user)
+
+    res.send("ok")
+})
+
+router.post('/stopTimer/:id', async function (req, res) {
+    let user = await User.findById(req.params.id)
+    user.timer2.stop()
+    res.send("ok")
+})
+
 router.post(`/registration`, function (req, res) { // body = {name: string, phone: string, password: string, contacts: []}
-// const tempUser = req.body
-// tempUser.phone = formatPhoneNumber(tempUser.phone)
-// tempUser.contacts.forEach(c => {
-//     c.phone = formatPhoneNumber(c.phone)
-// })
     const newUser = new User(req.body)
     newUser.save(function (err, user) {
         if (err) {
@@ -25,7 +110,7 @@ router.post(`/registration`, function (req, res) { // body = {name: string, phon
 })
 
 router.post(`/login`, function (req, res) {//body = {phon: string, password: string}
-    User.find({phone: req.body.phone, password: req.body.password}, function (err, user) {
+    User.find({ phone: req.body.phone, password: req.body.password }, function (err, user) {
         if (err) {
             res.send({ msg: err })
         }
@@ -35,30 +120,36 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
     })
 })
 
-router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
-    const user = await User.findById(req.params.id)
+const sosCall = function(user){
     const numbers = user.contacts.map(c => c.contactPhone)
     numbers.forEach(c => {
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=krco3154&password=o8TDSoiD&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=lihi and fill&to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=This is the sample content sent to test &to=${c}`,
             'headers': {
             },
             formData: {
             }
-          }
-          request(options, function (err, response) {
-            if (err){
-                res.send({msg: err})
-            }else{
-                res.send({msg: "good", obj: response})
+        }
+        request(options, function (err, response) {
+            if (err) {
+                return({ msg: err })
+            } else {
+                return({ msg: "good", obj: response })
             }
-          })
+        })
     })
+}
+
+router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
+    const user = await User.findById(req.params.id)
+    res.send(sosCall(user))
 })
+
 
 router.put(`/profile/:id`, function (req, res) { //body: {name: string and/or phone: string and/or password: string}
     User.findOneAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, user) {
+
         if (err) {
             res.send({ msg: err })
         } else {
@@ -68,7 +159,7 @@ router.put(`/profile/:id`, function (req, res) { //body: {name: string and/or ph
 })
 
 router.put(`/contactsSettings/:id`, function (req, res) { //body: {contacts: []}
-    User.findOneAndUpdate({ _id: req.params.id }, { $push: { contacts: req.body.contacts } }, {new: true}, function (err, user) {
+    User.findOneAndUpdate({ _id: req.params.id }, { $push: { contacts: req.body.contacts } }, { new: true }, function (err, user) {
         if (err) {
             res.send({ msg: err })
         } else {
@@ -86,4 +177,5 @@ router.put(`/contactSettings/:id/:contactName`, async function (req, res) { // b
     res.send(user)
 })
 
+checkTimer()
 module.exports = router
