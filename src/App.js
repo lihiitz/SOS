@@ -10,6 +10,7 @@ import GreenButton from './components/GreenButton';
 import Timer from './components/Timer';
 import AddNewContact from './components/AddNewContact';
 import Main from './components/Main';
+import Contacts from './components/Contacts';
 
 @observer
 @inject('userStore')
@@ -57,7 +58,7 @@ class App extends Component {
         {/* <Route path="/main" exact render={() => <Main />} /> */}
         <Route path="/profile" exact render={() => <Profile />} />
         <Route path="/timer" exact render={() => <Timer />} />
-        <Route path="/contacts" exact render={() => <AddNewContact />} />
+        <Route path="/contacts" exact render={() => <Contacts />} />
 
 
       </Router>

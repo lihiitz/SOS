@@ -5,7 +5,7 @@ const request = require('request')
 const cron = require('node-cron')
 const webpush = require("web-push")
 
-const publicVapidKey ="BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo"
+const publicVapidKey = "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo"
 const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
 webpush.setVapidDetails("mailto:test@test.com", publicVapidKey, privateVapidKey)
 
@@ -18,9 +18,58 @@ router.post("/subscribe", (req, res) => {
     const payload = JSON.stringify({ title: "Push Test" })
     // Pass object into sendNotification
     webpush
-      .sendNotification(subscription, payload)
-      .catch(err => console.error(err))
-  })
+        .sendNotification(subscription, payload)
+        .catch(err => console.error(err))
+})
+
+const checkUserTimer = async function (user) {
+    const now = new Date()
+    const nowH = now.getHours()
+    const nowM = now.getMinutes()
+    const nowS = now.getSeconds()
+    const nowTotal = (nowH * 3600) + (nowM * 60) + nowS
+
+    const startH = user.timer.startTime.hours
+    const startM = user.timer.startTime.minutes
+    const startS = user.timer.startTime.seconds
+    const startTotal = (startH * 3600) + (startM * 60) + startS
+
+    const diff = nowTotal - startTotal//res is in seconds
+    const diffH = Math.trunc(diff / 3600)
+    const r = diff % 3600
+    const diffM = Math.trunc(r / 60)
+
+    // console.log(diffH)
+    // console.log(diffM)
+    const duration = user.timer.duration * 3600
+
+    if (duration + startTotal < nowTotal) {
+        console.log("sos")
+        //************************************************************************ */
+        //TESTING
+
+        //END TESTING******************************************************
+        sosCall(user)
+        user.timer.isOn = false
+        await user.save()
+
+    }
+
+
+}
+
+const checkTimer = async function () {
+    const users = await User.find()
+    const task = cron.schedule('* * * * * *', () => {
+        // console.log(`check user timer every 1 second`)
+        users.forEach(u => {
+            if (u.timer.isOn) {
+                checkUserTimer(u)
+            }
+        })
+    }, { scheduled: false })
+    task.start()
+}
 
 router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
     const d = new Date()
@@ -63,11 +112,35 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
         if (err) {
             res.send({ msg: err })
         }
-        else {
+        else if (user.length === 0) {
+            res.send({ msg: "bad", user: null })
+        } else {
             res.send({ msg: "good", user: user[0] })
         }
     })
 })
+
+
+const sosCall = function (user) {
+    const numbers = user.contacts.map(c => c.contactPhone)
+    numbers.forEach(c => {
+        const options = {
+            'method': 'POST',
+            'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=This is the sample content sent to test &to=${c}`,
+            'headers': {
+            },
+            formData: {
+            }
+        }
+        request(options, function (err, response) {
+            if (err) {
+                return ({ msg: err })
+            } else {
+                return ({ msg: "good", obj: response })
+            }
+        })
+    })
+}
 
 router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
     const user = await User.findById(req.params.id)
@@ -76,7 +149,7 @@ router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
 
 
 router.put(`/profile/:id`, function (req, res) { //body: {name: string and/or phone: string and/or password: string}
-    User.findOneAndUpdate({ _id: req.params.id }, req.body, {new: true}, function (err, user) {
+    User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true }, function (err, user) {
 
         if (err) {
             res.send({ msg: err })

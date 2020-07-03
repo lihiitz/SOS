@@ -32,6 +32,8 @@ const Profile = inject("userStore")(observer((props, ref) => {
     const name = user.name
     const phone = user.phone
     const password = user.password
+    localStorage.setItem(`phone`, `${phone}`);
+    localStorage.setItem(`password`, `${password}`);
     props.userStore.updateUser(name, phone, password)
   }
 
@@ -43,7 +45,7 @@ const Profile = inject("userStore")(observer((props, ref) => {
       <form noValidate autoComplete="off" className={classes.row}>
         Name: <TextField label={thisuser.name} name='name' value={user.name} onChange={handleInput} />
         Phone: <TextField label={thisuser.phone} name='phone' value={user.phone} onChange={handleInput} />
-        Password: <TextField label={thisuser.password} name='password' value={user.password} onChange={handleInput} />
+        Password: <TextField type="password" label={thisuser.password} name='password' value={user.password} onChange={handleInput} />
         <Button variant="contained" color="primary" disableElevation onClick={editProfile}>Edit profile</Button>
         {/* <Button variant="contained" color="red" disableElevation onClick = {notEdit}>Cancel</Button> */}
       </form>
