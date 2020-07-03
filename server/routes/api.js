@@ -73,29 +73,27 @@ const checkTimer = async function () {
 
 router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
     const d = new Date()
-    // const hours = h + req.body.hours
     let user = await User.findById(req.params.id)
     user.timer.isOn = true
     user.timer.startTime = { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes() }
     user.timer.duration = req.body.hours
-    // const test = '*/' + hours + ' * * *'
-    const test = '*/' + 2 + ' * * * * *'
-    // console.log(test)
-    const task = cron.schedule(test, () => {
-        console.log(`every ${req.body.hours} seconds`)
-        //do sos router
-    }, { scheduled: false })
-    task.start()
-    await user.save()
-    checkUserTimer(user)
-
-    res.send("ok")
+    const updatedUser = await user.save()
+    if (updatedUser){
+        res.send({msg: "good", user: updatedUser})   
+    }else{
+        res.send({msg:"bad"})
+    }
 })
 
 router.post('/stopTimer/:id', async function (req, res) {
     let user = await User.findById(req.params.id)
-    user.timer2.stop()
-    res.send("ok")
+    user.timer.isOn = false
+    const updatedUser = await user.save()
+    if (updatedUser){
+        res.send({msg: "good", user: updatedUser})
+    }else{
+        res.send({msg: "bad"})
+    }
 })
 
 router.post(`/registration`, function (req, res) { // body = {name: string, phone: string, password: string, contacts: []}
@@ -121,6 +119,7 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
         }
     })
 })
+
 
 const sosCall = function (user) {
     const numbers = user.contacts.map(c => c.contactPhone)
@@ -178,6 +177,95 @@ router.put(`/contactSettings/:id/:contactName`, async function (req, res) { // b
     await user.save()
     res.send(user)
 })
+
+const sosCall = function(user){
+    const numbers = user.contacts.map(c => c.contactPhone)
+    numbers.forEach(c => {
+        const options = {
+            'method': 'POST',
+            'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=This is the sample content sent to test &to=${c}`,
+            'headers': {
+            },
+            formData: {
+            }
+        }
+        request(options, function (err, response) {
+            if (err) {
+                return({ msg: err })
+            } else {
+                return({ msg: "good", obj: response })
+            }
+        })
+    })
+}
+
+const checkUserTimer = async function(user){
+    const now = new Date()
+    const nowH = now.getHours()
+    const nowM = now.getMinutes() 
+    const nowS = now.getSeconds() 
+    const nowTotal = (nowH * 3600) + (nowM * 60) + nowS
+    
+    const startH = user.timer.startTime.hours 
+    const startM = user.timer.startTime.minutes
+    const startS = user.timer.startTime.seconds
+    const startTotal = (startH * 3600) + (startM * 60) + startS
+    
+    // const diff = nowTotal - startTotal//res is in seconds
+    // const diffH = Math.trunc(diff / 3600)
+    // const r = diff % 3600
+    // const diffM = Math.trunc(r / 60)
+    
+        // console.log(diffH)
+        // console.log(diffM)
+    // const duration = user.timer.duration * 3600
+        //************************************************************************ */
+        //TESTING - with minutes instead of hours **input will be in minutes and must be > 5
+        const duration = user.timer.duration * 60
+        //END TESTING******************************************************
+        console.log(`duration: ${duration}, startTotal: ${startTotal}, nowTotal: ${nowTotal}
+        duration + startTotal = ${duration + startTotal}`);
+    if (duration + startTotal < nowTotal){
+        console.log("sos")
+
+        sosCall(user)
+
+    }else if (duration - (5 * 60) + startTotal === nowTotal){
+        console.log("remainder 15 before timer ends")
+        //do push notification
+    }
+    }
+    
+    
+    // const checkTimer = async function(){
+    //     const users = await User.find()
+    //     const task = cron.schedule('* * * * * *', () => {
+    //         console.log(`current number of users: ${users.length}`)
+    //         users.forEach(u => {
+    //            if (u.timer.isOn){
+    //                checkUserTimer(u)
+    //            } 
+    //         })
+    //     }, {scheduled: false})
+    //     task.start()
+    // }
+
+    const checkTimer = async function(){
+        
+        const task = cron.schedule('* * * * * *', () => {
+            User.find().then(users => {
+                console.log(`current number of users: ${users.length}`)
+                users.forEach(u => {
+                   if (u.timer.isOn){
+                       console.log(`user: ${u.name} timer is on`);
+                       
+                       checkUserTimer(u)
+                   } 
+                })
+            }, {scheduled: false})
+            })
+        task.start()
+    }
 
 checkTimer()
 module.exports = router

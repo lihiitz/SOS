@@ -74,16 +74,18 @@ const Registration = inject("userStore")(observer((props) => {
   }
   const registration = async () => {
     // debugger
+
     const isAllOk = checking()
     if (isAllOk) {
       const user = {
         name: inputUser.name,
         phone: inputUser.phone,
         password: inputUser.password,
-        contacts: [{
-          name: inputContact.contactName,
-          phone: inputContact.contactPhone
-        }]
+      contacts: [{
+        contactName: inputContact.contactName,
+        contactPhone: inputContact.contactPhone
+      }],
+      timer: {isOn: false}
       }
       debugger
 

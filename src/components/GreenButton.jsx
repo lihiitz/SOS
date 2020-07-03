@@ -3,13 +3,13 @@ import './GreenButton.css'
 import { inject, observer } from 'mobx-react'
 
 const GreenButton = inject("userStore")(observer((props) => {
-  const hours = props.hours
+  // const hours = props.hours
   const greenSignal = () => {
-    props.userStore.greenSignal(hours)
+    // props.userStore.greenSignal(hours)
   }
 
    const startCount = () => {
-     props.startCount(hours)
+     props.startCount()
    }
   return (
     <div className='green' onClick={startCount}>

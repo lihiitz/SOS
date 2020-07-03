@@ -33,8 +33,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const isUserinLocalstorage = localStorage.getItem('phone')
-    if (isUserinLocalstorage) {
+    const temp = localStorage.getItem('phone')
+    if (temp) {
       const func = async () => {
         this.props.userStore.login(localStorage.getItem('phone'), localStorage.getItem('password'))
         this.setState({
