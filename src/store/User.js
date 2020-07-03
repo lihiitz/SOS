@@ -41,7 +41,7 @@ export class User {
       password: password
     }
     const response = await axios.post('http://localhost:3001/login', user)
-debugger
+
     if (response.data.msg === 'good') {
       const userData = response.data.user
       this.id = userData._id
@@ -49,7 +49,6 @@ debugger
       this.password = userData.password
       this.phone = userData.phone
       this.contacts = userData.contacts
-      debugger
       this.timer = userData.timer
     } if (response.data.msg === 'bad') {
       return (false)
@@ -75,7 +74,7 @@ debugger
   }
 
   @action addNewContact = async (name, phone) => {
-    const contacts = { contacts: [{ name: name, phone: phone }] }
+    const contacts = { contacts: [{ contactName: name, contactPhone: phone }] }
     const id = this.id
     const response = await axios.put(`http://localhost:3001/contactsSettings/${id}`, contacts)
     if (response.data.msg === 'good') {

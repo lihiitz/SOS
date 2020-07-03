@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
+    minWidth: 350,
   },
 });
 
@@ -26,7 +26,8 @@ const Contacts = inject("userStore")(observer((props) => {
   const contacts = props.userStore.contacts
   const rows = [];
   for (let c of contacts) {
-    rows.push(createData(c.name, c.phone))
+    debugger
+    rows.push(createData(c.contactName, c.contactPhone))
   }
 
   return (
