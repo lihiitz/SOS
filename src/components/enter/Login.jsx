@@ -34,7 +34,7 @@ const Login = inject("userStore")(observer((props) => {
 
   const login = async() => {
     const result =await props.userStore.login(input.phone, input.password)
-    debugger
+    
     if (result === false) {
       alert('wrong password or phone')
     } else {

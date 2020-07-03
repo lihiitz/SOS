@@ -19,7 +19,7 @@ export class User {
     this.timer = { isOn: false }
     // this.isLoged = false
   }
-  
+
   @action updateUser = async (newName, newPhone, newPassword) => {
 
     const user = { name: newName, phone: newPhone, password: newPassword }
@@ -35,7 +35,7 @@ export class User {
     }
   }
   @action login = async (phone, password) => {
-    // debugger
+    // 
     const user = {
       phone: phone,
       password: password
@@ -61,7 +61,7 @@ export class User {
 
     if (response.data.msg === 'good') {
       const userData = response.data.user
-      // debugger
+      // 
       this.id = userData._id
       this.name = userData.name
       this.password = userData.password
@@ -79,7 +79,7 @@ export class User {
     const response = await axios.put(`http://localhost:3001/contactsSettings/${id}`, contacts)
     if (response.data.msg === 'good') {
       const userData = response.data.user
-      debugger
+      
       this.contacts = userData.contacts
     } if (response.msg === 'bad') {
       return (false)
@@ -102,11 +102,20 @@ export class User {
 
   @action stopTimer = async () => {
     const updatedUser = await Axios.post(`http://localhost:3001/stopTimer/${this.id}`)
-    if (updatedUser.data.msg === "good"){
+    if (updatedUser.data.msg === "good") {
       this.timer = { isOn: false }
-    }else{
+    } else {
       //
     }
+  }
+
+  @action logOut = async () => {
+    this.id = ''
+    this.name = ''
+    this.phone = ''
+    this.password = ''
+    this.contacts = []
+    this.timer = { isOn: false }
   }
 
 }

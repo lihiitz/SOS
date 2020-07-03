@@ -8,7 +8,7 @@ const Main = inject("userStore")(observer((props) => {
   const user = props.userStore
   return (
     <div>
-      <Topic />
+      <Topic/>
       <RedButton />
     </div>
   )

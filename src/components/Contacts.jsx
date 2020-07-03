@@ -26,7 +26,7 @@ const Contacts = inject("userStore")(observer((props) => {
   const contacts = props.userStore.contacts
   const rows = [];
   for (let c of contacts) {
-    debugger
+    
     rows.push(createData(c.contactName, c.contactPhone))
   }
 
