@@ -73,7 +73,7 @@ const Registration = inject("userStore")(observer((props) => {
     }
   }
   const registration = async () => {
-    // debugger
+    // 
     const isAllOk = checking()
     if (isAllOk) {
       const user = {

@@ -19,7 +19,7 @@ class CountDown extends Component {
 
 
   count() {
-    // debugger
+    // 
     const now = new Date()
     const nowH = now.getHours()
     const nowM = now.getMinutes() 
@@ -39,7 +39,7 @@ class CountDown extends Component {
     }
   }
   componentDidMount() {
-    // debugger
+    // 
     const time = this.props.time
     const startH = time.startTime.hours 
     const startM = time.startTime.minutes
