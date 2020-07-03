@@ -118,10 +118,11 @@ router.put(`/contactSettings/:id/:contactName`, async function (req, res) { // b
 const sosCall = function (user) {
     
     const numbers = user.contacts.map(c => c.contactPhone)
+    const position = user.location ? user.location.position : null
     numbers.forEach(c => {
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=This is the sample content sent to test &to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: latitude: ${position ? position.coords.latitude : 'unknown'}, longitude: ${position ? position.coords.longitude : 'unknown'}&to=${c}`,
             'headers': {
             },
             formData: {
@@ -170,7 +171,7 @@ const checkTimer = async function () {
 
     const task = cron.schedule('* * * * * *', () => {
         User.find().then(users => {
-            console.log(`current number of users: ${users.length}`)
+            // console.log(`current number of users: ${users.length}`)
             users.forEach(u => {
                 if (u.timer.isOn) {
                     console.log(`user: ${u.name} timer is on`);

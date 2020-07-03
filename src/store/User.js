@@ -1,6 +1,8 @@
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import { observable, action } from 'mobx'
 import Axios from 'axios'
 const axios = require('axios')
+// import { GoogleMap, LoadScript } from '@react-google-maps/api'
 
 export class User {
   @observable name
@@ -8,6 +10,7 @@ export class User {
   @observable password
   @observable contacts
   @observable timer
+  @observable location
   // @observable isLoged
 
   constructor() {
@@ -17,6 +20,7 @@ export class User {
     this.password = ''
     this.contacts = []
     this.timer = { isOn: false }
+    this.location = { lat: 32.1827965, lng: 34.8513687}
     // this.isLoged = false
   }
   
@@ -41,7 +45,6 @@ export class User {
       password: password
     }
     const response = await axios.post('http://localhost:3001/login', user)
-debugger
     if (response.data.msg === 'good') {
       const userData = response.data.user
       this.id = userData._id
@@ -49,7 +52,6 @@ debugger
       this.password = userData.password
       this.phone = userData.phone
       this.contacts = userData.contacts
-      debugger
       this.timer = userData.timer
     } if (response.data.msg === 'bad') {
       return (false)
@@ -80,7 +82,6 @@ debugger
     const response = await axios.put(`http://localhost:3001/contactsSettings/${id}`, contacts)
     if (response.data.msg === 'good') {
       const userData = response.data.user
-      debugger
       this.contacts = userData.contacts
     } if (response.msg === 'bad') {
       return (false)
@@ -90,7 +91,6 @@ debugger
   @action handleSos = async () => {
     const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`)
     console.log(sos.data)
-
   }
 
   @action greenSignal = async (hours) => {

@@ -11,6 +11,8 @@ import Timer from './components/Timer';
 import AddNewContact from './components/AddNewContact';
 import Main from './components/Main';
 import Contacts from './components/Contacts';
+import { GoogleMap, LoadScript } from '@react-google-maps/api'
+import MapContainer from './components/MapContainer';
 
 @observer
 @inject('userStore')
@@ -31,7 +33,17 @@ class App extends Component {
     // localStorage.setItem(`phone`, `${user.phone}`);
     // localStorage.setItem(`password`, `${user.password}`);
   }
-
+  getLocation = () => {
+      if(navigator.geolocation){
+      console.log("location Available")
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position.coords.latitude, position.coords.longitude)
+        this.props. userStore.location = position       
+      })
+    } else {
+      console.log("Not Available")
+    }
+}
   componentDidMount() {
     const temp = localStorage.getItem('phone')
     if (temp) {
@@ -42,6 +54,7 @@ class App extends Component {
         })
       }
       func()
+      this.getLocation()
     }
   }
 
@@ -52,14 +65,12 @@ class App extends Component {
     return (
       <Router>
         <Route path="/" exact render={() => <EnterPage login={this.login} isLoged={this.state.isLoged} />} />
-        {/* <Route path="/login" exact render={() => <Login login={this.login} isLoged={this.state.isLoged} />} /> */}
         <Route path="/registration" exact render={() => <Registration login={this.login} isLoged={this.state.isLoged} />} />
         {this.state.isLoged ? <Route path="/main" exact render={() => <Main />} /> : null}
-        {/* <Route path="/main" exact render={() => <Main />} /> */}
         <Route path="/profile" exact render={() => <Profile />} />
         <Route path="/timer" exact render={() => <Timer />} />
         <Route path="/contacts" exact render={() => <Contacts />} />
-
+        <Route path="/sosMap" exact render={() => <MapContainer />} />
 
       </Router>
     );

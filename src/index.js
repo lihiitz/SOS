@@ -1,15 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-// import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import ReactDOM from 'react-dom'
+import App from './App'
+import * as serviceWorker from './serviceWorker'
 import { Provider } from 'mobx-react'
-import { User } from './store/User';
+import { User } from './store/User'
+import {MapContainer} from './store/MapContainer'
 
+const mapStore = new MapContainer()
 const userStore = new User()
-const stores = { userStore }
+const stores = { userStore, mapStore }
 
 ReactDOM.render(
+  // <Provider {...stores}>
   <Provider {...stores}>
     <App />
   </Provider>,
