@@ -74,7 +74,6 @@ const Registration = inject("userStore")(observer((props) => {
   }
   const registration = async () => {
     // debugger
-
     const isAllOk = checking()
     if (isAllOk) {
       const user = {
@@ -87,7 +86,6 @@ const Registration = inject("userStore")(observer((props) => {
       }],
       timer: {isOn: false}
       }
-      debugger
 
       const newUser = await props.userStore.registration(user)
       if (newUser === false) {

@@ -95,7 +95,6 @@ debugger
 
   @action greenSignal = async (hours) => {
     const id = this.id
-    debugger
     const updatedUser = await Axios.post(`http://localhost:3001/timer/${id}`, { hours })
     if (updatedUser.data.msg === "good") {
       this.timer = updatedUser.data.user.timer
