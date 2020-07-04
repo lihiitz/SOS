@@ -8,15 +8,16 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/pickers": "^3.2.10",
     "axios": "^0.19.2",
+    "formik": "^2.1.4",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
     "react-dom": "^16.13.1",
+    "react-number-format": "^4.4.1",
     "react-router-dom": "^5.2.0",
-    "moment": "^2.27.0",
-    "formik": "^2.1.4",
     "validator": "^13.1.1"
   },
   "devDependencies": {

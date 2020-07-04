@@ -20,7 +20,7 @@ const Login = inject("userStore")(observer((props) => {
   const classes = useStyles();
 
   const [input, setInput] = useState({
-    phone: "",
+    phone: "+972",
     password: "",
   })
 

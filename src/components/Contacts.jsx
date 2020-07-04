@@ -10,6 +10,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import EditIcon from '@material-ui/icons/Edit';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+
 
 const useStyles = makeStyles({
   table: {
@@ -17,16 +20,17 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, phone) {
-  return { name, phone };
+function createData(contactName, contactPhone) {
+  return { contactName, contactPhone };
 }
 
 const Contacts = inject("userStore")(observer((props) => {
   const classes = useStyles();
   const contacts = props.userStore.contacts
   const rows = [];
+  
   for (let c of contacts) {
-    
+
     rows.push(createData(c.contactName, c.contactPhone))
   }
 
@@ -36,17 +40,16 @@ const Contacts = inject("userStore")(observer((props) => {
       <AddNewContact />
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
-          {/* <TableHead>
-            <TableRow>
-              <TableCell align="center">Name</TableCell>
-              <TableCell align="center">Phone</TableCell>
-            </TableRow>
-          </TableHead> */}
           <TableBody>
             {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.phone}</TableCell>
+              <TableRow key={row.contactName}>
+                <TableCell align="center">{row.contactName}</TableCell>
+                <TableCell align="center">{row.contactPhone}</TableCell>
+                <TableCell align="center"><Link to={{
+                  pathname: "/contactSettings",
+                  state: row
+                }}>
+                  <EditIcon /></Link></TableCell>
               </TableRow>
             ))}
           </TableBody>

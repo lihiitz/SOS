@@ -6,10 +6,11 @@ import { useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import validator from 'validator';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    
+
   },
   form: {
     width: '300px',
@@ -25,13 +26,13 @@ const Registration = inject("userStore")(observer((props) => {
 
   const [inputUser, setInputUser] = useState({
     name: "",
-    phone: "",
+    phone: "+972",
     password: ""
   })
 
   const [inputContact, setInputContact] = useState({
     contactName: "",
-    contactPhone: ""
+    contactPhone: "+972"
   })
 
   const [validation, setValidation] = useState({
@@ -49,11 +50,6 @@ const Registration = inject("userStore")(observer((props) => {
 
     setInputUser(inputVal)
     validateRequiredInput(e)
-  }
-
-  const handleInputUserPassword = e => {
-    handleInputUser(e)
-    validatePassword(e)
   }
 
   const handleContactInput = e => {
@@ -83,14 +79,31 @@ const Registration = inject("userStore")(observer((props) => {
     setValidation(state)
   }
 
+  const validatePhone = e => {
+    const state = { ...validation }
+    const isInvalid = !validator.contains(e.target.value, '+972') || e.target.value.length !== 13
 
-  const isFormValid = Object.keys(validation).every(k => validation[k] === null)
+    state.phone = isInvalid ? 'Phone must be in format +972...' : null
+
+    setValidation(state)
+  }
+
+  const validateContactPhone = e => {
+    const state = { ...validation }
+    const isInvalid = !validator.contains(e.target.value, '+972') || e.target.value.length !== 13
+
+    state.contactPhone = isInvalid ? 'Phone must be in format +972...' : null
+
+    setValidation(state)
+  }
+
+
+
+  const hasNoErrors = Object.keys(validation).every(k => validation[k] === null)
+  const isFormValid = hasNoErrors && Object.keys(inputUser).every(k => inputUser[k]?.length) && Object.keys(inputContact).every(k => inputContact[k]?.length)
 
 
   const registration = async () => {
-
-    // const isAllOk = checking()
-
     if (isFormValid) {
       const user = {
         name: inputUser.name,
@@ -120,6 +133,7 @@ const Registration = inject("userStore")(observer((props) => {
 
         <TextField
           error={!!validation.name}
+          value={inputUser.name}
           label="Name"
           name='name'
           onBlur={validateRequiredInput}
@@ -128,7 +142,8 @@ const Registration = inject("userStore")(observer((props) => {
           helperText={validation.name}></TextField>
         <TextField
           error={!!validation.phone}
-          onBlur={validateRequiredInput}
+          value={inputUser.phone}
+          onBlur={validatePhone}
           label="Phone"
           name='phone'
           onChange={handleInputUser}
@@ -137,6 +152,7 @@ const Registration = inject("userStore")(observer((props) => {
         />
         <TextField
           error={!!validation.password}
+          value={inputUser.password}
           onBlur={validatePassword}
           type='password'
           label="Password"
@@ -157,7 +173,8 @@ const Registration = inject("userStore")(observer((props) => {
 
         <TextField
           error={!!validation.contactPhone}
-          onBlur={validateRequiredInput}
+          onBlur={validateContactPhone}
+          value={inputContact.contactPhone}
           label="Contact Phone"
           name='contactPhone'
           onChange={handleContactInput}
