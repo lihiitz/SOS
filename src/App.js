@@ -38,7 +38,7 @@ class App extends Component {
       console.log("location Available")
       navigator.geolocation.getCurrentPosition((position) => {
         console.log(position.coords.latitude, position.coords.longitude)
-        this.props. userStore.location = position       
+        this.props. userStore.location = position.coords     
       })
     } else {
       console.log("Not Available")
@@ -53,8 +53,8 @@ class App extends Component {
           isLoged: true
         })
       }
-      func()
       this.getLocation()
+      func()
     }
   }
 

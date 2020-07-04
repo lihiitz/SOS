@@ -20,7 +20,7 @@ export class User {
     this.password = ''
     this.contacts = []
     this.timer = { isOn: false }
-    this.location = { lat: 32.1827965, lng: 34.8513687}
+    this.location = {}
     // this.isLoged = false
   }
   
@@ -89,7 +89,8 @@ export class User {
   }
 
   @action handleSos = async () => {
-    const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`)
+    const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, {lat: this.location.lat, lng: this.location.lng, name: "sos"})
+    
     console.log(sos.data)
   }
 
@@ -106,7 +107,7 @@ export class User {
     if (updatedUser.data.msg === "good"){
       this.timer = { isOn: false }
     }else{
-      //
+      //TODOOOOOOOO
     }
   }
 

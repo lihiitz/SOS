@@ -2,39 +2,47 @@ import React from 'react'
 import {Map, InfoWindow, Marker, GoogleApiWrapper, google} from 'google-maps-react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import { observable, action } from 'mobx'
+import Axios from 'axios';
 
    
 export class MapContainer {
-  // @observable containerStyle
-  // @observable center
-  @observable locations = [{ lat: 32.1827965, lng: 34.8513687, name: "sos"}]
-  // @observable googleMapsApiKey
+  @observable containerStyle
+  @observable center
+  // @observable markers = [{lat: 32.1827965, lng: 34.8513687, name: "sos"}, {lat: 32.179798, lng: 34.839996, name: "sos"}]
+  @observable markers = []
 
   constructor() {
-    // this.containerStyle = {
-    //     width: '400px',
-    //     height: '400px'
-    //   }
-    // this.center = {
-    //     lat: 32.1827965,
-    //     lng: 34.8513687 
-    //   }
+    this.containerStyle = {
+        width: '400px',
+        height: '400px'
+      }
+    this.center = {
+        lat: 32.1827965,
+        lng: 34.8513687 
+      }
     // this.googleMapsApiKey="AIzaSyCm8cj9dRisI1LeIqulbg68R8gHxcm2Q0M"
-    // this.map = <GoogleMap mapContainerStyle={this.containerStyle} center={this.center} zoom={13}></GoogleMap>
 
   }
-  
-  @action addSosLocationToMap = (location, name) => {
-    this.locations.push({lat: location.coords.latitude, lng: location.coords.longitude, name})
+
+  @action getMarkers = async () => {
+    // debugger
+    let markers = await Axios.get('http://localhost:3001/markers')
+    markers.data.forEach(element => {
+      element.forEach(m => this.markers.push(m))
+    })
+    console.log(this.markers)
   }
 
     displayMarkers = () => {
-      return this.locations.map((location, index) => {
+      // debugger
+      console.log(this.markers);
+      
+      return this.markers.map((marker, index) => {
         return <Marker key={index} id={index} position={{
-         lat: location.lat,
-         lng: location.lng
+         lat: marker.lat,
+         lng: marker.lng
        }}
-       onClick={() => console.log(location.name)} />
+       onClick={() => console.log(marker.name)} />
       })
     }
   

@@ -22,6 +22,15 @@ router.post("/subscribe", (req, res) => {
         .catch(err => console.error(err))
 })
 
+router.get('/markers', async function(req, res){ //
+    const markers = await User.find({}).select('markers')
+    res.send(markers.map(m => {
+        return(
+            m.markers
+        )
+    })) //markers = [{"markers": [{"lat": 24, "lng": 34, "name": "sos"}, {}..]}, {}..]
+})
+
 router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
     
     const d = new Date()
@@ -75,10 +84,13 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
     })
 })
 
-router.post(`/sos/:id`, async function (req, res) { // return: {msg: string}
+router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
     
     const user = await User.findById(req.params.id)
-    res.send(sosCall(user))
+    sosCall(user, req.body)
+    user.markers.push(req.body)
+    const updatedUser = await user.save()
+    res.send(updatedUser)
 })
 
 
@@ -115,14 +127,13 @@ router.put(`/contactSettings/:id/:contactName`, async function (req, res) { // b
     res.send(user)
 })
 
-const sosCall = function (user) {
+const sosCall = function (user, location) {
     
     const numbers = user.contacts.map(c => c.contactPhone)
-    const position = user.location ? user.location.position : null
     numbers.forEach(c => {
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: latitude: ${position ? position.coords.latitude : 'unknown'}, longitude: ${position ? position.coords.longitude : 'unknown'}&to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: latitude: ${location ? location.lat : 'unknown'}, longitude: ${location ? location.lng : 'unknown'}&to=${c}`,
             'headers': {
             },
             formData: {
