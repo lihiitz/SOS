@@ -6,6 +6,9 @@ const api = require('./server/routes/api')
 const mongoose = require(`mongoose`)
 
 mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/sos`, { useNewUrlParser: true, useUnifiedTopology: true })
+//for heroku
+// app.use(express.static(path.join(__dirname, 'build')));
+//end for heroku
 app.use(express.static(path.join(__dirname, "public")))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
@@ -18,6 +21,12 @@ app.use(function (req, res, next) {
   })
   
 app.use('/', api)
+
+//for heroku
+// app.get('*', function (req, res) {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// })
+//end for heroku
 
 const PORT = 3001
 app.listen(process.env.PORT || PORT, function(){

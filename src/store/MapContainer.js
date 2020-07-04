@@ -17,26 +17,23 @@ export class MapContainer {
         height: '400px'
       }
     this.center = {
-        lat: 32.1827965,
-        lng: 34.8513687 
+        lat: 31.880099,
+        lng: 34.820535 
       }
     // this.googleMapsApiKey="AIzaSyCm8cj9dRisI1LeIqulbg68R8gHxcm2Q0M"
 
   }
 
   @action getMarkers = async () => {
-    // debugger
     let markers = await Axios.get('http://localhost:3001/markers')
+    // let markers = await Axios.get('/markers')
     markers.data.forEach(element => {
       element.forEach(m => this.markers.push(m))
     })
     console.log(this.markers)
   }
 
-    displayMarkers = () => {
-      // debugger
-      console.log(this.markers);
-      
+    displayMarkers = () => {      
       return this.markers.map((marker, index) => {
         return <Marker key={index} id={index} position={{
          lat: marker.lat,

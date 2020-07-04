@@ -6,8 +6,8 @@ import Login from './components/enter/Login'
 import Registration from './components/enter/Registration'
 import Profile from './components/Profile';
 import EnterPage from './components/enter/EnterPage'
-import GreenButton from './components/GreenButton';
-import Timer from './components/Timer';
+import GreenButton from './components/Timer/GreenButton';
+import Timer from './components/Timer/Timer';
 import AddNewContact from './components/AddNewContact';
 import Main from './components/Main';
 import Contacts from './components/Contacts';
@@ -38,7 +38,7 @@ class App extends Component {
       console.log("location Available")
       navigator.geolocation.getCurrentPosition((position) => {
         console.log(position.coords.latitude, position.coords.longitude)
-        this.props. userStore.location = position.coords     
+        this.props.userStore.location = position.coords     
       })
     } else {
       console.log("Not Available")

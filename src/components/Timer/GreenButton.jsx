@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/GreenButton.css'
+import '../../styles/GreenButton.css'
 import { inject, observer } from 'mobx-react'
 
 const GreenButton = inject("userStore")(observer((props) => {

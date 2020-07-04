@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import GreenButton from './GreenButton';
 import CountDown from './CountDown';
-import Topic from './Topic'
+import Topic from '../Topic'
 
 
 const useStyles = makeStyles((theme) => ({
