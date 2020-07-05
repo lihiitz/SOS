@@ -109,7 +109,7 @@ router.put(`/contactsSettings/:id`, function (req, res) { //body: {contacts: []}
 router.put(`/contactSettings/:id`, async function (req, res) { // body : { name: string, phone: string newName:string, newPhone: string}
 
     let user = await User.findById(req.params.id)
-    const index =  user.contacts.findIndex(c => c.contactName === req.body.name)
+    const index = user.contacts.findIndex(c => c.contactName === req.body.name)
     // user.contacts[index] = req.body
     const newData = {
         contactName: req.body.newName,
@@ -119,6 +119,16 @@ router.put(`/contactSettings/:id`, async function (req, res) { // body : { name:
     await user.save()
     res.send(user)
 })
+
+router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name: string, phone: string}
+
+    let user = await User.findById(req.params.id)
+    const index = user.contacts.findIndex(c => c.contactName === req.body.contactName)
+    user.contacts.splice(index, 1)
+    await user.save()
+    res.send(user)
+})
+
 
 const sosCall = function (user) {
 

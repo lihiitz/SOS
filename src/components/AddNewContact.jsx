@@ -7,14 +7,6 @@ import { useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import validator from 'validator';
 
-import PropTypes from 'prop-types';
-import MaskedInput from 'react-text-mask';
-import NumberFormat from 'react-number-format';
-
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-
-import FormControl from '@material-ui/core/FormControl';
 
 const useStyles = makeStyles((theme) => ({
   root: {
