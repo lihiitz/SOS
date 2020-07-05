@@ -45,15 +45,15 @@ const Menu = inject("userStore")(observer((props) => {
     setState({ ...state, [anchor]: open });
   };
 
-  const {logout} = useContext(MyContext) //using hook
+  const { logout } = useContext(MyContext) //using hook
   const logOut = () => {
-    
+
     localStorage.clear()
     props.userStore.logOut()
     logout()
   }
-  
- 
+
+
 
   const list = (anchor) => (
     <div
@@ -110,7 +110,7 @@ const Menu = inject("userStore")(observer((props) => {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}> <MenuIcon style={{ color: 'white' }} /></Button>
+          <MenuIcon onClick={toggleDrawer(anchor, true)} style={{ color: 'white' }} />
           <SwipeableDrawer
             anchor={anchor}
             open={state[anchor]}
