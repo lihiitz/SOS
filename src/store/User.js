@@ -23,7 +23,7 @@ export class User {
     this.location = null
     // this.isLoged = false
   }
-  
+
   @action updateUser = async (newName, newPhone, newPassword) => {
 
     const user = { name: newName, phone: newPhone, password: newPassword }
@@ -40,7 +40,7 @@ export class User {
     }
   }
   @action login = async (phone, password) => {
-    // debugger
+    // 
     const user = {
       phone: phone,
       password: password
@@ -66,7 +66,7 @@ export class User {
     // const response = await axios.post('/registration', user)
     if (response.data.msg === 'good') {
       const userData = response.data.user
-      // debugger
+      debugger
       this.id = userData._id
       this.name = userData.name
       this.password = userData.password
@@ -79,20 +79,40 @@ export class User {
   }
 
   @action addNewContact = async (name, phone) => {
-    const contacts = { contacts: [{ name: name, phone: phone }] }
+    const contacts = { contacts: [{ contactName: name, contactPhone: phone }] }
     const id = this.id
     const response = await axios.put(`http://localhost:3001/contactsSettings/${id}`, contacts)
     // const response = await axios.put(`/contactsSettings/${id}`, contacts)
     if (response.data.msg === 'good') {
       const userData = response.data.user
+
       this.contacts = userData.contacts
     } if (response.msg === 'bad') {
       return (false)
     }
   }
 
+  @action updateContact = async (name, newName, newPhone) => {
+    const contact = { name: name, newName: newName, newPhone: newPhone }
+    const id = this.id
+    const response = await axios.put(`http://localhost:3001/contactSettings/${id}`, contact)
+    const userData = response.data
+    this.contacts = userData.contacts
+  }
+
+  @action deleteContact = async (name, phone) => {
+    const contact = { contactName: name, contactPhone: phone }
+    const id = this.id
+    const response = await axios.put(`http://localhost:3001/contactSettingsD/${id}`, contact)
+    debugger
+    const userData = response.data
+    this.contacts = userData.contacts
+  }
+
+
   @action handleSos = async () => {    
     const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, {lat: this.location.latitude, lng: this.location.longitude, name: "sos"})
+
   }
 
   @action greenSignal = async (hours) => {
@@ -112,6 +132,15 @@ export class User {
     }else{
       //TODOOOOOOOO
     }
+  }
+
+  @action logOut = async () => {
+    this.id = ''
+    this.name = ''
+    this.phone = ''
+    this.password = ''
+    this.contacts = []
+    this.timer = { isOn: false }
   }
 
 }

@@ -13,6 +13,12 @@ import Main from './components/Main';
 import Contacts from './components/Contacts';
 import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import MapContainer from './components/MapContainer';
+import { useContext } from 'react' //import hook from react
+import { MyContext } from './components/Topic';
+import ContactSettings from './components/ContactSettings';
+
+
+ //create context
 
 @observer
 @inject('userStore')
@@ -29,7 +35,7 @@ class App extends Component {
       isLoged: true
     })
     // const user = this.props.userStore
-    // debugger
+    // 
     // localStorage.setItem(`phone`, `${user.phone}`);
     // localStorage.setItem(`password`, `${user.password}`);
   }
@@ -45,6 +51,12 @@ class App extends Component {
       console.log("Not Available")
     }
 }
+  logout = async () => {
+    await this.setState({
+      isLoged: false
+    })
+  }
+
   componentDidMount() {
     const temp = localStorage.getItem('phone')
     if (temp) {
@@ -62,18 +74,26 @@ class App extends Component {
   //TO DO ADD SMTH IF USER PASSWORD WRONG!
 
   render() {
-
+    const value = { //object with context
+      logout: this.logout,
+    }
+    
     return (
-      <Router>
-        <Route path="/" exact render={() => <EnterPage login={this.login} isLoged={this.state.isLoged} />} />
-        <Route path="/registration" exact render={() => <Registration login={this.login} isLoged={this.state.isLoged} />} />
-        {this.state.isLoged ? <Route path="/main" exact render={() => <Main />} /> : null}
-        <Route path="/profile" exact render={() => <Profile />} />
-        <Route path="/timer" exact render={() => <Timer />} />
-        <Route path="/contacts" exact render={() => <Contacts />} />
-        <Route path="/sosMap" exact render={() => <MapContainer />} />
+      <MyContext.Provider value={value}>
+        <Router>
+          <Route path="/" exact render={() => <EnterPage login={this.login} isLoged={this.state.isLoged} />} />
+          {/* <Route path="/login" exact render={() => <Login login={this.login} isLoged={this.state.isLoged} />} /> */}
+          <Route path="/registration" exact render={() => <Registration login={this.login} isLoged={this.state.isLoged} />} />
+          {this.state.isLoged ? <Route path="/main" exact render={() => <Main />} /> : null}
+          {/* <Route path="/main" exact render={() => <Main />} /> */}
+          <Route path="/profile" exact render={() => <Profile />} />
+          <Route path="/timer" exact render={() => <Timer />} />
+          <Route path="/contacts" exact render={() => <Contacts />} />
+          <Route path="/contactSettings" exact render={() => <ContactSettings />} />
+          <Route path="/sosMap" exact render={() => <MapContainer />} />
+        </Router>
+      </MyContext.Provider >
 
-      </Router>
     );
   }
 }

@@ -71,7 +71,7 @@ router.get('/markers', async function(req, res){ //
 })
 
 router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
-    
+
     const d = new Date()
     let user = await User.findById(req.params.id)
     user.timer.isOn = true
@@ -86,7 +86,7 @@ router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
 })
 
 router.post('/stopTimer/:id', async function (req, res) {
-    
+
     let user = await User.findById(req.params.id)
     user.timer.isOn = false
     const updatedUser = await user.save()
@@ -98,7 +98,7 @@ router.post('/stopTimer/:id', async function (req, res) {
 })
 
 router.post(`/registration`, function (req, res) { // body = {name: string, phone: string, password: string, contacts: []}
-    
+
     const newUser = new User(req.body)
     newUser.save(function (err, user) {
         if (err) {
@@ -110,7 +110,7 @@ router.post(`/registration`, function (req, res) { // body = {name: string, phon
 })
 
 router.post(`/login`, function (req, res) {//body = {phon: string, password: string}
-    
+
     User.find({ phone: req.body.phone, password: req.body.password }, function (err, user) {
         if (err) {
             res.send({ msg: err })
@@ -133,7 +133,7 @@ router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: 
 
 
 router.put(`/profile/:id`, function (req, res) { //body: {name: string and/or phone: string and/or password: string}
-    
+
     User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true }, function (err, user) {
 
         if (err) {
@@ -145,7 +145,7 @@ router.put(`/profile/:id`, function (req, res) { //body: {name: string and/or ph
 })
 
 router.put(`/contactsSettings/:id`, function (req, res) { //body: {contacts: []}
-    
+
     User.findOneAndUpdate({ _id: req.params.id }, { $push: { contacts: req.body.contacts } }, { new: true }, function (err, user) {
         if (err) {
             res.send({ msg: err })
@@ -156,11 +156,25 @@ router.put(`/contactsSettings/:id`, function (req, res) { //body: {contacts: []}
     })
 })
 
-router.put(`/contactSettings/:id/:contactName`, async function (req, res) { // body : { name: string, phone: string}
-    
+router.put(`/contactSettings/:id`, async function (req, res) { // body : { name: string, phone: string newName:string, newPhone: string}
+
     let user = await User.findById(req.params.id)
-    const index = user.contacts.findIndex(c => c.name === req.params.contactName)
-    user.contacts[index] = req.body
+    const index = user.contacts.findIndex(c => c.contactName === req.body.name)
+    // user.contacts[index] = req.body
+    const newData = {
+        contactName: req.body.newName,
+        contactPhone: req.body.newPhone
+    }
+    user.contacts[index] = newData
+    await user.save()
+    res.send(user)
+})
+
+router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name: string, phone: string}
+
+    let user = await User.findById(req.params.id)
+    const index = user.contacts.findIndex(c => c.contactName === req.body.contactName)
+    user.contacts.splice(index, 1)
     await user.save()
     res.send(user)
 })
@@ -189,7 +203,7 @@ const sosCall = function (user, location) {
 }
 
 const checkUserTimer = async function (user) {
-    
+
     const now = new Date()
     const nowH = now.getHours()
     const nowM = now.getMinutes()

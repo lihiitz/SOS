@@ -16,6 +16,10 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AddLocationIcon from '@material-ui/icons/AddLocation';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { inject, observer } from 'mobx-react'
+import { useContext } from 'react' //import hook from react
+// const MyContext = React.createContext() 
+import { MyContext } from './Topic';
 
 
 const useStyles = makeStyles({
@@ -27,7 +31,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Menu() {
+const Menu = inject("userStore")(observer((props) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false
@@ -41,6 +45,16 @@ function Menu() {
     setState({ ...state, [anchor]: open });
   };
 
+  const {logout} = useContext(MyContext) //using hook
+  const logOut = () => {
+    
+    localStorage.clear()
+    props.userStore.logOut()
+    logout()
+  }
+  
+ 
+
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -51,7 +65,7 @@ function Menu() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-      <Link to='/main'>
+        <Link to='/main'>
           <ListItem button key='sos'>
             <ListItemIcon> <NotificationsActiveIcon /> </ListItemIcon>
             <ListItemText primary='SOS' />
@@ -80,10 +94,12 @@ function Menu() {
           <ListItemText primary='Map' />
         </ListItem>
         <Divider />
-        <ListItem button key='logout'>
-          <ListItemIcon> < ExitToAppIcon /> </ListItemIcon>
-          <ListItemText primary='Log Out' />
-        </ListItem>
+        <Link to='/'>
+          <ListItem button key='logout' onClick={logOut}>
+            <ListItemIcon> < ExitToAppIcon /> </ListItemIcon>
+            <ListItemText primary='Log Out' />
+          </ListItem>
+        </Link>
       </List>
 
 
@@ -94,7 +110,7 @@ function Menu() {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}> <MenuIcon style={{color:'white'}}/></Button>
+          <Button onClick={toggleDrawer(anchor, true)}> <MenuIcon style={{ color: 'white' }} /></Button>
           <SwipeableDrawer
             anchor={anchor}
             open={state[anchor]}
@@ -107,6 +123,6 @@ function Menu() {
       ))}
     </div>
   );
-}
+}))
 
 export default Menu

@@ -20,11 +20,11 @@ const Login = inject("userStore")(observer((props) => {
   const classes = useStyles();
 
   const [input, setInput] = useState({
-    phone: "",
+    phone: "+972",
     password: "",
   })
 
-
+  const [validation, setValidation] = useState(true)
 
   const handleInput = e => {
     let inputVal = { ...input }
@@ -32,10 +32,11 @@ const Login = inject("userStore")(observer((props) => {
     setInput(inputVal)
   }
 
-  const login = async() => {
-    const result =await props.userStore.login(input.phone, input.password)
+  const login = async () => {
+    const result = await props.userStore.login(input.phone, input.password)
+
     if (result === false) {
-      alert('wrong password or phone')
+      setValidation(false)
     } else {
       props.login()
       localStorage.setItem(`phone`, `${input.phone}`);
@@ -46,9 +47,26 @@ const Login = inject("userStore")(observer((props) => {
   }
 
   return (
-    <form className={classes.root} noValidate autoComplete="off">
-      <TextField id="phone" label="Phone" name='phone' onChange={handleInput} />
-      <TextField id="password" label="Password" name='password' onChange={handleInput} type="password" />
+    <form className={classes.root} noValidate autoComplete="on">
+      {validation ? <TextField id="phone" label="Phone" name='phone' onChange={handleInput} /> : <TextField
+        error
+        id="standard-error-helper-text"
+        label="Phone" 
+        name='phone'
+        helperText="Incorrect entry."
+        onChange={handleInput}
+      />}
+      {validation ? <TextField id="password" label="Password" name='password' onChange={handleInput} type="password" /> : <TextField
+        error
+        id="standard-error-helper-text"
+        label="Password"
+        name='password'
+        helperText="Incorrect entry."
+        type="password"
+        onChange={handleInput}
+      />}
+      {/* <TextField id="phone" label="Phone" name='phone' onChange={handleInput} />
+      <TextField id="password" label="Password" name='password' onChange={handleInput} type="password" /> */}
       <Button variant="contained" color="primary" disableElevation onClick={login}>LogIn</Button>
       {props.isLoged ? <Redirect to='/main' /> : null}
     </form>
