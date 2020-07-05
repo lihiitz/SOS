@@ -182,11 +182,11 @@ router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name
 const sosCall = function (user, location) {
     
     const numbers = user.contacts.map(c => c.contactPhone)
+    //https://maps.google.com?saddr=Current+Location&daddr=
     numbers.forEach(c => {        
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: https://maps.google.com?saddr=Current+Location&daddr=${location.lat},${location.lng}&to=+972539528514`,
-            // 'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: latitude: ${location ? location.lat : 'unknown'}, longitude: ${location ? location.lng : 'unknown'}&to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location:https://maps.google.com?daddr=${location.lat},${location.lng}&to=${c}`,
             'headers': {
             },
             formData: {
