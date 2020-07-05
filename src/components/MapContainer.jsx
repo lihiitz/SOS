@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import { inject, observer } from 'mobx-react';
+import { Circle, GoogleMap } from '@react-google-maps/api';
 
 @observer
 @inject('userStore', 'mapStore')
@@ -35,8 +36,9 @@ class MapContainer extends Component {
           this.props.mapStore.center.lng }}
       >
         {this.props.mapStore.displayMarkers()}
+
       </Map>
-    );
+    )
   }
 }
 

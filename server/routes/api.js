@@ -127,7 +127,7 @@ router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: 
     const user = await User.findOneAndUpdate({_id: req.params.id}, {marker: req.body})
     console.log(req.body.lat);
     
-    sosCall(user, req.body)
+    // sosCall(user, req.body)
     res.send(user)
 })
 
