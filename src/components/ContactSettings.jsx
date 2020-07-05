@@ -41,7 +41,9 @@ const ContactSettings = inject("userStore")(observer((props, ref) => {
   const updateContact = () => {
     props.userStore.updateContact(name, contact.contactName, contact.contactPhone)
   }
-
+  const deleteContact = () => {
+    props.userStore.deleteContact(name, phone)
+  }
   return (
     <div>
       <Topic />
@@ -77,6 +79,8 @@ const ContactSettings = inject("userStore")(observer((props, ref) => {
         </FormControl>
 
         <Button variant="contained" color="primary" disableElevation onClick={updateContact}>Edit contact</Button>
+
+        <Link to='/contacts'> <Button variant="contained" color="primary" disableElevation onClick={deleteContact}>Delete contact</Button></Link>
       </div>
     </div>
   )

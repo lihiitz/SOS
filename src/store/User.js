@@ -94,6 +94,15 @@ export class User {
     this.contacts = userData.contacts
   }
 
+  @action deleteContact = async (name, phone) => {
+    const contact = { contactName: name, contactPhone: phone }
+    const id = this.id
+    const response = await axios.put(`http://localhost:3001/contactSettingsD/${id}`, contact)
+    debugger
+    const userData = response.data
+    this.contacts = userData.contacts
+  }
+
 
   @action handleSos = async () => {
     const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`)
