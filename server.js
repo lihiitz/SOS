@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const api = require('./server/routes/api')
 const mongoose = require(`mongoose`)
 
-mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/sos`, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/sos`, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 //for heroku
 // app.use(express.static(path.join(__dirname, 'build')));
 //end for heroku

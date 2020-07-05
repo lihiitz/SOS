@@ -91,9 +91,7 @@ export class User {
     }
   }
 
-  @action handleSos = async () => {
-    console.log(this.location.latitude);
-    
+  @action handleSos = async () => {    
     const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, {lat: this.location.latitude, lng: this.location.longitude, name: "sos"})
   }
 

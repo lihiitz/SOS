@@ -124,7 +124,9 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
 })
 
 router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
-    const user = await User.findOneAndUpdate({_id: req.params.id}, {marker: req.body}, {new:true})
+    const user = await User.findOneAndUpdate({_id: req.params.id}, {marker: req.body})
+    console.log(req.body.lat);
+    
     sosCall(user, req.body)
     res.send(user)
 })
@@ -166,10 +168,11 @@ router.put(`/contactSettings/:id/:contactName`, async function (req, res) { // b
 const sosCall = function (user, location) {
     
     const numbers = user.contacts.map(c => c.contactPhone)
-    numbers.forEach(c => {
+    numbers.forEach(c => {        
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: latitude: ${location ? location.lat : 'unknown'}, longitude: ${location ? location.lng : 'unknown'}&to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: https://maps.google.com?saddr=Current+Location&daddr=${location.lat},${location.lng}&to=${c}`,
+            // 'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: latitude: ${location ? location.lat : 'unknown'}, longitude: ${location ? location.lng : 'unknown'}&to=${c}`,
             'headers': {
             },
             formData: {
