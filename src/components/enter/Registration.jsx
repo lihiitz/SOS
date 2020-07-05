@@ -1,23 +1,23 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useState } from 'react'
-import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import validator from 'validator';
-import { Formik } from "formik";
-import * as EmailValidator from "email-validator"; // used when validating with a self-implemented approach
-import * as Yup from "yup"; // used when validating with a pre-built solution
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
+
   },
+  form: {
+    width: '300px',
+    display: 'grid',
+    flexDirection: 'column',
+    rowGap: theme.spacing(4) + 'px'
+  }
 }));
 
 
@@ -26,65 +26,94 @@ const Registration = inject("userStore")(observer((props) => {
 
   const [inputUser, setInputUser] = useState({
     name: "",
-    phone: "",
+    phone: "+972",
     password: ""
   })
 
   const [inputContact, setInputContact] = useState({
     contactName: "",
-    contactPhone: ""
+    contactPhone: "+972"
   })
 
+  const [validation, setValidation] = useState({
+    name: null,
+    phone: null,
+    password: null,
+    contactName: null,
+    contactPhone: null
+  })
 
   const handleInputUser = e => {
-    let inputVal = { ...inputUser }
+    const inputVal = { ...inputUser }
+
     inputVal[e.target.name] = e.target.value
+
     setInputUser(inputVal)
+    validateRequiredInput(e)
   }
 
-  const handleInputContact = e => {
-    let inputVal = { ...inputContact }
+  const handleContactInput = e => {
+    const inputVal = { ...inputContact }
     inputVal[e.target.name] = e.target.value
+
     setInputContact(inputVal)
+    validateRequiredInput(e)
   }
 
-  const checking = () => {
-    if (inputUser.name === "") {
-        alert("Imput your name") 
-        return false
-    }
-    if (inputUser.phone === "") {
-      alert("Imput your phone")
-      return false
-    }
-    if (!validator.contains(inputUser.phone, "+972")) {
-      alert('input phone in format "+972..."')
-      return false
-    }
-    if (!validator.contains(inputContact.contactPhone, "+972")) {
-      alert('input phone in format "+972..."')
-      return false
-    }
-    if (inputContact.contactName === "") {
-      alert("Imput your contact name")
-      return false
-    } else {
-      return true
-    }
+  const validateRequiredInput = e => {
+    const state = { ...validation }
+    const isInvalid = !e.target.value
+
+    state[e.target.name] = isInvalid ? 'Required' : null
+
+    setValidation(state)
   }
+
+
+  const validatePassword = e => {
+    const state = { ...validation }
+    const isInvalid = e.target.value.length < 3
+
+    state.password = isInvalid ? 'Has to contain more then 3 letters' : null
+
+    setValidation(state)
+  }
+
+  const validatePhone = e => {
+    const state = { ...validation }
+    const isInvalid = !validator.contains(e.target.value, '+972') || e.target.value.length !== 13
+
+    state.phone = isInvalid ? 'Phone must be in format +972...' : null
+
+    setValidation(state)
+  }
+
+  const validateContactPhone = e => {
+    const state = { ...validation }
+    const isInvalid = !validator.contains(e.target.value, '+972') || e.target.value.length !== 13
+
+    state.contactPhone = isInvalid ? 'Phone must be in format +972...' : null
+
+    setValidation(state)
+  }
+
+
+
+  const hasNoErrors = Object.keys(validation).every(k => validation[k] === null)
+  const isFormValid = hasNoErrors && Object.keys(inputUser).every(k => inputUser[k]?.length) && Object.keys(inputContact).every(k => inputContact[k]?.length)
+
+
   const registration = async () => {
-    // 
-    const isAllOk = checking()
-    if (isAllOk) {
+    if (isFormValid) {
       const user = {
         name: inputUser.name,
         phone: inputUser.phone,
         password: inputUser.password,
-      contacts: [{
-        contactName: inputContact.contactName,
-        contactPhone: inputContact.contactPhone
-      }],
-      timer: {isOn: false}
+        contacts: [{
+          contactName: inputContact.contactName,
+          contactPhone: inputContact.contactPhone
+        }],
+        timer: { isOn: false }
       }
 
       const newUser = await props.userStore.registration(user)
@@ -95,20 +124,66 @@ const Registration = inject("userStore")(observer((props) => {
         localStorage.setItem(`password`, `${user.password}`);
         props.login()
       }
-    } else {
-      return
     }
   }
   return (
     <div>
       <Link to='/'> <ArrowBackIosIcon /> </Link>
-      <form className={classes.root} noValidate autoComplete="off">
-        <TextField id="name" label="Name" name='name' onChange={handleInputUser} />
-        <TextField id="phone" label="Phone" name='phone' onChange={handleInputUser} />
-        <TextField type='password' id="password" label="Password" name='password' onChange={handleInputUser} />
-        <TextField id="contactName" label="Contact Name" name='contactName' onChange={handleInputContact} />
-        <TextField id="contactPhone" label="Contact Phone" name='contactPhone' onChange={handleInputContact} />
-        <Button variant="contained" color="primary" disableElevation onClick={registration} >Registration</Button>
+      <form className={classes.form} noValidate autoComplete="off">
+
+        <TextField
+          error={!!validation.name}
+          value={inputUser.name}
+          label="Name"
+          name='name'
+          onBlur={validateRequiredInput}
+          onChange={handleInputUser}
+          id="standard-error-helper-text"
+          helperText={validation.name}></TextField>
+        <TextField
+          error={!!validation.phone}
+          value={inputUser.phone}
+          onBlur={validatePhone}
+          label="Phone"
+          name='phone'
+          onChange={handleInputUser}
+          id="standard-error-helper-text"
+          helperText={validation.phone}
+        />
+        <TextField
+          error={!!validation.password}
+          value={inputUser.password}
+          onBlur={validatePassword}
+          type='password'
+          label="Password"
+          name='password'
+          onChange={handleInputUser}
+          id="standard-error-helper-text"
+          helperText={validation.password}
+        />
+        <TextField
+          error={!!validation.contactName}
+          onBlur={validateRequiredInput}
+          label="Contact Name"
+          name='contactName'
+          onChange={handleContactInput}
+          id="standard-error-helper-text"
+          helperText={validation.contactName}
+        />
+
+        <TextField
+          error={!!validation.contactPhone}
+          onBlur={validateContactPhone}
+          value={inputContact.contactPhone}
+          label="Contact Phone"
+          name='contactPhone'
+          onChange={handleContactInput}
+          id="standard-error-helper-text"
+          helperText={validation.contactPhone}
+        />
+
+        <Button variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={registration}>Registration</Button>
+
         {props.isLoged ? <Redirect to='/main' /> : null}
       </form>
     </div>

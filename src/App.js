@@ -13,6 +13,7 @@ import Main from './components/Main';
 import Contacts from './components/Contacts';
 import { useContext } from 'react' //import hook from react
 import { MyContext } from './components/Topic';
+import ContactSettings from './components/ContactSettings';
 
 
  //create context
@@ -73,6 +74,7 @@ class App extends Component {
           <Route path="/profile" exact render={() => <Profile />} />
           <Route path="/timer" exact render={() => <Timer />} />
           <Route path="/contacts" exact render={() => <Contacts />} />
+          <Route path="/contactSettings" exact render={() => <ContactSettings />} />
         </Router>
       </MyContext.Provider >
 
