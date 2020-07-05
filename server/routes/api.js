@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require(`../model/User`)
+const Marker = require('../model/Marker')
 const request = require('request')
 const cron = require('node-cron')
 const webpush = require("web-push")
@@ -9,6 +10,28 @@ const publicVapidKey = "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y
 const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
 webpush.setVapidDetails("mailto:test@test.com", publicVapidKey, privateVapidKey)
 
+const accountSid = 'ACae72d5890e44228d4a9e4efc32f66c71'
+const authToken = 'e3e2297a5e2e289bf691e309491a8465'
+const client = require('twilio')(accountSid, authToken)
+const VoiceResponse = require('twilio').twiml.VoiceResponse
+const response = new VoiceResponse()
+response.say('SOS from a friend')
+console.log(response.toString());
+
+
+// client.calls
+//       .create({
+//         //  url: 'http://demo.twilio.com/docs/voice.xml',
+//         url: response.toString(),
+//          to: '+972544257318',
+//          from: '+12058905867'
+//        }, function(err, call){
+//            if (err){
+//                console.log(err)
+//            }else{
+//                console.log(call.sid)
+//             }
+//        })
 router.post("/subscribe", (req, res) => {
     // Get pushSubscription object
     const subscription = req.body
@@ -22,13 +45,29 @@ router.post("/subscribe", (req, res) => {
         .catch(err => console.error(err))
 })
 
+// router.get('/markers', async function(req, res){ //
+//     const markers = await User.find({}).select('markers')
+//     res.send(markers.map(m => {
+//         return(
+//             m.markers
+//         )
+//     })) //markers = [{"markers": [{"lat": 24, "lng": 34, "name": "sos"}, {}..]}, {}..]
+// })
+
+router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, name: String}
+    const marker = new Marker(req.body)
+    marker.save(function (err, marker) {
+        if (err) {
+            res.send({ msg: err })
+        } else {
+            res.send({ msg: "good", marker })
+        }
+    })
+})
+
 router.get('/markers', async function(req, res){ //
-    const markers = await User.find({}).select('markers')
-    res.send(markers.map(m => {
-        return(
-            m.markers
-        )
-    })) //markers = [{"markers": [{"lat": 24, "lng": 34, "name": "sos"}, {}..]}, {}..]
+    const markers = await Marker.find({})
+    res.send(markers)
 })
 
 router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
@@ -85,12 +124,9 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
 })
 
 router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
-    
-    const user = await User.findById(req.params.id)
+    const user = await User.findOneAndUpdate({_id: req.params.id}, {marker: req.body}, {new:true})
     sosCall(user, req.body)
-    user.markers.push(req.body)
-    const updatedUser = await user.save()
-    res.send(updatedUser)
+    res.send(user)
 })
 
 

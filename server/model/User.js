@@ -8,7 +8,7 @@ const userSchema = new Schema({
     password: String,
     contacts: [], // contact = {name: string, phone: string}
     timer: {isOn: Boolean, duration: Number, startTime: {hours: Number, minutes: Number, seconds: Number}},
-    markers: [] // marker = {lat: Number, lng: Number, name: String}
+    marker: {} //  {lat: Number, lng: Number, name: String}
 })
 
 const User = mongoose.model(`User`, userSchema)

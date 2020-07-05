@@ -24,11 +24,15 @@ export class MapContainer {
 
   }
 
+  @action handleSos = async (location, name) => {
+    const marker = await Axios.post(`http://localhost:3001/marker/`, {lat: location.latitude, lng: location.longitude, name})
+  }
+  
   @action getMarkers = async () => {
     let markers = await Axios.get('http://localhost:3001/markers')
     // let markers = await Axios.get('/markers')
     markers.data.forEach(element => {
-      element.forEach(m => this.markers.push(m))
+      this.markers.push(element)
     })
     console.log(this.markers)
   }

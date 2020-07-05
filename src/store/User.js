@@ -20,7 +20,7 @@ export class User {
     this.password = ''
     this.contacts = []
     this.timer = { isOn: false }
-    this.location = {}
+    this.location = null
     // this.isLoged = false
   }
   
@@ -92,8 +92,9 @@ export class User {
   }
 
   @action handleSos = async () => {
+    console.log(this.location.latitude);
+    
     const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, {lat: this.location.latitude, lng: this.location.longitude, name: "sos"})
-    // const sos = await Axios.post(`/sos/${this.id}`, {lat: this.location.lat, lng: this.location.lng, name: "sos"})
   }
 
   @action greenSignal = async (hours) => {

@@ -5,7 +5,9 @@ import '../styles/RedButton.css'
 const RedButton = inject('userStore', 'mapStore')(observer((props) => {
   const sendSos = ()=> {
     props.userStore.handleSos()
-    // props.mapStore.addSosLocationToMap(props.userStore.location, "sos")
+    props.mapStore.handleSos(props.userStore.location, "sos")
+    console.log(props.userStore.location);
+    
     alert("SOS")
   }
   return (

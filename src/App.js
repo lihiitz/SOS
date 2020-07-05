@@ -37,8 +37,9 @@ class App extends Component {
       if(navigator.geolocation){
       console.log("location Available")
       navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position.coords);
         console.log(position.coords.latitude, position.coords.longitude)
-        this.props.userStore.location = position.coords     
+        this.props.userStore.location = position.coords
       })
     } else {
       console.log("Not Available")

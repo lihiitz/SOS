@@ -78,6 +78,7 @@
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "2.3.5",
     "ts-pnp": "1.1.6",
+    "twilio": "^3.47.0",
     "url-loader": "2.3.0",
     "validator": "^13.1.1",
     "web-push": "^3.4.4",
