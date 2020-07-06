@@ -16,6 +16,7 @@ import MapContainer from './components/MapContainer';
 import { useContext } from 'react' //import hook from react
 import { MyContext } from './components/Topic';
 import ContactSettings from './components/ContactSettings';
+import MapPage from './components/MapPage';
 
 
  //create context
@@ -90,7 +91,7 @@ class App extends Component {
           <Route path="/timer" exact render={() => <Timer />} />
           <Route path="/contacts" exact render={() => <Contacts />} />
           <Route path="/contactSettings" exact render={() => <ContactSettings />} />
-          <Route path="/sosMap" exact render={() => <MapContainer />} />
+          <Route path="/sosMap" exact render={() => <MapPage />} />
         </Router>
       </MyContext.Provider >
 

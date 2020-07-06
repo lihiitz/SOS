@@ -10,13 +10,93 @@ const publicVapidKey = "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y
 const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
 webpush.setVapidDetails("mailto:test@test.com", publicVapidKey, privateVapidKey)
 
-const accountSid = 'ACae72d5890e44228d4a9e4efc32f66c71'
-const authToken = 'e3e2297a5e2e289bf691e309491a8465'
-const client = require('twilio')(accountSid, authToken)
+// const accountSid = 'ACae72d5890e44228d4a9e4efc32f66c71'
+const accountSid = 'AC76f5bf833bdefe51ea72e17816b1f697'
+// const authToken = 'e3e2297a5e2e289bf691e309491a8465'
+const authToken = 'a236de200bf720d37bd1cf25d8723c3c'
+const client = require('twilio')(accountSid, authToken);
 const VoiceResponse = require('twilio').twiml.VoiceResponse
-const response = new VoiceResponse()
-response.say('SOS from a friend')
-console.log(response.toString());
+// const response = new VoiceResponse()
+
+
+// Public Key BD7ZFkvexndv9G78vcZjEXoiwaRzKP919-5OYxge8UySNr0rY4eXkLHzl17xDg10YjpebtQT1OUtVQFTvJ1ffus
+//Private Key cAJ_gDl3Et1Eps_mljoA8u1ZIywJVwUz7LlFjsGYHpI
+
+
+const createSender  = require("pushkit/server");
+let sender     = createSender({
+    publicKey  : "BD7ZFkvexndv9G78vcZjEXoiwaRzKP919-5OYxge8UySNr0rY4eXkLHzl17xDg10YjpebtQT1OUtVQFTvJ1ffus",
+    privateKey : "cAJ_gDl3Et1Eps_mljoA8u1ZIywJVwUz7LlFjsGYHpI"
+},"adelson1606@gmail.com");
+
+
+
+router.post(`/reg`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
+    console.log(req.body);
+    sender.send(pushRegistrationObject, title, [config]);
+// let config = {
+//     body: "Street dogs don't want anything more than love and shelter."
+// }
+// // Here, the `pushRegistrationObject` is the object sent from the client that was stored on the server.
+// // Make sure to parse the pushRegistrationObject from JSON string
+// sender.send(pushRegistrationObject,"Adopt a street dog today!", config);
+    res.send(req.body)
+})
+// 
+
+// response.say('SOS from a friend')
+// console.log(response.toString());
+
+// Handle an AJAX POST request to place an outbound call
+router.post('/call', function (request, response) {
+    // This should be the publicly accessible URL for your application
+    // Here, we just use the host for the application making the request,
+    // but you can hard code it or use something different if need be
+    var salesNumber = request.body.salesNumber;
+    var url = 'https://36bfcfecb919.ngrok.io' + '/outbound/' + encodeURIComponent(salesNumber);
+
+    var options = {
+        to: request.body.phoneNumber,
+        from: '+18504469060',
+        url: url, //%2B = +
+    };
+
+    // Place an outbound call to the user, using the TwiML instructions
+    // from the /outbound route
+    client.calls.create(options)
+        .then((message) => {
+            console.log(message.responseText);
+            response.send({
+                message: 'Thank you! We will be calling you shortly.',
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            response.status(500).send(error);
+        });
+    //     client.calls
+    //   .create({
+    //      url: 'http://demo.twilio.com/docs/voice.xml',
+    //      to: '+14155551212',
+    //      from: '+15017122661'
+    //    })
+    //   .then(call => console.log(call.sid));
+});
+
+// Return TwiML instructions for the outbound call
+router.post('/outbound/:salesNumber', function (request, response) {
+    var salesNumber = request.params.salesNumber;
+    console.log(salesNumber)
+    var twimlResponse = new VoiceResponse();
+
+    twimlResponse.say('Thanks for contacting our sales department. Our ' +
+        'next available representative will take your call. ',
+        { voice: 'alice' });
+        console.log("making call")
+    twimlResponse.dial(salesNumber);
+
+    response.send(twimlResponse.toString());
+});
 
 
 // client.calls
@@ -54,7 +134,7 @@ router.post("/subscribe", (req, res) => {
 //     })) //markers = [{"markers": [{"lat": 24, "lng": 34, "name": "sos"}, {}..]}, {}..]
 // })
 
-router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, name: String}
+router.post('/marker', function (req, res) {//body = {lat: Number, lng: Number, name: String}
     const marker = new Marker(req.body)
     marker.save(function (err, marker) {
         if (err) {
@@ -65,7 +145,7 @@ router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, nam
     })
 })
 
-router.get('/markers', async function(req, res){ //
+router.get('/markers', async function (req, res) { //
     const markers = await Marker.find({})
     res.send(markers)
 })
@@ -124,9 +204,9 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
 })
 
 router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
-    const user = await User.findOneAndUpdate({_id: req.params.id}, {marker: req.body})
+    const user = await User.findOneAndUpdate({ _id: req.params.id }, { marker: req.body })
     console.log(req.body.lat);
-    
+
     sosCall(user, req.body)
     res.send(user)
 })
@@ -180,13 +260,13 @@ router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name
 })
 
 const sosCall = function (user, location) {
-    
+
     const numbers = user.contacts.map(c => c.contactPhone)
-    numbers.forEach(c => {        
+    //https://maps.google.com?saddr=Current+Location&daddr=
+    numbers.forEach(c => {
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: https://maps.google.com?saddr=Current+Location&daddr=${location.lat},${location.lng}&to=+972539528514`,
-            // 'url': `https://http-api.d7networks.com/send?username=ruwz8400&password=9OuYSqQf&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=smsinfo&content=SOS from ${user.name} in location: latitude: ${location ? location.lat : 'unknown'}, longitude: ${location ? location.lng : 'unknown'}&to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location:https://maps.google.com?daddr=${location.lat},${location.lng}&to=${c}`,
             'headers': {
             },
             formData: {
