@@ -6,9 +6,7 @@ const request = require('request')
 const cron = require('node-cron')
 const webpush = require("web-push")
 
-const publicVapidKey = "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo"
-const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
-webpush.setVapidDetails("mailto:test@test.com", publicVapidKey, privateVapidKey)
+
 
 // const accountSid = 'ACae72d5890e44228d4a9e4efc32f66c71'
 const accountSid = 'AC76f5bf833bdefe51ea72e17816b1f697'
@@ -19,29 +17,28 @@ const VoiceResponse = require('twilio').twiml.VoiceResponse
 // const response = new VoiceResponse()
 
 
-// Public Key BD7ZFkvexndv9G78vcZjEXoiwaRzKP919-5OYxge8UySNr0rY4eXkLHzl17xDg10YjpebtQT1OUtVQFTvJ1ffus
-//Private Key cAJ_gDl3Et1Eps_mljoA8u1ZIywJVwUz7LlFjsGYHpI
+const publicVapidKey = "BCue7AbRMDE6GPH0DWhS9kishGryuSKQxGm1Y_otQG9ai8wwUPVsTGGY7_iW-iVp5jxM0Nu2fBz6dDUknd-AHRk"
+const privateVapidKey = "SSAMmgW-Ytx0tMlNAfgUuL-h731zMjiQDCmX25NUJZ4";
 
 
-const createSender  = require("pushkit/server");
-let sender     = createSender({
-    publicKey  : "BD7ZFkvexndv9G78vcZjEXoiwaRzKP919-5OYxge8UySNr0rY4eXkLHzl17xDg10YjpebtQT1OUtVQFTvJ1ffus",
-    privateKey : "cAJ_gDl3Et1Eps_mljoA8u1ZIywJVwUz7LlFjsGYHpI"
-},"adelson1606@gmail.com");
+webpush.setVapidDetails("mailto:adelson1606@gmail.com", publicVapidKey, privateVapidKey)
+
+// router.post(`/subscribe`, async function (req, res) {
+//     console.log(req.body)
 
 
+//     const subscription = req.body;
+//     res.status(201).json({});
+    
 
-router.post(`/reg`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
-    console.log(req.body);
-    sender.send(pushRegistrationObject, title, [config]);
-// let config = {
-//     body: "Street dogs don't want anything more than love and shelter."
-// }
-// // Here, the `pushRegistrationObject` is the object sent from the client that was stored on the server.
-// // Make sure to parse the pushRegistrationObject from JSON string
-// sender.send(pushRegistrationObject,"Adopt a street dog today!", config);
-    res.send(req.body)
-})
+//     // let config = {
+//     //     body: "Street dogs don't want anything more than love and shelter."
+//     // }
+//     // // Here, the `pushRegistrationObject` is the object sent from the client that was stored on the server.
+//     // // Make sure to parse the pushRegistrationObject from JSON string
+//     // sender.send(pushRegistrationObject,"Adopt a street dog today!", config);
+//     // res.send(req.body)
+// })
 // 
 
 // response.say('SOS from a friend')
@@ -92,7 +89,7 @@ router.post('/outbound/:salesNumber', function (request, response) {
     twimlResponse.say('Thanks for contacting our sales department. Our ' +
         'next available representative will take your call. ',
         { voice: 'alice' });
-        console.log("making call")
+    console.log("making call")
     twimlResponse.dial(salesNumber);
 
     response.send(twimlResponse.toString());
@@ -112,18 +109,18 @@ router.post('/outbound/:salesNumber', function (request, response) {
 //                console.log(call.sid)
 //             }
 //        })
-router.post("/subscribe", (req, res) => {
-    // Get pushSubscription object
-    const subscription = req.body
-    // Send 201 - resource created
-    res.status(201).json({})
-    // Create payload
-    const payload = JSON.stringify({ title: "Push Test" })
-    // Pass object into sendNotification
-    webpush
-        .sendNotification(subscription, payload)
-        .catch(err => console.error(err))
-})
+// router.post("/subscribe", (req, res) => {
+//     // Get pushSubscription object
+//     const subscription = req.body
+//     // Send 201 - resource created
+//     res.status(201).json({})
+//     // Create payload
+//     const payload = JSON.stringify({ title: "Push Test" })
+//     // Pass object into sendNotification
+//     webpush
+//         .sendNotification(subscription, payload)
+//         .catch(err => console.error(err))
+// })
 
 // router.get('/markers', async function(req, res){ //
 //     const markers = await User.find({}).select('markers')
@@ -184,7 +181,7 @@ router.post(`/registration`, function (req, res) { // body = {name: string, phon
         if (err) {
             res.send({ msg: err })
         } else {
-            res.send({ msg: "good", user })
+            res.send({ msg: "good", user: user.toJSON() })
         }
     })
 })
@@ -266,7 +263,7 @@ const sosCall = function (user, location) {
     numbers.forEach(c => {
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location:https://maps.google.com?daddr=${location.lat},${location.lng}&to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in &to=${c}`,
             'headers': {
             },
             formData: {
@@ -307,6 +304,31 @@ const checkUserTimer = async function (user) {
         await user.save()
     } else if (duration - (5 * 60) + startTotal === nowTotal) {
         console.log("remainder 15 before timer ends")
+
+        const payload = JSON.stringify({
+            title: 'test',
+            body: {
+                body: 'Hello, World!',
+                icon: 'http://mongoosejs.com/docs/images/mongoose5_62x30_transparent.png',
+                actions: [
+                    {
+                        action: 'COOL',
+                        title: 'Akol Sababa'
+                    },
+                    {
+                        action: 'SOS',
+                        title: 'SOS'
+                    }
+                ]
+            }
+        });
+    
+        try {
+            await webpush.sendNotification(user.notificationSubscription, payload)
+        } catch (e) {
+            console.error(e.stack);
+        }
+
         //do push notification
     }
 }

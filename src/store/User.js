@@ -1,4 +1,3 @@
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import { observable, action } from 'mobx'
 import Axios from 'axios'
 const axios = require('axios')
@@ -111,7 +110,7 @@ export class User {
 
 
   @action handleSos = async () => {
-    const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
+    // const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
 
   }
 
@@ -151,7 +150,7 @@ export class User {
      
     }
     // Call our ajax endpoint on the server to initialize the phone call
-    const call = await Axios.post(`http://localhost:3001/call/`, data)
+    await Axios.post(`http://localhost:3001/call/`, data)
     await (function (data) {
       // The JSON sent back from the server will contain a success message
       alert(data.message);

@@ -53,6 +53,7 @@ const Login = inject("userStore")(observer((props) => {
         id="standard-error-helper-text"
         label="Phone" 
         name='phone'
+        autoComplete="username"
         helperText="Incorrect entry."
         onChange={handleInput}
       />}
@@ -63,6 +64,7 @@ const Login = inject("userStore")(observer((props) => {
         name='password'
         helperText="Incorrect entry."
         type="password"
+        autoComplete="current-password"
         onChange={handleInput}
       />}
       {/* <TextField id="phone" label="Phone" name='phone' onChange={handleInput} />

@@ -1,12 +1,19 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import { useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import validator from 'validator';
+
+import Switch from '@material-ui/core/Switch';
+import { subscribe } from '../../notifications/notifications-web-push';
+
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,8 +28,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
 const Registration = inject("userStore")(observer((props) => {
   const classes = useStyles();
+  const isNotificationsDenied = Notification.permission === 'denied'
+
+  const [notifications, setNotifications] = React.useState(null);
+
 
   const [inputUser, setInputUser] = useState({
     name: "",
@@ -42,6 +54,18 @@ const Registration = inject("userStore")(observer((props) => {
     contactName: null,
     contactPhone: null
   })
+  const handleChange = async (event) => {
+    if (event.target.checked) {
+      const notificationSubscription = await subscribe()
+      // const notificationsState = {
+      //   { ... }
+      // }
+      setNotifications(notificationSubscription);
+    } else {
+      setNotifications(null);
+    }
+
+  };
 
   const handleInputUser = e => {
     const inputVal = { ...inputUser }
@@ -113,7 +137,8 @@ const Registration = inject("userStore")(observer((props) => {
           contactName: inputContact.contactName,
           contactPhone: inputContact.contactPhone
         }],
-        timer: { isOn: false }
+        timer: { isOn: false },
+        notificationSubscription: notifications
       }
 
       const newUser = await props.userStore.registration(user)
@@ -129,7 +154,7 @@ const Registration = inject("userStore")(observer((props) => {
   return (
     <div>
       <Link to='/'> <ArrowBackIosIcon /> </Link>
-      <form className={classes.form} noValidate autoComplete="off">
+      <form className={classes.form} noValidate>
 
         <TextField
           error={!!validation.name}
@@ -155,6 +180,7 @@ const Registration = inject("userStore")(observer((props) => {
           value={inputUser.password}
           onBlur={validatePassword}
           type='password'
+          autoComplete="new-password"
           label="Password"
           name='password'
           onChange={handleInputUser}
@@ -181,6 +207,15 @@ const Registration = inject("userStore")(observer((props) => {
           id="standard-error-helper-text"
           helperText={validation.contactPhone}
         />
+
+        <FormControl component="fieldset">
+          <FormControlLabel
+            control={<Switch disabled={isNotificationsDenied} checked={!!notifications} onChange={handleChange} name="checkedA" />}
+            label="Enable Notifications"
+          />
+          {isNotificationsDenied && <FormHelperText error={true}>Push notification denied, see browser settings to enable this</FormHelperText>}
+        </FormControl>
+
 
         <Button variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={registration}>Registration</Button>
 

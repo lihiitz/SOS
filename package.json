@@ -9,12 +9,9 @@
     "@material-ui/pickers": "^3.2.10",
     "@react-google-maps/api": "^1.9.7",
     "axios": "^0.19.2",
-    "formik": "^2.1.4",
-    "jquery": "^3.5.1",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
     "moment": "^2.27.0",
-    "pushkit": "^3.2.1",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
@@ -100,6 +97,7 @@
     "start": "node scripts/start.js",
     "server": "node server.js",
     "build": "node scripts/build.js",
+    "generateVAPID": "web-push generate-vapid-keys",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
