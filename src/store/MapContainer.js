@@ -39,7 +39,11 @@ export class MapContainer {
         circle: {
           radius: 0,
           options: {
-            strokeColor: ""
+            strokeColor: "",
+            strokeOpacity: 0.8,
+            fillColor: "",
+            fillOpacity: 0.35,
+
           }
         }
       },
@@ -56,12 +60,15 @@ export class MapContainer {
         }
       }
     ]
-    this.radius = 100//in metersssssssssss
+    this.radius = 2000//in metersssssssssss
     this.zoom = 12
   }
 
   @action handleSos = async (location, name) => {
-    const marker = await Axios.post(`http://localhost:3001/marker/`, { lat: location.latitude, lng: location.longitude, name })
+    const d = new Date()
+    // const date = {year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), hours: d.getHours(), minutes: d.getMinutes() }
+    const timeStamp = Date.now()
+    const marker = await Axios.post(`http://localhost:3001/marker/`, { lat: location.latitude, lng: location.longitude, timeStamp, name })
   }
 
   @action getColor = (point) => {
@@ -72,9 +79,30 @@ export class MapContainer {
     }
   }
 
+  @action isNewMarker = (date) => {
+    const now = new Date()
+
+
+  }
+
   @action getMarkers = async () => {
     let markers = await Axios.get('http://localhost:3001/markers')
-    this.markers = markers.data
+    // this.markers = markers.data
+    this.markers = markers.data.map(m => {
+      let ms = Date.now() - m.timeStamp
+      // debugger
+      const isNew = ms < 3600000 ? true: false
+      return(
+        {
+          id: m._id,
+          name: m.name,
+          lat: m.lat,
+          lng: m.lng,
+          new: isNew
+        }
+      )
+    })
+    
 
     this.addColorToZones()
 
@@ -83,7 +111,10 @@ export class MapContainer {
         Object.assign(z, {circle: {
           radius: this.radius,
           options: {
-            strokeColor: z.color
+            strokeColor: z.color,
+            strokeOpacity: 0.8,
+            fillColor: z.color,
+            fillOpacity: 0.35,
           }
         }})
       )
@@ -93,7 +124,6 @@ export class MapContainer {
   }
 
   @action addColorToZones = () => {
-    debugger
 
     this.zones.forEach(z => {
       let count = this.countMarkersInZone(z)

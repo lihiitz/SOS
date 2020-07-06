@@ -1,3 +1,4 @@
+/*global google*/
 import React, {Fragment, Component} from "react";
 import {
   withGoogleMap,
@@ -42,7 +43,8 @@ import { observer, inject } from "mobx-react";
                   lat: parseFloat(place.lat),
                   lng: parseFloat(place.lng)
                 }}
-                onClick={() => console.log(place)}
+                animation= {place.new ? google.maps.Animation.BOUNCE : google.maps.Animation.DROP}
+                onClick={() => console.log(place.name)}
               />
             </Fragment>
           )
