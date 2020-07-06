@@ -1,61 +1,68 @@
-import React from 'react'
+
 import { Map, InfoWindow, Marker, GoogleApiWrapper, google } from 'google-maps-react';
 import { GoogleMap, LoadScript, Circle } from '@react-google-maps/api'
 import { observable, action } from 'mobx'
 import Axios from 'axios';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
 
 
 export class MapContainer {
   @observable containerStyle
   @observable center
-  @observable markers = [] //{lat: number, lng: number, color: str}
+  @observable markers = [] //{lat: number, lng: number, color: string}
   @observable zones = []
-
-  constructor() {
-    this.containerStyle = {
-      width: '400px',
-      height: '400px'
-    }
+  
+  constructor(){
     this.center = {
       lat: 31.880099,
       lng: 34.820535
     }
     this.zones = [
       {
-        name: 'a',
+        count: 0,
         color: '',
-        lat: 32.066385,
-        lng: 34.775957
+        lat: 29.563468, //eilat
+        lng: 34.923842,
+        circle: {
+          radius: 0,
+          options: {
+            strokeColor: ""
+          }
+        }
       },
       {
-        name: 'b',
+        count: 0,
         color: '',
-        lat: 32.989208,
-        lng: 35.455084
+        lat: 32.072741,
+        lng: 34.771058, //tel aviv
+        circle: {
+          radius: 0,
+          options: {
+            strokeColor: ""
+          }
+        }
+      },
+      {
+        count: 0,
+        color: '',
+        lat: 33.275325,//metula
+        lng: 35.578519,
+        circle: {
+          radius: 0,
+          options: {
+            strokeColor: ""
+          }
+        }
       }
     ]
-    this.radius = 100 //km
-
+    this.radius = 100//in metersssssssssss
+    this.zoom = 12
   }
 
   @action handleSos = async (location, name) => {
     const marker = await Axios.post(`http://localhost:3001/marker/`, { lat: location.latitude, lng: location.longitude, name })
   }
-
-//   @action addCircles = () => {
-//     for (let zone in this.zones) {
-//       // Add the circle for this city to the map.
-//       const circle = new google.maps.Circle({
-//         strokeColor: "#FF0000",
-//         strokeOpacity: 0.8,
-//         strokeWeight: 2,
-//         fillColor: "#FF0000",
-//         fillOpacity: 0.35,
-//         center: {lat: zone.lat, lng: zone.lng},
-//         radius: 100
-//       })
-//   }
-// }
 
   @action getColor = (point) => {
     for (let z of this.zones){
@@ -66,32 +73,31 @@ export class MapContainer {
   }
 
   @action getMarkers = async () => {
-    debugger
     let markers = await Axios.get('http://localhost:3001/markers')
-    // let markers = await Axios.get('/markers')
-    let temp = markers.data.map(m => {
-      return(
-        {lat: m.lat, lng: m.lng}
-      )
-    })
-    this.markers = temp
+    this.markers = markers.data
 
     this.addColorToZones()
 
-    temp = this.markers.map(m => {
-      const color = this.getColor(m)
+    let temp = this.zones.map(z => {
       return(
-        {lat: m.lat, lng: m.lng, color}
+        Object.assign(z, {circle: {
+          radius: this.radius,
+          options: {
+            strokeColor: z.color
+          }
+        }})
       )
     })
-    this.markers = temp
-
+    this.zones = temp
     console.log(this.markers)
   }
 
   @action addColorToZones = () => {
+    debugger
+
     this.zones.forEach(z => {
       let count = this.countMarkersInZone(z)
+      z.count = count
       if (count > 10){
         z.color = 'red'
       }else if (count <= 10 && count > 5){
@@ -113,39 +119,32 @@ export class MapContainer {
   }
 
   @action isPointInCircle = (point, circleCenter) => {
-    let dist_points = (point.lat - circleCenter.lat) * (point.lat - circleCenter.lat) + (point.lng - circleCenter.lng) * (point.lng - circleCenter.lng)
-    let r = this.radius * this.radius
-    if (dist_points < r) {
+    let dist_points = this.distance(point.lat, point.lng, circleCenter.lat, circleCenter.lng, "K") //dist in Kilometers
+    if (dist_points < this.radius) {
         return true
     }
     return false
   }
 
-  // displayMarkers = () => {
-  //   let url = "http://maps.google.com/mapfiles/ms/icons/"
-  //   return this.markers.map((marker, index) => {
-  //     url += marker.color + "-dot.png"
-  //     return <Marker key={index} id={index} position={{
-  //       lat: marker.lat,
-  //       lng: marker.lng
-  //     }}
-  //       onClick={() => console.log(marker.name)}
-  //       // options={{icon:`${url}`}}
-  //       />
-  //   })
-  // }
-
-  displayMarkers = () => {
-    let url = "http://maps.google.com/mapfiles/ms/icons/"
-    return this.markers.map((marker, index) => {
-      url += marker.color + "-dot.png"
-      return <Marker key={index} id={index} position={{
-        lat: marker.lat,
-        lng: marker.lng
-      }}
-        onClick={() => console.log(marker.name)}
-        // options={{icon:`${url}`}}
-        />
-    })
+  @action distance(lat1, lon1, lat2, lon2, unit) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+      return 0;
+    }
+    else {
+      var radlat1 = Math.PI * lat1/180;
+      var radlat2 = Math.PI * lat2/180;
+      var theta = lon1-lon2;
+      var radtheta = Math.PI * theta/180;
+      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+        dist = 1;
+      }
+      dist = Math.acos(dist);
+      dist = dist * 180/Math.PI;
+      dist = dist * 60 * 1.1515;
+      if (unit=="K") { dist = dist * 1.609344 }
+      if (unit=="N") { dist = dist * 0.8684 }
+      return dist * 1000; //return in meters
+    }
   }
 }
