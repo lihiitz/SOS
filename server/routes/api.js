@@ -45,16 +45,7 @@ router.post("/subscribe", (req, res) => {
         .catch(err => console.error(err))
 })
 
-// router.get('/markers', async function(req, res){ //
-//     const markers = await User.find({}).select('markers')
-//     res.send(markers.map(m => {
-//         return(
-//             m.markers
-//         )
-//     })) //markers = [{"markers": [{"lat": 24, "lng": 34, "name": "sos"}, {}..]}, {}..]
-// })
-
-router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, name: String}
+router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, timeStamp: Number, name: String}
     const marker = new Marker(req.body)
     marker.save(function (err, marker) {
         if (err) {
@@ -127,7 +118,7 @@ router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: 
     const user = await User.findOneAndUpdate({_id: req.params.id}, {marker: req.body})
     console.log(req.body.lat);
     
-    sosCall(user, req.body)
+    // sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
     res.send(user)
 })
 
@@ -182,7 +173,6 @@ router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name
 const sosCall = function (user, location) {
     
     const numbers = user.contacts.map(c => c.contactPhone)
-    //https://maps.google.com?saddr=Current+Location&daddr=
     numbers.forEach(c => {        
         const options = {
             'method': 'POST',
