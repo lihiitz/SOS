@@ -121,16 +121,8 @@ router.post('/outbound/:salesNumber', function (request, response) {
 //         .catch(err => console.error(err))
 // })
 
-// router.get('/markers', async function(req, res){ //
-//     const markers = await User.find({}).select('markers')
-//     res.send(markers.map(m => {
-//         return(
-//             m.markers
-//         )
-//     })) //markers = [{"markers": [{"lat": 24, "lng": 34, "name": "sos"}, {}..]}, {}..]
-// })
 
-router.post('/marker', function (req, res) {//body = {lat: Number, lng: Number, name: String}
+router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, timeStamp: Number, name: String}
     const marker = new Marker(req.body)
     marker.save(function (err, marker) {
         if (err) {
@@ -202,8 +194,7 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
 router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
     const user = await User.findOneAndUpdate({ _id: req.params.id }, { marker: req.body })
     console.log(req.body.lat);
-
-    sosCall(user, req.body)
+    // sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
     res.send(user)
 })
 
@@ -258,8 +249,8 @@ router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name
 const sosCall = function (user, location) {
 
     const numbers = user.contacts.map(c => c.contactPhone)
-    //https://maps.google.com?saddr=Current+Location&daddr=
-    numbers.forEach(c => {
+
+    numbers.forEach(c => {        
         const options = {
             'method': 'POST',
             'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in &to=${c}`,

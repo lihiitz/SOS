@@ -16,6 +16,7 @@
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
     "react-dom": "^16.13.1",
+    "react-google-maps": "^9.4.5",
     "react-number-format": "^4.4.1",
     "react-router-dom": "^5.2.0",
     "validator": "^13.1.1"
