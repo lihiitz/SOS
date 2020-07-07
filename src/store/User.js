@@ -66,7 +66,6 @@ export class User {
     // const response = await axios.post('/registration', user)
     if (response.data.msg === 'good') {
       const userData = response.data.user
-      debugger
       this.id = userData._id
       this.name = userData.name
       this.password = userData.password

@@ -70,31 +70,31 @@ const AddNewContact = inject("userStore")(observer((props) => {
   const isFormValid = hasNoErrors && Object.keys(input).every(k => input[k]?.length)
   return (
     <div>
-      <form className={classes.root} noValidate autoComplete="off">
-        <InputLabel id="ContactText" htmlFor="input-with-icon-adornment">Name</InputLabel>
-        <TextField
+      <body>
+      <div className="textbox">
+        <input
+          placeholder="Contact Name"
           id="ContactText"
           error={!!validation.contactName}
           name='contactName'
           value={input.contactName}
           onBlur={validateRequiredInput}
           onChange={handleInput}
-          helperText={validation.contactName}>
-        </TextField>
-        <InputLabel id="ContactText" htmlFor="input-with-icon-adornment">Phone</InputLabel>
-        <TextField
+          helperText={validation.contactName}/>
+      </div>
+      <div className="textbox">
+        <input
+          placeholder="Contact Number"
           error={!!validation.contactPhone}
           onBlur={validatePhone}
           name='contactPhone'
           value={input.contactPhone}
           onChange={handleInput}
           id="ContactText"
-          helperText={validation.contactPhone}
-        // inputComponent={TextMaskCustom}
-        />
-
-        <button className="btn" variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={addNewContact}>Add New Contact</button>
-      </form>
+          helperText={validation.contactPhone}/>
+        </div>
+        <button className="loginBtn" variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={addNewContact}>Add New Contact</button>
+        </body>
     </div>
   )
 }))

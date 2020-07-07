@@ -14,10 +14,10 @@
   font: 25px/330px "Open Sans", sans-serif;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #fff;
+  color: black;
   text-align: center;
   font-weight: 900;
-  background: green;
+  background: #FFE787;
   border-radius: 50%;
   animation: shadow-pulse1 3s infinite;
   display: inline-block;
@@ -29,25 +29,25 @@
 @keyframes shadow-pulse1
 {
   0% {
-    box-shadow: 0 0 0 0px green;
+    box-shadow: 0 0 0 0px #FFE787;
   }
   50% {
-    box-shadow: 0 0 0 15px green;
+    box-shadow: 0 0 0 15px #FFE787;
   }
   100% {
-    box-shadow: 0 0 0 0px green;
+    box-shadow: 0 0 0 0px #FFE787;
   }
 }
 
 @keyframes shadow-pulse-big
 {
   0% {
-    box-shadow: 0 0 0 0px green;
+    box-shadow: 0 0 0 0px #FFE787;
   }
   50% {
-    box-shadow: 0 0 0 15px green;
+    box-shadow: 0 0 0 15px #FFE787;
   }
   100% {
-    box-shadow: 0 0 0 0px green;
+    box-shadow: 0 0 0 0px #FFE787;
   }
 }

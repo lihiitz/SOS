@@ -50,26 +50,27 @@ const Profile = inject("userStore")(observer((props, ref) => {
       <Topic />
       <div style={{ display: 'grid', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ display: "block" }}>
+      <div className="textbox">
       <FormControl  id="profileText" className={classes.margin}>
-        <InputLabel id="profileText" htmlFor="input-with-icon-adornment">Name</InputLabel>
-        <Input
-        
+        <InputLabel id="profileText" htmlFor="input-with-icon-adornment"></InputLabel>
+        <AccountCircle id="123" className="profileIcon"/>
+        <input
+          placeholder="  Name"
           id="profileText"
           name='name'
           value={user.name}
           onChange={handleInput}
-          startAdornment={
-            <InputAdornment position="start">
-              <AccountCircle className="profileIcon"/>
-            </InputAdornment>
-          }
         />
       </FormControl>
       </div>
+      </div>
       <br></br>
+      <div className="textbox">
       <FormControl className={classes.margin}>
-        <InputLabel id="profileText" htmlFor="input-with-icon-adornment">Phone</InputLabel>
-        <Input
+        <InputLabel id="profileText" htmlFor="input-with-icon-adornment"></InputLabel>
+        <PhoneIcon className="profileIcon"/>
+        <input
+          placeholder="  Phone"
           id="profileText"
           name='phone'
           value={user.phone}
@@ -81,10 +82,14 @@ const Profile = inject("userStore")(observer((props, ref) => {
           }
         />
       </FormControl>
+      </div>
       <br></br>
+      <div className="textbox">
       <FormControl className={classes.margin}>
-        <InputLabel id="profileText" htmlFor="input-with-icon-adornment">Password</InputLabel>
-        <Input
+        <InputLabel id="profileText" htmlFor="input-with-icon-adornment"></InputLabel>
+        <VpnKeyIcon className="profileIcon"/>
+        <input
+          placeholder="  Password"
           id="profileText"
           type='password'
           name='password'
@@ -97,9 +102,10 @@ const Profile = inject("userStore")(observer((props, ref) => {
           }
         />
       </FormControl>
+      </div>
       <br></br>
       <br></br>
-      <button className="btn" disableElevation onClick={editProfile}>Edit profile</button>
+      <button className="loginBtn" disableElevation onClick={editProfile}>Edit profile</button>
 
     </div>
    </div>

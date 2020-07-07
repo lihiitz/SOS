@@ -53,6 +53,12 @@ body{
   margin: 12px 0;
 }
 
+.loginBtn:hover{
+  background-color:#c0392b;
+}
+
+
+
 p {
     width: 100%;
     overflow: hidden;

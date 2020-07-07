@@ -47,11 +47,13 @@ const ContactSettings = inject("userStore")(observer((props, ref) => {
   }
   return (
     <div>
+      <body>
       <Topic />
       <Link to='/contacts'> <ArrowBackIosIcon /> </Link>
+      <div className="textbox">
         <FormControl className={classes.margin}>
-          <InputLabel htmlFor="input-with-icon-adornment">Name</InputLabel>
-          <Input
+          <input
+            placeholder="Contact Name"
             id="input-with-icon-adornment"
             name='contactName'
             value={contact.contactName}
@@ -63,10 +65,12 @@ const ContactSettings = inject("userStore")(observer((props, ref) => {
             }
           />
         </FormControl>
+        </div>
+        <div className="textbox">
         <br></br>
         <FormControl className={classes.margin}>
-          <InputLabel htmlFor="input-with-icon-adornment">Phone</InputLabel>
-          <Input
+          <input
+            placeholder="Contact Phone"
             id="input-with-icon-adornment"
             name='contactPhone'
             value={contact.contactPhone}
@@ -78,10 +82,12 @@ const ContactSettings = inject("userStore")(observer((props, ref) => {
             }
           />
         </FormControl>
+        </div>
 
-        <Button variant="contained" color="primary" disableElevation onClick={updateContact}>Edit contact</Button>
+        <button className="loginBtn" variant="contained" color="primary" disableElevation onClick={updateContact}>Edit contact</button>
 
-        <Link to='/contacts'> <Button variant="contained" color="primary" disableElevation onClick={deleteContact}>Delete contact</Button></Link>
+        <Link to='/contacts'> <button className="loginBtn" variant="contained" color="primary" disableElevation onClick={deleteContact}>Delete contact</button></Link>
+        </body>
         </div>
 
   )
