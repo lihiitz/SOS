@@ -8,6 +8,7 @@ import Select from '@material-ui/core/Select';
 import GreenButton from './GreenButton';
 import CountDown from './CountDown';
 import Topic from '../Topic'
+import "./Timer.scss"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -48,8 +49,9 @@ const TimerInputs = inject("userStore")(observer((props) => {
   return (
     <div>
       <Topic/>
+      <div className="timerBody">
       <FormControl className={classes.formControl}>
-        <InputLabel id="demo-controlled-open-select-label">Hour</InputLabel>
+        <InputLabel className="TimerColor" id="demo-controlled-open-select-label">Hour</InputLabel>
         <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
@@ -69,7 +71,8 @@ const TimerInputs = inject("userStore")(observer((props) => {
       </FormControl>
       <GreenButton startCount={startCount} />
       {props.userStore.timer.isOn ? <CountDown time={props.userStore.timer} /> : null}
-      <button onClick={stopTimerClick}>STOP TIMER</button>
+      <button className="btn" id="timerbtn" onClick={stopTimerClick}>STOP TIMER</button>
+      </div>
     </div>
   )
 }))

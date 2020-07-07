@@ -9,9 +9,12 @@ const RedButton = inject('userStore', 'mapStore')(observer((props) => {
     alert("SOS")
   }
   return (
+    <div className="body">
     <div className='SOS' onClick={sendSos}>
-
+      SOS
     </div>
+    </div>
+
   )
 }))
 

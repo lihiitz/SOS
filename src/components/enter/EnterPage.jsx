@@ -8,12 +8,12 @@ import Login from './Login';
 const EnterPage = (props) => {
 
   return (
-    <div>
+    <div className='login-box'>
       {props.isLoged ? <Redirect to='/main' /> : null}
       {/* <Link to='/login'><Button variant="contained" color="primary" disableElevation >LogIn</Button></Link> */}
       <Login  login={props.login} isLoged={props.isLoged} />
-      <p>Have no profile yet? SignUp here</p>
-      <Link to='/registration'>  <Button variant="contained" color="primary" disableElevation >Registration</Button></Link>
+      <p></p>
+      <Link to='/registration'>  <button className="registerbtn" variant="contained" color="primary" disableElevation >Registration</button></Link>
     </div>
   )
 }

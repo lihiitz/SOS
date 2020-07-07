@@ -94,7 +94,24 @@ router.post('/outbound/:salesNumber', function (request, response) {
     response.send(twimlResponse.toString());
 });
 
+let sender = createSender(
+  {
+    publicKey: publicVapidKey,
+    privateKey: privateVapidKey,
+  },
+  "filjuwabbyo@gmail.com"
+);
 
+router.post("/reg", (req, res) => {
+  let config = {
+    body: "Street dogs don't want anything more than love and shelter.",
+  };
+  const pushRegistrationObject = req.body;
+  // Here, the `pushRegistrationObject` is the object sent from the client that was stored on the server.
+  // Make sure to parse the pushRegistrationObject from JSON string
+  sender.send(pushRegistrationObject, "Adopt a street dog today!", config);
+  res.send(pushRegistrationObject);
+});
 // client.calls
 //       .create({
 //         //  url: 'http://demo.twilio.com/docs/voice.xml',
@@ -108,6 +125,21 @@ router.post('/outbound/:salesNumber', function (request, response) {
 //                console.log(call.sid)
 //             }
 //        })
+
+router.post("/subscribe", (req, res) => {
+  // Get pushSubscription object
+  const subscription = req.body;
+  // Send 201 - resource created
+  res.status(201).json({});
+  // Create payload
+  const payload = JSON.stringify({ title: "Push Test" });
+  // Pass object into sendNotification
+  webpush
+    .sendNotification(subscription, payload)
+    .catch((err) => console.error(err));
+});
+
+router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, timeStamp: Number, name: String}
 // router.post("/subscribe", (req, res) => {
 //     // Get pushSubscription object
 //     const subscription = req.body
@@ -149,19 +181,57 @@ router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
     if (updatedUser) {
         res.send({ msg: "good", user: updatedUser })
     } else {
-        res.send({ msg: "bad" })
+      res.send({ msg: "good", marker });
     }
-})
+  });
+});
 
-router.post('/stopTimer/:id', async function (req, res) {
+router.get("/markers", async function (req, res) {
+  //
+  const markers = await Marker.find({});
+  res.send(markers);
+});
 
-    let user = await User.findById(req.params.id)
-    user.timer.isOn = false
-    const updatedUser = await user.save()
-    if (updatedUser) {
-        res.send({ msg: "good", user: updatedUser })
+router.post("/timer/:id", async function (req, res) {
+  //body = {hours: Number}
+
+  const d = new Date();
+  let user = await User.findById(req.params.id);
+  user.timer.isOn = true;
+  user.timer.startTime = {
+    hours: d.getHours(),
+    seconds: d.getSeconds(),
+    minutes: d.getMinutes(),
+  };
+  user.timer.duration = req.body.hours;
+  const updatedUser = await user.save();
+  if (updatedUser) {
+    res.send({ msg: "good", user: updatedUser });
+  } else {
+    res.send({ msg: "bad" });
+  }
+});
+
+router.post("/stopTimer/:id", async function (req, res) {
+  let user = await User.findById(req.params.id);
+  user.timer.isOn = false;
+  const updatedUser = await user.save();
+  if (updatedUser) {
+    res.send({ msg: "good", user: updatedUser });
+  } else {
+    res.send({ msg: "bad" });
+  }
+});
+
+router.post(`/registration`, function (req, res) {
+  // body = {name: string, phone: string, password: string, contacts: []}
+
+  const newUser = new User(req.body);
+  newUser.save(function (err, user) {
+    if (err) {
+      res.send({ msg: err });
     } else {
-        res.send({ msg: "bad" })
+      res.send({ msg: "good", user });
     }
 })
 
@@ -235,21 +305,103 @@ router.put(`/contactSettings/:id`, async function (req, res) { // body : { name:
         contactName: req.body.newName,
         contactPhone: req.body.newPhone
     }
-    user.contacts[index] = newData
-    await user.save()
-    res.send(user)
-})
+  });
+});
 
-router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name: string, phone: string}
+router.post(`/sos/:id`, async function (req, res) {
+  //body = {lat: Number, lng: Number, name: String}
+  const user = await User.findOneAndUpdate(
+    { _id: req.params.id },
+    { marker: req.body }
+  );
+  console.log(req.body.lat);
 
-    let user = await User.findById(req.params.id)
-    const index = user.contacts.findIndex(c => c.contactName === req.body.contactName)
-    user.contacts.splice(index, 1)
-    await user.save()
-    res.send(user)
-})
+  sosCall(user, req.body);
+  res.send(user);
+});
+
+router.put(`/profile/:id`, function (req, res) {
+  //body: {name: string and/or phone: string and/or password: string}
+
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    { new: true },
+    function (err, user) {
+      if (err) {
+        res.send({ msg: err });
+      } else {
+        res.send({ msg: "good", user });
+      }
+    }
+  );
+});
+
+router.put(`/contactsSettings/:id`, function (req, res) {
+  //body: {contacts: []}
+
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { $push: { contacts: req.body.contacts } },
+    { new: true },
+    function (err, user) {
+      if (err) {
+        res.send({ msg: err });
+      } else {
+        res.send({ msg: "good", user });
+      }
+      //TODO : ADD NEW CONTACT ONLY IF IS NOT ALREADY IN LIST
+    }
+  );
+});
+
+router.put(`/contactSettings/:id`, async function (req, res) {
+  // body : { name: string, phone: string newName:string, newPhone: string}
+
+  let user = await User.findById(req.params.id);
+  const index = user.contacts.findIndex((c) => c.contactName === req.body.name);
+  // user.contacts[index] = req.body
+  const newData = {
+    contactName: req.body.newName,
+    contactPhone: req.body.newPhone,
+  };
+  user.contacts[index] = newData;
+  await user.save();
+  res.send(user);
+});
+
+router.put(`/contactSettingsD/:id`, async function (req, res) {
+  // body : { name: string, phone: string}
+
+  let user = await User.findById(req.params.id);
+  const index = user.contacts.findIndex(
+    (c) => c.contactName === req.body.contactName
+  );
+  user.contacts.splice(index, 1);
+  await user.save();
+  res.send(user);
+});
 
 const sosCall = function (user, location) {
+  const numbers = user.contacts.map((c) => c.contactPhone);
+  //https://maps.google.com?saddr=Current+Location&daddr=
+  numbers.forEach((c) => {
+    const options = {
+      method: "POST",
+      url: `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location:https://maps.google.com?daddr=${location.lat},${location.lng}&to=${c}`,
+      headers: {},
+      formData: {},
+    };
+    request(options, function (err, response) {
+      if (err) {
+        return { msg: err };
+      } else {
+        return { msg: "good", obj: response };
+      }
+    });
+  });
+};
+
 
     const numbers = user.contacts.map(c => c.contactPhone)
 
@@ -271,7 +423,7 @@ const sosCall = function (user, location) {
             }
         })
     })
-}
+
 
 
 
@@ -294,22 +446,21 @@ const payload = JSON.stringify({
 });
 
 const checkUserTimer = async function (user) {
-
-    const now = new Date()
-    const nowH = now.getHours()
-    const nowM = now.getMinutes()
-    const nowS = now.getSeconds()
-    const nowTotal = (nowH * 3600) + (nowM * 60) + nowS
-    const startH = user.timer.startTime.hours
-    const startM = user.timer.startTime.minutes
-    const startS = user.timer.startTime.seconds
-    const startTotal = (startH * 3600) + (startM * 60) + startS
-    // const duration = user.timer.duration * 3600
-    //************************************************************************ */
-    //TESTING - with minutes instead of hours **input will be in minutes and must be > 5
-    const duration = user.timer.duration * 60
-    //END TESTING******************************************************
-    console.log(`duration: ${duration}, startTotal: ${startTotal}, nowTotal: ${nowTotal}
+  const now = new Date();
+  const nowH = now.getHours();
+  const nowM = now.getMinutes();
+  const nowS = now.getSeconds();
+  const nowTotal = nowH * 3600 + nowM * 60 + nowS;
+  const startH = user.timer.startTime.hours;
+  const startM = user.timer.startTime.minutes;
+  const startS = user.timer.startTime.seconds;
+  const startTotal = startH * 3600 + startM * 60 + startS;
+  // const duration = user.timer.duration * 3600
+  //************************************************************************ */
+  //TESTING - with minutes instead of hours **input will be in minutes and must be > 5
+  const duration = user.timer.duration * 60;
+  //END TESTING******************************************************
+  console.log(`duration: ${duration}, startTotal: ${startTotal}, nowTotal: ${nowTotal}
         duration + startTotal = ${duration + startTotal}`);
 
 
@@ -339,20 +490,22 @@ const checkUserTimer = async function (user) {
 }
 
 const checkTimer = async function () {
+  const task = cron.schedule("* * * * * *", () => {
+    User.find().then(
+      (users) => {
+        // console.log(`current number of users: ${users.length}`)
+        users.forEach((u) => {
+          if (u.timer.isOn) {
+            console.log(`user: ${u.name} timer is on`);
+            checkUserTimer(u);
+          }
+        });
+      },
+      { scheduled: false }
+    );
+  });
+  task.start();
+};
 
-    const task = cron.schedule('* * * * * *', () => {
-        User.find().then(users => {
-            // console.log(`current number of users: ${users.length}`)
-            users.forEach(u => {
-                if (u.timer.isOn) {
-                    console.log(`user: ${u.name} timer is on`);
-                    checkUserTimer(u)
-                }
-            })
-        }, { scheduled: false })
-    })
-    task.start()
-}
-
-checkTimer()
-module.exports = router
+checkTimer();
+module.exports = router;

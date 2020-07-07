@@ -1,6 +1,64 @@
+.body {
+  width: 100%;
+  height: 700px;
+  background-color: black;
+  text-align: center;
+}
+
+
 .SOS {
-  width: 100px;
-  height: 100px;
+  float: center;
+  margin-top: 7rem;
+  width: 330px; 
+  /* padding-top: 10%; */
+  font: 25px/330px "Open Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  text-align: center;
+  font-weight: 900;
+  background: #c0392b;
   border-radius: 50%;
-  background-color: red;
+  animation: shadow-pulse 3s infinite;
+  display: inline-block;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+
+
+}
+
+@keyframes shadow-pulse
+{
+  0% {
+    box-shadow: 0 0 0 0px #c0392b;
+  }
+  50% {
+    box-shadow: 0 0 0 15px #c0392b;
+  }
+  100% {
+    box-shadow: 0 0 0 0px #c0392b;
+  }
+}
+
+@keyframes shadow-pulse-big
+{
+  0% {
+    box-shadow: 0 0 0 0px #c0392b;
+  }
+  50% {
+    box-shadow: 0 0 0 15px #c0392b;
+  }
+  100% {
+    box-shadow: 0 0 0 0px #c0392b;
+  }
+}
+
+.center {
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;     
+
 }

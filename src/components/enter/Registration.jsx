@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import validator from 'validator';
+import "./login.css"
+
 
 import Switch from '@material-ui/core/Switch';
 import { subscribe } from '../../notifications/notifications-web-push';
@@ -151,63 +153,79 @@ const Registration = inject("userStore")(observer((props) => {
       }
     }
   }
-  return (
-    <div>
+  return (<div>
+    <body>
       <Link to='/'> <ArrowBackIosIcon /> </Link>
-      <form className={classes.form} noValidate>
+      <div className="login-box">
+        <h1>Registration</h1>
+        <div className="textbox">
+          <input
+            error={!!validation.name}
+            value={inputUser.name}
+            placeholder="Name"
+            label="Name"
+            name='name'
+            onBlur={validateRequiredInput}
+            onChange={handleInputUser}
+            id="standard-error-helper-text"
+            helperText={validation.name} />
+        </div>
+        <div className="textbox">
+          <input
+            error={!!validation.phone}
+            value={inputUser.phone}
+            onBlur={validatePhone}
+            placeholder="Phone"
+            label="Phone"
+            name='phone'
+            onChange={handleInputUser}
+            id="standard-error-helper-text"
+            helperText={validation.phone}
+          />
+        </div>
+        <div className="textbox">
+          <input
+            error={!!validation.password}
+            value={inputUser.password}
+            onBlur={validatePassword}
+            placeholder="Password"
+            type='password'
+            autoComplete="new-password"
+            label="Password"
+            name='password'
+            onChange={handleInputUser}
+            id="standard-error-helper-text"
+            helperText={validation.password}
+          />
+        </div>
+        <div className="textbox">
+          <input
+            error={!!validation.contactName}
+            onBlur={validateRequiredInput}
+            placeholder="Contact Name"
+            label="Contact Name"
+            name='contactName'
+            onChange={handleContactInput}
+            id="standard-error-helper-text"
+            helperText={validation.contactName}
+          />
+        </div>
 
-        <TextField
-          error={!!validation.name}
-          value={inputUser.name}
-          label="Name"
-          name='name'
-          onBlur={validateRequiredInput}
-          onChange={handleInputUser}
-          id="standard-error-helper-text"
-          helperText={validation.name}></TextField>
-        <TextField
-          error={!!validation.phone}
-          value={inputUser.phone}
-          onBlur={validatePhone}
-          label="Phone"
-          name='phone'
-          onChange={handleInputUser}
-          id="standard-error-helper-text"
-          helperText={validation.phone}
-        />
-        <TextField
-          error={!!validation.password}
-          value={inputUser.password}
-          onBlur={validatePassword}
-          type='password'
-          autoComplete="new-password"
-          label="Password"
-          name='password'
-          onChange={handleInputUser}
-          id="standard-error-helper-text"
-          helperText={validation.password}
-        />
-        <TextField
-          error={!!validation.contactName}
-          onBlur={validateRequiredInput}
-          label="Contact Name"
-          name='contactName'
-          onChange={handleContactInput}
-          id="standard-error-helper-text"
-          helperText={validation.contactName}
-        />
+        <div className="textbox">
+          <input
+            error={!!validation.contactPhone}
+            onBlur={validateContactPhone}
+            // value={inputContact.contactPhone}
+            placeholder="Contact Phone"
+            label="Contact Phone"
+            name='contactPhone'
+            onChange={handleContactInput}
+            id="standard-error-helper-text"
+            helperText={validation.contactPhone}
+          />
+        </div>
 
-        <TextField
-          error={!!validation.contactPhone}
-          onBlur={validateContactPhone}
-          value={inputContact.contactPhone}
-          label="Contact Phone"
-          name='contactPhone'
-          onChange={handleContactInput}
-          id="standard-error-helper-text"
-          helperText={validation.contactPhone}
-        />
-
+        <button className="loginBtn" variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={registration}>Registration</button>
         <FormControl component="fieldset">
           <FormControlLabel
             control={<Switch disabled={isNotificationsDenied} checked={!!notifications} onChange={handleChange} name="checkedA" />}
@@ -216,12 +234,12 @@ const Registration = inject("userStore")(observer((props) => {
           {isNotificationsDenied && <FormHelperText error={true}>Push notification denied, see browser settings to enable this</FormHelperText>}
         </FormControl>
 
-
-        <Button variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={registration}>Registration</Button>
+        {/* <Button variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={registration}>Registration</Button> */}
 
         {props.isLoged ? <Redirect to='/main' /> : null}
-      </form>
-    </div>
+      </div>
+    </body>
+  </div>
   );
 }))
 

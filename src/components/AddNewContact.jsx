@@ -3,9 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import InputLabel from '@material-ui/core/InputLabel';
 import { useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import validator from 'validator';
+import "./Contacts.scss"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -62,37 +64,37 @@ const AddNewContact = inject("userStore")(observer((props) => {
     const isInvalid = !validator.contains(e.target.value, '+972') || e.target.value.length !== 13
     state.contactPhone = isInvalid ? 'Phone must be in format +972...' : null
     setValidation(state)
-  } 
+  }
 
   const hasNoErrors = Object.keys(validation).every(k => validation[k] === null)
   const isFormValid = hasNoErrors && Object.keys(input).every(k => input[k]?.length)
   return (
     <div>
-      <form className={classes.root} noValidate autoComplete="off">
-        <TextField
-        // required={true}
+      <body>
+      <div className="textbox">
+        <input
+          placeholder="Contact Name"
+          id="ContactText"
           error={!!validation.contactName}
-          label="Name"
           name='contactName'
           value={input.contactName}
           onBlur={validateRequiredInput}
           onChange={handleInput}
-          id="standard-error-helper-text"
-          helperText={validation.contactName}></TextField>
-        <TextField
+          helperText={validation.contactName}/>
+      </div>
+      <div className="textbox">
+        <input
+          placeholder="Contact Number"
           error={!!validation.contactPhone}
           onBlur={validatePhone}
-          label="Phone"
           name='contactPhone'
           value={input.contactPhone}
           onChange={handleInput}
-          id="standard-error-helper-text"
-          helperText={validation.contactPhone}
-          // inputComponent={TextMaskCustom}
-        />
-
-        <Button variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={addNewContact}>Add New Contact</Button>
-      </form>
+          id="ContactText"
+          helperText={validation.contactPhone}/>
+        </div>
+        <button className="loginBtn" variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={addNewContact}>Add New Contact</button>
+        </body>
     </div>
   )
 }))

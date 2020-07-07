@@ -10,7 +10,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
-import { Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import "./Contacts.scss"
 
 
 const useStyles = makeStyles({
@@ -34,27 +35,30 @@ const Contacts = inject("userStore")(observer((props) => {
   }
 
   return (
-    <div>
+    <div className="ContactsBody">
       <AppBar />
+      <div id="profile" style={{ display: 'grid', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ display: "block" }}>
       <AddNewContact />
       <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+        <Table id="ContactText" className={classes.table} aria-label="simple table">
           <TableBody>
             {rows.map((row) => (
-              <TableRow key={row.contactName}>
-                <TableCell align="center">{row.contactName}</TableCell>
-                <TableCell align="center">{row.contactPhone}</TableCell>
+              <TableRow style={{ backgroundColor: 'black' }} key={row.contactName}>
+                <TableCell style={{ color: '#DAD6D6' }} align="center">{row.contactName}</TableCell>
+                <TableCell style={{ color: '#DAD6D6' }} align="center">{row.contactPhone}</TableCell>
                 <TableCell align="center"><Link to={{
                   pathname: "/contactSettings",
                   state: row
                 }}>
-                  <EditIcon /></Link></TableCell>
+                  <EditIcon style={{ color: '#DAD6D6' }}/></Link></TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-
+        </div>
+      </div>
     </div>
   )
 }))

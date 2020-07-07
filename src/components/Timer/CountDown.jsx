@@ -57,19 +57,9 @@ class CountDown extends Component {
         <h1>We will send messages in:</h1>
         <div id="clockdiv">
           <div>
-            <span className="hours" id="hour">{hours}</span>
-            <div className="smalltext">Hours</div>
-
-          </div>
-          <div>
-            <span className="minutes" id="minute">{minutes}</span>
-            <div className="smalltext">Minutes</div>
-
-          </div>
-          <div>
-            <span className="seconds" id="second">{seconds}</span>
-            <div className="smalltext">Seconds</div>
-
+            <li><span className="hours" id="hour">{hours}:</span></li>
+            <li><span className="minutes" id="minute">{minutes}:</span></li>
+            <li><span className="seconds" id="second">{seconds}</span></li>
           </div>
         </div>
 
