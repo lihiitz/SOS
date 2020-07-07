@@ -360,7 +360,6 @@ router.put(`/contactSettings/:id`, async function (req, res) {
 
   let user = await User.findById(req.params.id);
   const index = user.contacts.findIndex((c) => c.contactName === req.body.name);
-  // user.contacts[index] = req.body
   const newData = {
     contactName: req.body.newName,
     contactPhone: req.body.newPhone,
@@ -371,8 +370,6 @@ router.put(`/contactSettings/:id`, async function (req, res) {
 });
 
 router.put(`/contactSettingsD/:id`, async function (req, res) {
-  // body : { name: string, phone: string}
-
   let user = await User.findById(req.params.id);
   const index = user.contacts.findIndex(
     (c) => c.contactName === req.body.contactName
@@ -384,27 +381,6 @@ router.put(`/contactSettingsD/:id`, async function (req, res) {
 
 const sosCall = function (user, location) {
   const numbers = user.contacts.map((c) => c.contactPhone);
-  //https://maps.google.com?saddr=Current+Location&daddr=
-  numbers.forEach((c) => {
-    const options = {
-      method: "POST",
-      url: `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location:https://maps.google.com?daddr=${location.lat},${location.lng}&to=${c}`,
-      headers: {},
-      formData: {},
-    };
-    request(options, function (err, response) {
-      if (err) {
-        return { msg: err };
-      } else {
-        return { msg: "good", obj: response };
-      }
-    });
-  });
-};
-
-
-    const numbers = user.contacts.map(c => c.contactPhone)
-
     numbers.forEach(c => {
         const options = {
             'method': 'POST',
@@ -431,17 +407,7 @@ const payload = JSON.stringify({
     title: 'SoSApp',
     body: {
         body: 'Are you ok? Cancel your timer or we will send SOS signal in 15 minutes',
-        icon: 'https://vignette.wikia.nocookie.net/starbase-fanon/images/2/28/SOS-icon.png/revision/latest?cb=20190809222911',
-        // actions: [
-        //     {
-        //         action: 'COOL',
-        //         title: 'Akol Sababa'
-        //     },
-        //     {
-        //         action: 'SOS',
-        //         title: 'SOS'
-        //     }
-        // ]
+        icon: 'https://vignette.wikia.nocookie.net/starbase-fanon/images/2/28/SOS-icon.png/revision/latest?cb=20190809222911'
     }
 });
 
@@ -476,16 +442,6 @@ const checkUserTimer = async function (user) {
     } else if (duration - (5 * 60) + startTotal === nowTotal) {
         await webpush.sendNotification(user.notificationSubscription, payload)
         console.log("remainder 15 before timer ends")
-
-
-
-        // try {
-        //     await webpush.sendNotification(user.notificationSubscription, payload)
-        // } catch (e) {
-        //     console.error(e.stack);
-        // }
-
-        //do push notification
     }
 }
 
@@ -508,4 +464,4 @@ const checkTimer = async function () {
 };
 
 checkTimer();
-module.exports = router;
+module.exports = router
