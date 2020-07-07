@@ -89,10 +89,12 @@ const Menu = inject("userStore")(observer((props) => {
             <ListItemText primary='Timer' />
           </ListItem>
         </Link>
-        <ListItem button key='Timer'>
-          <ListItemIcon> <AddLocationIcon /> </ListItemIcon>
-          <ListItemText primary='Map' />
-        </ListItem>
+        <Link to='/sosMap'>
+          <ListItem button key='Map'>
+            <ListItemIcon> <AddLocationIcon /> </ListItemIcon>
+            <ListItemText primary='Map' />
+          </ListItem>
+        </Link>
         <Divider />
         <Link to='/'>
           <ListItem button key='logout' onClick={logOut}>

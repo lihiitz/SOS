@@ -16,6 +16,7 @@ import MapContainer from './components/MapContainer';
 import { useContext } from 'react' //import hook from react
 import { MyContext } from './components/Topic';
 import ContactSettings from './components/ContactSettings';
+import MapPage from './components/MapPage';
 
 
  //create context
@@ -87,8 +88,9 @@ class App extends Component {
           <Route path="/timer" exact render={() => <Timer />} />
           <Route path="/contacts" exact render={() => <Contacts />} />
           <Route path="/contactSettings" exact render={() => <ContactSettings />} />
-          <Route path="/sosMap" exact render={() => <MapContainer containerElement={<div style={{ height: `800px` }} />}
-    mapElement={<div style={{ height: `100%` }} />}loadingElement={<div style={{ height: `100%` }} />} googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm8cj9dRisI1LeIqulbg68R8gHxcm2Q0M"/>} />
+
+          <Route path="/sosMap" exact render={() => <MapPage/>} />
+
         </Router>
       </MyContext.Provider >
 
@@ -96,5 +98,8 @@ class App extends Component {
   }
 }
 
+
+// MapContainer containerElement={<div style={{ height: `800px` }} />}
+//     mapElement={<div style={{ height: `100%` }} />}loadingElement={<div style={{ height: `100%` }} />} googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm8cj9dRisI1LeIqulbg68R8gHxcm2Q0M"/>
 export default App;
 

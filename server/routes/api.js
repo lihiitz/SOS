@@ -1,28 +1,98 @@
-const express = require("express");
-const router = express.Router();
-const User = require(`../model/User`);
-const Marker = require("../model/Marker");
-const request = require("request");
-const cron = require("node-cron");
-const webpush = require("web-push");
-const createSender = require("pushkit/server");
+const express = require('express')
+const router = express.Router()
+const User = require(`../model/User`)
+const Marker = require('../model/Marker')
+const request = require('request')
+const cron = require('node-cron')
+const webpush = require("web-push")
 
-const publicVapidKey =
-  "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo";
-const privateVapidKey = "3KzvKasA2SoCxsp0iIG_o9B0Ozvl1XDwI63JRKNIWBM";
-webpush.setVapidDetails(
-  "mailto:test@test.com",
-  publicVapidKey,
-  privateVapidKey
-);
 
-const accountSid = "ACae72d5890e44228d4a9e4efc32f66c71";
-const authToken = "e3e2297a5e2e289bf691e309491a8465";
-const client = require("twilio")(accountSid, authToken);
-const VoiceResponse = require("twilio").twiml.VoiceResponse;
-const response = new VoiceResponse();
-response.say("SOS from a friend");
-console.log(response.toString());
+
+// const accountSid = 'ACae72d5890e44228d4a9e4efc32f66c71'
+const accountSid = 'AC76f5bf833bdefe51ea72e17816b1f697'
+// const authToken = 'e3e2297a5e2e289bf691e309491a8465'
+const authToken = 'a236de200bf720d37bd1cf25d8723c3c'
+const client = require('twilio')(accountSid, authToken);
+const VoiceResponse = require('twilio').twiml.VoiceResponse
+// const response = new VoiceResponse()
+
+
+const publicVapidKey = "BCue7AbRMDE6GPH0DWhS9kishGryuSKQxGm1Y_otQG9ai8wwUPVsTGGY7_iW-iVp5jxM0Nu2fBz6dDUknd-AHRk"
+const privateVapidKey = "SSAMmgW-Ytx0tMlNAfgUuL-h731zMjiQDCmX25NUJZ4";
+
+
+webpush.setVapidDetails("mailto:adelson1606@gmail.com", publicVapidKey, privateVapidKey)
+
+// router.post(`/subscribe`, async function (req, res) {
+//     console.log(req.body)
+
+
+//     const subscription = req.body;
+//     res.status(201).json({});
+
+
+//     // let config = {
+//     //     body: "Street dogs don't want anything more than love and shelter."
+//     // }
+//     // // Here, the `pushRegistrationObject` is the object sent from the client that was stored on the server.
+//     // // Make sure to parse the pushRegistrationObject from JSON string
+//     // sender.send(pushRegistrationObject,"Adopt a street dog today!", config);
+//     // res.send(req.body)
+// })
+// 
+
+// response.say('SOS from a friend')
+// console.log(response.toString());
+
+// Handle an AJAX POST request to place an outbound call
+router.post('/call', function (request, response) {
+    // This should be the publicly accessible URL for your application
+    // Here, we just use the host for the application making the request,
+    // but you can hard code it or use something different if need be
+    var salesNumber = request.body.salesNumber;
+    var url = 'https://36bfcfecb919.ngrok.io' + '/outbound/' + encodeURIComponent(salesNumber);
+
+    var options = {
+        to: request.body.phoneNumber,
+        from: '+18504469060',
+        url: url, //%2B = +
+    };
+
+    // Place an outbound call to the user, using the TwiML instructions
+    // from the /outbound route
+    client.calls.create(options)
+        .then((message) => {
+            console.log(message.responseText);
+            response.send({
+                message: 'Thank you! We will be calling you shortly.',
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            response.status(500).send(error);
+        });
+    //     client.calls
+    //   .create({
+    //      url: 'http://demo.twilio.com/docs/voice.xml',
+    //      to: '+14155551212',
+    //      from: '+15017122661'
+    //    })
+    //   .then(call => console.log(call.sid));
+});
+
+// Return TwiML instructions for the outbound call
+router.post('/outbound/:salesNumber', function (request, response) {
+    var salesNumber = request.params.salesNumber;
+    console.log(salesNumber)
+    var twimlResponse = new VoiceResponse();
+
+    twimlResponse.say('We will connect you as soon as possible',
+        { voice: 'alice' });
+    console.log("making call")
+    twimlResponse.dial(salesNumber);
+
+    response.send(twimlResponse.toString());
+});
 
 let sender = createSender(
   {
@@ -55,6 +125,7 @@ router.post("/reg", (req, res) => {
 //                console.log(call.sid)
 //             }
 //        })
+
 router.post("/subscribe", (req, res) => {
   // Get pushSubscription object
   const subscription = req.body;
@@ -68,24 +139,22 @@ router.post("/subscribe", (req, res) => {
     .catch((err) => console.error(err));
 });
 
-<<<<<<< HEAD
-// router.get('/markers', async function(req, res){ //
-//     const markers = await User.find({}).select('markers')
-//     res.send(markers.map(m => {
-//         return(
-//             m.markers
-//         )
-//     })) //markers = [{"markers": [{"lat": 24, "lng": 34, "name": "sos"}, {}..]}, {}..]
+router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, timeStamp: Number, name: String}
+// router.post("/subscribe", (req, res) => {
+//     // Get pushSubscription object
+//     const subscription = req.body
+//     // Send 201 - resource created
+//     res.status(201).json({})
+//     // Create payload
+//     const payload = JSON.stringify({ title: "Push Test" })
+//     // Pass object into sendNotification
+//     webpush
+//         .sendNotification(subscription, payload)
+//         .catch(err => console.error(err))
 // })
 
-router.post("/marker", function (req, res) {
-  //body = {lat: Number, lng: Number, name: String}
-  const marker = new Marker(req.body);
-  marker.save(function (err, marker) {
-    if (err) {
-      res.send({ msg: err });
-=======
-router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, timeStamp: Number, name: String}
+
+router.post('/marker', function (req, res) {//body = {lat: Number, lng: Number, timeStamp: Number, name: String}
     const marker = new Marker(req.body)
     marker.save(function (err, marker) {
         if (err) {
@@ -96,7 +165,7 @@ router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, tim
     })
 })
 
-router.get('/markers', async function(req, res){ //
+router.get('/markers', async function (req, res) { //
     const markers = await Marker.find({})
     res.send(markers)
 })
@@ -111,7 +180,6 @@ router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
     const updatedUser = await user.save()
     if (updatedUser) {
         res.send({ msg: "good", user: updatedUser })
->>>>>>> dc198bb61fa1fee05c2fe5da5d388697ed4339d3
     } else {
       res.send({ msg: "good", marker });
     }
@@ -165,24 +233,6 @@ router.post(`/registration`, function (req, res) {
     } else {
       res.send({ msg: "good", user });
     }
-<<<<<<< HEAD
-  });
-});
-
-router.post(`/login`, function (req, res) {
-  //body = {phon: string, password: string}
-
-  User.find({ phone: req.body.phone, password: req.body.password }, function (
-    err,
-    user
-  ) {
-    if (err) {
-      res.send({ msg: err });
-    } else if (user.length === 0) {
-      res.send({ msg: "bad", user: null });
-    } else {
-      res.send({ msg: "good", user: user[0] });
-=======
 })
 
 router.post(`/registration`, function (req, res) { // body = {name: string, phone: string, password: string, contacts: []}
@@ -192,7 +242,7 @@ router.post(`/registration`, function (req, res) { // body = {name: string, phon
         if (err) {
             res.send({ msg: err })
         } else {
-            res.send({ msg: "good", user })
+            res.send({ msg: "good", user: user.toJSON() })
         }
     })
 })
@@ -206,16 +256,18 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
         else if (user.length === 0) {
             res.send({ msg: "bad", user: null })
         } else {
+
+            //  webpush.sendNotification(user[0].notificationSubscription, payload)
+
             res.send({ msg: "good", user: user[0] })
         }
     })
 })
 
 router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
-    const user = await User.findOneAndUpdate({_id: req.params.id}, {marker: req.body})
+    const user = await User.findOneAndUpdate({ _id: req.params.id }, { marker: req.body })
     console.log(req.body.lat);
-    
-    // sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
+    sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
     res.send(user)
 })
 
@@ -252,7 +304,6 @@ router.put(`/contactSettings/:id`, async function (req, res) { // body : { name:
     const newData = {
         contactName: req.body.newName,
         contactPhone: req.body.newPhone
->>>>>>> dc198bb61fa1fee05c2fe5da5d388697ed4339d3
     }
   });
 });
@@ -332,7 +383,6 @@ router.put(`/contactSettingsD/:id`, async function (req, res) {
 });
 
 const sosCall = function (user, location) {
-<<<<<<< HEAD
   const numbers = user.contacts.map((c) => c.contactPhone);
   //https://maps.google.com?saddr=Current+Location&daddr=
   numbers.forEach((c) => {
@@ -351,13 +401,15 @@ const sosCall = function (user, location) {
     });
   });
 };
-=======
-    
+
+
     const numbers = user.contacts.map(c => c.contactPhone)
-    numbers.forEach(c => {        
+
+    numbers.forEach(c => {
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location:https://maps.google.com?daddr=${location.lat},${location.lng}&to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location: https://maps.google.com/?q=${location.lat},${location.lng}&to=${c}`,
+
             'headers': {
             },
             formData: {
@@ -371,8 +423,27 @@ const sosCall = function (user, location) {
             }
         })
     })
-}
->>>>>>> dc198bb61fa1fee05c2fe5da5d388697ed4339d3
+
+
+
+
+const payload = JSON.stringify({
+    title: 'SoSApp',
+    body: {
+        body: 'Are you ok? Cancel your timer or we will send SOS signal in 15 minutes',
+        icon: 'https://vignette.wikia.nocookie.net/starbase-fanon/images/2/28/SOS-icon.png/revision/latest?cb=20190809222911',
+        // actions: [
+        //     {
+        //         action: 'COOL',
+        //         title: 'Akol Sababa'
+        //     },
+        //     {
+        //         action: 'SOS',
+        //         title: 'SOS'
+        //     }
+        // ]
+    }
+});
 
 const checkUserTimer = async function (user) {
   const now = new Date();
@@ -391,17 +462,32 @@ const checkUserTimer = async function (user) {
   //END TESTING******************************************************
   console.log(`duration: ${duration}, startTotal: ${startTotal}, nowTotal: ${nowTotal}
         duration + startTotal = ${duration + startTotal}`);
-  if (duration + startTotal < nowTotal) {
-    console.log("sos");
-    sender.send(pushRegistrationObject, "Adopt a street dog today!", config);
-    sosCall(user);
-    user.timer.isOn = false;
-    await user.save();
-  } else if (duration - 5 * 60 + startTotal === nowTotal) {
-    console.log("remainder 15 before timer ends");
-    //do push notification
-  }
-};
+
+
+    if ((nowTotal - startTotal) === 15) {
+        await webpush.sendNotification(user.notificationSubscription, payload)
+    }
+
+    if (duration + startTotal < nowTotal) {
+        console.log("sos")
+        // sosCall(user)
+        user.timer.isOn = false
+        await user.save()
+    } else if (duration - (5 * 60) + startTotal === nowTotal) {
+        await webpush.sendNotification(user.notificationSubscription, payload)
+        console.log("remainder 15 before timer ends")
+
+
+
+        // try {
+        //     await webpush.sendNotification(user.notificationSubscription, payload)
+        // } catch (e) {
+        //     console.error(e.stack);
+        // }
+
+        //do push notification
+    }
+}
 
 const checkTimer = async function () {
   const task = cron.schedule("* * * * * *", () => {
