@@ -68,6 +68,7 @@ router.post("/subscribe", (req, res) => {
     .catch((err) => console.error(err));
 });
 
+<<<<<<< HEAD
 // router.get('/markers', async function(req, res){ //
 //     const markers = await User.find({}).select('markers')
 //     res.send(markers.map(m => {
@@ -83,6 +84,34 @@ router.post("/marker", function (req, res) {
   marker.save(function (err, marker) {
     if (err) {
       res.send({ msg: err });
+=======
+router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, timeStamp: Number, name: String}
+    const marker = new Marker(req.body)
+    marker.save(function (err, marker) {
+        if (err) {
+            res.send({ msg: err })
+        } else {
+            res.send({ msg: "good", marker })
+        }
+    })
+})
+
+router.get('/markers', async function(req, res){ //
+    const markers = await Marker.find({})
+    res.send(markers)
+})
+
+router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
+
+    const d = new Date()
+    let user = await User.findById(req.params.id)
+    user.timer.isOn = true
+    user.timer.startTime = { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes() }
+    user.timer.duration = req.body.hours
+    const updatedUser = await user.save()
+    if (updatedUser) {
+        res.send({ msg: "good", user: updatedUser })
+>>>>>>> dc198bb61fa1fee05c2fe5da5d388697ed4339d3
     } else {
       res.send({ msg: "good", marker });
     }
@@ -136,6 +165,7 @@ router.post(`/registration`, function (req, res) {
     } else {
       res.send({ msg: "good", user });
     }
+<<<<<<< HEAD
   });
 });
 
@@ -152,6 +182,77 @@ router.post(`/login`, function (req, res) {
       res.send({ msg: "bad", user: null });
     } else {
       res.send({ msg: "good", user: user[0] });
+=======
+})
+
+router.post(`/registration`, function (req, res) { // body = {name: string, phone: string, password: string, contacts: []}
+
+    const newUser = new User(req.body)
+    newUser.save(function (err, user) {
+        if (err) {
+            res.send({ msg: err })
+        } else {
+            res.send({ msg: "good", user })
+        }
+    })
+})
+
+router.post(`/login`, function (req, res) {//body = {phon: string, password: string}
+
+    User.find({ phone: req.body.phone, password: req.body.password }, function (err, user) {
+        if (err) {
+            res.send({ msg: err })
+        }
+        else if (user.length === 0) {
+            res.send({ msg: "bad", user: null })
+        } else {
+            res.send({ msg: "good", user: user[0] })
+        }
+    })
+})
+
+router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
+    const user = await User.findOneAndUpdate({_id: req.params.id}, {marker: req.body})
+    console.log(req.body.lat);
+    
+    // sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
+    res.send(user)
+})
+
+
+router.put(`/profile/:id`, function (req, res) { //body: {name: string and/or phone: string and/or password: string}
+
+    User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true }, function (err, user) {
+
+        if (err) {
+            res.send({ msg: err })
+        } else {
+            res.send({ msg: "good", user })
+        }
+    })
+})
+
+router.put(`/contactsSettings/:id`, function (req, res) { //body: {contacts: []}
+
+    User.findOneAndUpdate({ _id: req.params.id }, { $push: { contacts: req.body.contacts } }, { new: true }, function (err, user) {
+        if (err) {
+            res.send({ msg: err })
+        } else {
+            res.send({ msg: "good", user })
+        }
+        //TODO : ADD NEW CONTACT ONLY IF IS NOT ALREADY IN LIST
+    })
+})
+
+router.put(`/contactSettings/:id`, async function (req, res) { // body : { name: string, phone: string newName:string, newPhone: string}
+
+    let user = await User.findById(req.params.id)
+    const index = user.contacts.findIndex(c => c.contactName === req.body.name)
+    // user.contacts[index] = req.body
+    const newData = {
+        contactName: req.body.newName,
+        contactPhone: req.body.newPhone
+>>>>>>> dc198bb61fa1fee05c2fe5da5d388697ed4339d3
     }
   });
 });
@@ -231,6 +332,7 @@ router.put(`/contactSettingsD/:id`, async function (req, res) {
 });
 
 const sosCall = function (user, location) {
+<<<<<<< HEAD
   const numbers = user.contacts.map((c) => c.contactPhone);
   //https://maps.google.com?saddr=Current+Location&daddr=
   numbers.forEach((c) => {
@@ -249,6 +351,28 @@ const sosCall = function (user, location) {
     });
   });
 };
+=======
+    
+    const numbers = user.contacts.map(c => c.contactPhone)
+    numbers.forEach(c => {        
+        const options = {
+            'method': 'POST',
+            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location:https://maps.google.com?daddr=${location.lat},${location.lng}&to=${c}`,
+            'headers': {
+            },
+            formData: {
+            }
+        }
+        request(options, function (err, response) {
+            if (err) {
+                return ({ msg: err })
+            } else {
+                return ({ msg: "good", obj: response })
+            }
+        })
+    })
+}
+>>>>>>> dc198bb61fa1fee05c2fe5da5d388697ed4339d3
 
 const checkUserTimer = async function (user) {
   const now = new Date();

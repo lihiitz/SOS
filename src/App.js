@@ -19,9 +19,8 @@ import ContactSettings from './components/ContactSettings';
 
 
  //create context
-
-@observer
 @inject('userStore')
+@observer
 class App extends Component {
   constructor() {
     super()
@@ -82,15 +81,14 @@ class App extends Component {
       <MyContext.Provider value={value}>
         <Router>
           <Route path="/" exact render={() => <EnterPage login={this.login} isLoged={this.state.isLoged} />} />
-          {/* <Route path="/login" exact render={() => <Login login={this.login} isLoged={this.state.isLoged} />} /> */}
           <Route path="/registration" exact render={() => <Registration login={this.login} isLoged={this.state.isLoged} />} />
           {this.state.isLoged ? <Route path="/main" exact render={() => <Main />} /> : null}
-          {/* <Route path="/main" exact render={() => <Main />} /> */}
           <Route path="/profile" exact render={() => <Profile />} />
           <Route path="/timer" exact render={() => <Timer />} />
           <Route path="/contacts" exact render={() => <Contacts />} />
           <Route path="/contactSettings" exact render={() => <ContactSettings />} />
-          <Route path="/sosMap" exact render={() => <MapContainer />} />
+          <Route path="/sosMap" exact render={() => <MapContainer containerElement={<div style={{ height: `800px` }} />}
+    mapElement={<div style={{ height: `100%` }} />}loadingElement={<div style={{ height: `100%` }} />} googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm8cj9dRisI1LeIqulbg68R8gHxcm2Q0M"/>} />
         </Router>
       </MyContext.Provider >
 
