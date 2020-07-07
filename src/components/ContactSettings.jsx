@@ -14,6 +14,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 
 
+
 const useStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(1),
@@ -48,7 +49,6 @@ const ContactSettings = inject("userStore")(observer((props, ref) => {
     <div>
       <Topic />
       <Link to='/contacts'> <ArrowBackIosIcon /> </Link>
-      <div>
         <FormControl className={classes.margin}>
           <InputLabel htmlFor="input-with-icon-adornment">Name</InputLabel>
           <Input
@@ -63,6 +63,7 @@ const ContactSettings = inject("userStore")(observer((props, ref) => {
             }
           />
         </FormControl>
+        <br></br>
         <FormControl className={classes.margin}>
           <InputLabel htmlFor="input-with-icon-adornment">Phone</InputLabel>
           <Input
@@ -81,8 +82,8 @@ const ContactSettings = inject("userStore")(observer((props, ref) => {
         <Button variant="contained" color="primary" disableElevation onClick={updateContact}>Edit contact</Button>
 
         <Link to='/contacts'> <Button variant="contained" color="primary" disableElevation onClick={deleteContact}>Delete contact</Button></Link>
-      </div>
-    </div>
+        </div>
+
   )
 }))
 

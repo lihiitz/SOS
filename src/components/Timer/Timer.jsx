@@ -3,7 +3,7 @@ import TimerInputs from './TimerInputs';
 
 const Timer = () => {
   return (
-    <div>
+    <div class="gbody">
       <TimerInputs />
 
     </div>

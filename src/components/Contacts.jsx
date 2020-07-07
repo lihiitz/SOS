@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import "./Contacts.scss"
 
 
 const useStyles = makeStyles({
@@ -35,11 +36,13 @@ const Contacts = inject("userStore")(observer((props) => {
   }
 
   return (
-    <div>
+    <div className="ContactsBody">
       <AppBar />
+      <div id="profile" style={{ display: 'grid', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ display: "block" }}>
       <AddNewContact />
       <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+        <Table id="ContactText" className={classes.table} aria-label="simple table">
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.contactName}>
@@ -55,7 +58,8 @@ const Contacts = inject("userStore")(observer((props) => {
           </TableBody>
         </Table>
       </TableContainer>
-
+        </div>
+      </div>
     </div>
   )
 }))

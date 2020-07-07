@@ -11,6 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import PhoneIcon from '@material-ui/icons/Phone';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import "./Profile.scss"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -45,59 +46,63 @@ const Profile = inject("userStore")(observer((props, ref) => {
   }
 
   return (
-    <div>
+    <div className="profileBody">
       <Topic />
-      <FormControl className={classes.margin}>
-        <InputLabel htmlFor="input-with-icon-adornment">Name</InputLabel>
+      <div style={{ display: 'grid', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ display: "block" }}>
+      <FormControl  id="profileText" className={classes.margin}>
+        <InputLabel id="profileText" htmlFor="input-with-icon-adornment">Name</InputLabel>
         <Input
-          id="input-with-icon-adornment"
+        
+          id="profileText"
           name='name'
           value={user.name}
           onChange={handleInput}
           startAdornment={
             <InputAdornment position="start">
-              <AccountCircle />
+              <AccountCircle className="profileIcon"/>
             </InputAdornment>
           }
         />
       </FormControl>
+      </div>
+      <br></br>
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="input-with-icon-adornment">Phone</InputLabel>
+        <InputLabel id="profileText" htmlFor="input-with-icon-adornment">Phone</InputLabel>
         <Input
-          id="input-with-icon-adornment"
+          id="profileText"
           name='phone'
           value={user.phone}
           onChange={handleInput}
           startAdornment={
             <InputAdornment position="start">
-              <PhoneIcon />
+              <PhoneIcon className="profileIcon"/>
             </InputAdornment>
           }
         />
       </FormControl>
+      <br></br>
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="input-with-icon-adornment">Password</InputLabel>
+        <InputLabel id="profileText" htmlFor="input-with-icon-adornment">Password</InputLabel>
         <Input
-          id="input-with-icon-adornment"
+          id="profileText"
           type='password'
           name='password'
           value={user.password}
           onChange={handleInput}
           startAdornment={
             <InputAdornment position="start">
-              <VpnKeyIcon />
+              <VpnKeyIcon className="profileIcon"/>
             </InputAdornment>
           }
         />
       </FormControl>
-      <Button variant="contained" color="primary" disableElevation onClick={editProfile}>Edit profile</Button>
-      {/* <form noValidate autoComplete="off" className={classes.row}>
-        Name: <TextField label={thisuser.name} name='name' value={user.name} onChange={handleInput} />
-        Phone: <TextField label={thisuser.phone} name='phone' value={user.phone} onChange={handleInput} />
-        Password: <TextField type="password" label={thisuser.password} name='password' value={user.password} onChange={handleInput} />
-      </form> */}
+      <br></br>
+      <br></br>
+      <button className="btn" disableElevation onClick={editProfile}>Edit profile</button>
 
     </div>
+   </div>
   )
 }))
 

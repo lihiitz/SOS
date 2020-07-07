@@ -5,10 +5,30 @@ import * as serviceWorker from './serviceWorker'
 import { Provider } from 'mobx-react'
 import { User } from './store/User'
 import {MapContainer} from './store/MapContainer'
+import {PushKit} from "pushkit/client";
+// import Axios from 'axios'
+const axios = require('axios')
 
 const mapStore = new MapContainer()
 const userStore = new User()
 const stores = { userStore, mapStore }
+
+let pkInstance = new PushKit("BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo", true);
+// register service worker
+ function startPushReg(){
+    navigator.serviceWorker.register("./serviceWorker.js").then(swreg=>{
+        pkInstance.handleRegistration(swreg).then(pushreg=>{
+
+            let regData =  JSON.stringify(pushreg);
+             axios.post("/reg", regData,  {headers : {
+                    "content-type":"application/json"
+                }
+            });
+        });
+    });
+}
+
+startPushReg()
 
 ReactDOM.render(
   // <Provider {...stores}>
