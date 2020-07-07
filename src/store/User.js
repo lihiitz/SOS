@@ -10,6 +10,7 @@ export class User {
   @observable contacts
   @observable timer
   @observable location
+  @observable notificationSubscription
   // @observable isLoged
 
   constructor() {
@@ -19,13 +20,28 @@ export class User {
     this.password = ''
     this.contacts = []
     this.timer = { isOn: false }
+    this.notificationSubscription = {
+      endpoint: '',
+      keys: {
+        auth: '',
+        p256dh: ''
+      }
+    }
     this.location = null
     // this.isLoged = false
   }
 
-  @action updateUser = async (newName, newPhone, newPassword) => {
-
+  @action updateUser = async (newName, newPhone, newPassword, notificationSubscription, timer) => {
     const user = { name: newName, phone: newPhone, password: newPassword }
+    if (notificationSubscription) {
+      user.notificationSubscription = notificationSubscription
+
+    }
+    if (timer) {
+      user.timer = timer
+    }
+
+
     const response = await axios.put(`http://localhost:3001/profile/${this.id}`, user)
     // const response = await axios.put(`/profile/${this.id}`, user)
     if (response.data.msg === 'good') {
@@ -33,6 +49,7 @@ export class User {
       this.name = userData.name
       this.phone = userData.phone
       this.password = userData.password
+      this.notificationSubscription = userData.notificationSubscription
     }
     if (response.data.msg === 'bad') {
       return (false)
@@ -54,8 +71,11 @@ export class User {
       this.phone = userData.phone
       this.contacts = userData.contacts
       this.timer = userData.timer
+      this.notificationSubscription = userData.notificationSubscription
+
+      return true
     } if (response.data.msg === 'bad') {
-      return (false)
+      return false
     }
   }
 
@@ -71,6 +91,7 @@ export class User {
       this.phone = userData.phone
       this.contacts = userData.contacts
       this.timer = userData.timer
+      this.notificationSubscription = userData.notificationSubscription
     } if (response.msg === 'bad') {
       return (false)
     }
@@ -140,6 +161,7 @@ export class User {
     this.password = ''
     this.contacts = []
     this.timer = { isOn: false }
+    this.notificationSubscription = null
   }
 
   @action makeCall = async () => {
@@ -147,7 +169,7 @@ export class User {
     const data = {
       phoneNumber: '+972544257318',
       salesNumber: '+972539528514'
-     
+
     }
     // Call our ajax endpoint on the server to initialize the phone call
     await Axios.post(`http://localhost:3001/call/`, data)
