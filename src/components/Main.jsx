@@ -6,10 +6,15 @@ import Topic from './Topic'
 
 const Main = inject("userStore")(observer((props) => {
   const user = props.userStore
+  const makeCall = () => {
+    props.userStore.makeCall()
+  }
+  debugger
   return (
     <div>
-      <Topic/>
+      <Topic />
       <RedButton />
+      <div onClick={props.userStore.makeCall}>TRY CALL</div>
     </div>
   )
 }))
