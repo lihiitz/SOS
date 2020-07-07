@@ -2,8 +2,6 @@
 
 const applicationServerPublicKey = 'BCue7AbRMDE6GPH0DWhS9kishGryuSKQxGm1Y_otQG9ai8wwUPVsTGGY7_iW-iVp5jxM0Nu2fBz6dDUknd-AHRk';
 
-
-
 function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
