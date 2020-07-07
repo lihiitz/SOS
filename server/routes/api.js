@@ -29,7 +29,7 @@ webpush.setVapidDetails("mailto:adelson1606@gmail.com", publicVapidKey, privateV
 
 //     const subscription = req.body;
 //     res.status(201).json({});
-    
+
 
 //     // let config = {
 //     //     body: "Street dogs don't want anything more than love and shelter."
@@ -122,7 +122,7 @@ router.post('/outbound/:salesNumber', function (request, response) {
 // })
 
 
-router.post('/marker', function(req,res){//body = {lat: Number, lng: Number, timeStamp: Number, name: String}
+router.post('/marker', function (req, res) {//body = {lat: Number, lng: Number, timeStamp: Number, name: String}
     const marker = new Marker(req.body)
     marker.save(function (err, marker) {
         if (err) {
@@ -253,10 +253,11 @@ const sosCall = function (user, location) {
 
     const numbers = user.contacts.map(c => c.contactPhone)
 
-    numbers.forEach(c => {        
+    numbers.forEach(c => {
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in &to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location: 'https://maps.google.com/?q=${location.lat},${location.lng}'&to=${c}`,
+
             'headers': {
             },
             formData: {
@@ -312,7 +313,7 @@ const checkUserTimer = async function (user) {
         duration + startTotal = ${duration + startTotal}`);
 
 
-    if ((nowTotal - startTotal) === 15 ) {
+    if ((nowTotal - startTotal) === 15) {
         await webpush.sendNotification(user.notificationSubscription, payload)
     }
 
@@ -326,7 +327,7 @@ const checkUserTimer = async function (user) {
         console.log("remainder 15 before timer ends")
 
 
-    
+
         // try {
         //     await webpush.sendNotification(user.notificationSubscription, payload)
         // } catch (e) {
