@@ -1,4 +1,3 @@
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import { observable, action } from 'mobx'
 import Axios from 'axios'
 const axios = require('axios')
@@ -66,7 +65,6 @@ export class User {
     // const response = await axios.post('/registration', user)
     if (response.data.msg === 'good') {
       const userData = response.data.user
-      debugger
       this.id = userData._id
       this.name = userData.name
       this.password = userData.password
@@ -110,8 +108,8 @@ export class User {
   }
 
 
-  @action handleSos = async () => {    
-    const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, {lat: this.location.latitude, lng: this.location.longitude, name: "sos"})
+  @action handleSos = async () => {
+    const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
 
   }
 
@@ -127,9 +125,9 @@ export class User {
   @action stopTimer = async () => {
     const updatedUser = await Axios.post(`http://localhost:3001/stopTimer/${this.id}`)
     // const updatedUser = await Axios.post(`/stopTimer/${this.id}`)
-    if (updatedUser.data.msg === "good"){
+    if (updatedUser.data.msg === "good") {
       this.timer = { isOn: false }
-    }else{
+    } else {
       //TODOOOOOOOO
     }
   }
@@ -142,5 +140,26 @@ export class User {
     this.contacts = []
     this.timer = { isOn: false }
   }
+
+  @action makeCall = async () => {
+    // Initialize phone number text input plugin
+    const data = {
+      phoneNumber: '+972544257318',
+      salesNumber: '+972539528514'
+     
+    }
+    // Call our ajax endpoint on the server to initialize the phone call
+    await Axios.post(`http://localhost:3001/call/`, data)
+    await (function (data) {
+      // The JSON sent back from the server will contain a success message
+      alert(data.message);
+    })
+    // }).fail(function (error) {
+    //   alert(JSON.stringify(error));
+    // });
+
+    // const backCall = await Axios.post(`http://localhost:3001/outbound/+972544257318`)
+  }
+
 
 }
