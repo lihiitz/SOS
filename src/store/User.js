@@ -130,9 +130,7 @@ export class User {
 
 
   @action handleSos = async () => {
-    debugger
     const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
-
   }
 
   @action greenSignal = async (hours) => {
