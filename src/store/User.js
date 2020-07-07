@@ -42,7 +42,7 @@ export class User {
     }
 
 
-    const response = await axios.put(`http://localhost:3001/profile/${this.id}`, user)
+    const response = await axios.put(`/api/profile/${this.id}`, user)
     // const response = await axios.put(`/profile/${this.id}`, user)
     if (response.data.msg === 'good') {
       const userData = response.data.user
@@ -61,7 +61,7 @@ export class User {
       phone: phone,
       password: password
     }
-    const response = await axios.post('http://localhost:3001/login', user)
+    const response = await axios.post('/api/login', user)
     // const response = await axios.post('/login', user)
     if (response.data.msg === 'good') {
       const userData = response.data.user
@@ -81,7 +81,7 @@ export class User {
 
 
   @action registration = async (user) => {
-    const response = await axios.post('http://localhost:3001/registration', user)
+    const response = await axios.post('/api/registration', user)
     // const response = await axios.post('/registration', user)
     if (response.data.msg === 'good') {
       const userData = response.data.user
@@ -100,7 +100,7 @@ export class User {
   @action addNewContact = async (name, phone) => {
     const contacts = { contacts: [{ contactName: name, contactPhone: phone }] }
     const id = this.id
-    const response = await axios.put(`http://localhost:3001/contactsSettings/${id}`, contacts)
+    const response = await axios.put(`/api/contactsSettings/${id}`, contacts)
     // const response = await axios.put(`/contactsSettings/${id}`, contacts)
     if (response.data.msg === 'good') {
       const userData = response.data.user
@@ -114,7 +114,7 @@ export class User {
   @action updateContact = async (name, newName, newPhone) => {
     const contact = { name: name, newName: newName, newPhone: newPhone }
     const id = this.id
-    const response = await axios.put(`http://localhost:3001/contactSettings/${id}`, contact)
+    const response = await axios.put(`/api/contactSettings/${id}`, contact)
     const userData = response.data
     this.contacts = userData.contacts
   }
@@ -122,7 +122,7 @@ export class User {
   @action deleteContact = async (name, phone) => {
     const contact = { contactName: name, contactPhone: phone }
     const id = this.id
-    const response = await axios.put(`http://localhost:3001/contactSettingsD/${id}`, contact)
+    const response = await axios.put(`/api/contactSettingsD/${id}`, contact)
     debugger
     const userData = response.data
     this.contacts = userData.contacts
@@ -130,12 +130,12 @@ export class User {
 
 
   @action handleSos = async () => {
-    const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
+    const sos = await Axios.post(`/api/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
   }
 
   @action greenSignal = async (hours) => {
     const id = this.id
-    const updatedUser = await Axios.post(`http://localhost:3001/timer/${id}`, { hours })
+    const updatedUser = await Axios.post(`/api/timer/${id}`, { hours })
     // const updatedUser = await Axios.post(`/timer/${id}`, { hours })
     if (updatedUser.data.msg === "good") {
       this.timer = updatedUser.data.user.timer
@@ -143,7 +143,7 @@ export class User {
   }
 
   @action stopTimer = async () => {
-    const updatedUser = await Axios.post(`http://localhost:3001/stopTimer/${this.id}`)
+    const updatedUser = await Axios.post(`/api/stopTimer/${this.id}`)
     // const updatedUser = await Axios.post(`/stopTimer/${this.id}`)
     if (updatedUser.data.msg === "good") {
       this.timer = { isOn: false }
@@ -170,7 +170,7 @@ export class User {
 
     }
     // Call our ajax endpoint on the server to initialize the phone call
-    await Axios.post(`http://localhost:3001/call/`, data)
+    await Axios.post(`/api/call/`, data)
 
     // }).fail(function (error) {
     //   alert(JSON.stringify(error));

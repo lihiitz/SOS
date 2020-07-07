@@ -1,24 +1,20 @@
 const express = require('express')
 const app = express()
-const path = require('path')
 const bodyParser = require('body-parser')
 const api = require('./server/routes/api')
 const mongoose = require(`mongoose`)
 
 mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/sos`, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
-//for heroku
-// app.use(express.static(path.join(__dirname, 'build')));
-//end for heroku
 
 
 
-const options = {
-  setHeaders: function (res, path, stat) {
-      res.set('Service-Worker-Allowed', '/');
-  },
-};
 
-app.use(express.static(path.join(__dirname, "public"), options))
+// const options = {
+//   setHeaders: function (res, path, stat) {
+//       res.set('Service-Worker-Allowed', '/');
+//   },
+// };
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(function (req, res, next) {
@@ -29,7 +25,11 @@ app.use(function (req, res, next) {
     next()
 })
   
-app.use('/', api)
+app.use('/api', api)
+
+module.exports = {
+    app
+}
 
 //for heroku
 // app.get('*', function (req, res) {
@@ -37,7 +37,3 @@ app.use('/', api)
 // })
 //end for heroku
 
-const PORT = 3001
-app.listen(process.env.PORT || PORT, function(){
-    console.log(`running on port ${PORT}`)
-})
