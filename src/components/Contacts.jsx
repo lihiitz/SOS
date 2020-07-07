@@ -12,7 +12,6 @@ import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import "./Contacts.scss"
-import { Link } from 'react-router-dom'
 
 
 const useStyles = makeStyles({
