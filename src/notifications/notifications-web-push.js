@@ -20,13 +20,19 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 
-
-
-async function tryToSubscribe() {
+export async function getSubscription() {
     const serviceWorkerRegistration = await navigator.serviceWorker.register('./serviceWorker.js')
     const pushSubscription = await serviceWorkerRegistration.pushManager.getSubscription()
+    return {
+        serviceWorkerRegistration,
+        pushSubscription
+    }
 
-    
+}
+
+async function tryToSubscribe() {
+    const {pushSubscription, serviceWorkerRegistration} = await getSubscription()
+
     if (pushSubscription === null) {
         return await serviceWorkerRegistration.pushManager.subscribe({
             userVisibleOnly: true,

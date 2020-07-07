@@ -65,7 +65,6 @@ export class User {
     // const response = await axios.post('/registration', user)
     if (response.data.msg === 'good') {
       const userData = response.data.user
-      debugger
       this.id = userData._id
       this.name = userData.name
       this.password = userData.password
@@ -110,7 +109,7 @@ export class User {
 
 
   @action handleSos = async () => {
-    // const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
+    const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
 
   }
 

@@ -186,6 +186,9 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
         else if (user.length === 0) {
             res.send({ msg: "bad", user: null })
         } else {
+
+            //  webpush.sendNotification(user[0].notificationSubscription, payload)
+
             res.send({ msg: "good", user: user[0] })
         }
     })
@@ -194,7 +197,7 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
 router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
     const user = await User.findOneAndUpdate({ _id: req.params.id }, { marker: req.body })
     console.log(req.body.lat);
-    // sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
+    sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
     res.send(user)
 })
 
@@ -253,7 +256,7 @@ const sosCall = function (user, location) {
     numbers.forEach(c => {        
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=mukk3327&password=2LrJU2nW&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in &to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in &to=${c}`,
             'headers': {
             },
             formData: {
@@ -309,25 +312,26 @@ const checkUserTimer = async function (user) {
         duration + startTotal = ${duration + startTotal}`);
 
 
-    if ((nowTotal - startTotal) === 5 ) {
+    if ((nowTotal - startTotal) === 15 ) {
         await webpush.sendNotification(user.notificationSubscription, payload)
     }
 
     if (duration + startTotal < nowTotal) {
         console.log("sos")
-        sosCall(user)
+        // sosCall(user)
         user.timer.isOn = false
         await user.save()
     } else if (duration - (5 * 60) + startTotal === nowTotal) {
+        await webpush.sendNotification(user.notificationSubscription, payload)
         console.log("remainder 15 before timer ends")
 
 
     
-        try {
-            await webpush.sendNotification(user.notificationSubscription, payload)
-        } catch (e) {
-            console.error(e.stack);
-        }
+        // try {
+        //     await webpush.sendNotification(user.notificationSubscription, payload)
+        // } catch (e) {
+        //     console.error(e.stack);
+        // }
 
         //do push notification
     }
