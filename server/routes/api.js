@@ -256,7 +256,7 @@ const sosCall = function (user, location) {
     numbers.forEach(c => {
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location: 'https://maps.google.com/?q=${location.lat},${location.lng}'&to=${c}`,
+            'url': `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location: https://maps.google.com/?q=${location.lat},${location.lng}&to=${c}`,
 
             'headers': {
             },
