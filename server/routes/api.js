@@ -86,8 +86,7 @@ router.post('/outbound/:salesNumber', function (request, response) {
     console.log(salesNumber)
     var twimlResponse = new VoiceResponse();
 
-    twimlResponse.say('Thanks for contacting our sales department. Our ' +
-        'next available representative will take your call. ',
+    twimlResponse.say('We will connect you as soon as possible',
         { voice: 'alice' });
     console.log("making call")
     twimlResponse.dial(salesNumber);
@@ -279,6 +278,26 @@ const sosCall = function (user, location) {
     })
 }
 
+
+
+const payload = JSON.stringify({
+    title: 'SoSApp',
+    body: {
+        body: 'Are you ok? Cancel your timer or we will send SOS signal in 15 minutes',
+        icon: 'https://vignette.wikia.nocookie.net/starbase-fanon/images/2/28/SOS-icon.png/revision/latest?cb=20190809222911',
+        // actions: [
+        //     {
+        //         action: 'COOL',
+        //         title: 'Akol Sababa'
+        //     },
+        //     {
+        //         action: 'SOS',
+        //         title: 'SOS'
+        //     }
+        // ]
+    }
+});
+
 const checkUserTimer = async function (user) {
 
     const now = new Date()
@@ -297,6 +316,12 @@ const checkUserTimer = async function (user) {
     //END TESTING******************************************************
     console.log(`duration: ${duration}, startTotal: ${startTotal}, nowTotal: ${nowTotal}
         duration + startTotal = ${duration + startTotal}`);
+
+
+    if ((nowTotal - startTotal) === 5 ) {
+        await webpush.sendNotification(user.notificationSubscription, payload)
+    }
+
     if (duration + startTotal < nowTotal) {
         console.log("sos")
         sosCall(user)
@@ -305,23 +330,7 @@ const checkUserTimer = async function (user) {
     } else if (duration - (5 * 60) + startTotal === nowTotal) {
         console.log("remainder 15 before timer ends")
 
-        const payload = JSON.stringify({
-            title: 'test',
-            body: {
-                body: 'Hello, World!',
-                icon: 'http://mongoosejs.com/docs/images/mongoose5_62x30_transparent.png',
-                actions: [
-                    {
-                        action: 'COOL',
-                        title: 'Akol Sababa'
-                    },
-                    {
-                        action: 'SOS',
-                        title: 'SOS'
-                    }
-                ]
-            }
-        });
+
     
         try {
             await webpush.sendNotification(user.notificationSubscription, payload)
