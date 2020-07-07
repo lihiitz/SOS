@@ -6,7 +6,6 @@ const RedButton = inject('userStore', 'mapStore')(observer((props) => {
   const sendSos = ()=> {
     props.userStore.handleSos()
     props.mapStore.handleSos(props.userStore.location, "sos")    
-    alert("SOS")
   }
   return (
     <div className="body">

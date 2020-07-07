@@ -109,6 +109,7 @@ export class User {
 
 
   @action handleSos = async () => {
+    debugger
     const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
 
   }
@@ -150,15 +151,11 @@ export class User {
     }
     // Call our ajax endpoint on the server to initialize the phone call
     await Axios.post(`http://localhost:3001/call/`, data)
-    await (function (data) {
-      // The JSON sent back from the server will contain a success message
-      alert(data.message);
-    })
+
     // }).fail(function (error) {
     //   alert(JSON.stringify(error));
     // });
 
-    // const backCall = await Axios.post(`http://localhost:3001/outbound/+972544257318`)
   }
 
 
