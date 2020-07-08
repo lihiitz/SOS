@@ -7,7 +7,7 @@ const {app} = require('./server')
 app.use(express.static(path.join(__dirname, "public")))
 
 
-const PORT = 5000
+const PORT = 3001
 app.listen(process.env.PORT || PORT, function(){
     console.log(`running on port ${PORT}`)
 })
