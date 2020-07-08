@@ -11,9 +11,10 @@
 .SOS {
   float: center;
   margin-top: 7rem;
-  width: 330px; 
+  width: 250px; 
+  height: 250px;
   /* padding-top: 10%; */
-  font: 40px/330px 'Monoton', cursive;
+  font: 40px/250px 'Monoton', cursive;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #fff;

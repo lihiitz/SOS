@@ -123,7 +123,6 @@ export class User {
     const contact = { contactName: name, contactPhone: phone }
     const id = this.id
     const response = await axios.put(`/api/contactSettingsD/${id}`, contact)
-    debugger
     const userData = response.data
     this.contacts = userData.contacts
   }

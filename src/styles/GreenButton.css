@@ -4,10 +4,10 @@
 .green {
   /* float: center; */
   margin-top: 6rem;
-  width: 330px; 
+  width: 250px; 
+  height: 250px;
   /* padding-top: 10%; */
-  font: 40px/330px 'Bangers', cursive;
-  /* font-family: 'Bangers', cursive; */
+  font: 40px/250px 'Monoton', cursive;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: black;
@@ -21,6 +21,7 @@
   display: inline-block;
   vertical-align: middle;
   align-items: center;
+  margin-bottom: 15px;
 
   /* display: grid;
   justify-content: center;

@@ -90,7 +90,6 @@ export class MapContainer {
     // this.markers = markers.data
     this.markers = markers.data.map(m => {
       let ms = Date.now() - m.timeStamp
-      // debugger
       const isNew = ms < 3600000 ? true: false
       return(
         {
