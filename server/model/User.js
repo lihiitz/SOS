@@ -8,7 +8,7 @@ const userSchema = new Schema({
     phone: String,
     password: String,
     contacts: [], // contact = {name: string, phone: string}
-    timer: {isOn: Boolean, duration: Number, startTime: {hours: Number, minutes: Number, seconds: Number, timeStamp:Number}},
+    timer: {isOn: Boolean, duration: Number, notificationSent: Boolean, startTime: {hours: Number, minutes: Number, seconds: Number, timeStamp:Number}},
     marker: {}, //  {lat: Number, lng: Number, name: String}
     notificationSubscription: {
         endpoint: String,

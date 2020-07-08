@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
+
 .body {
   width: 100%;
   height: 700px;
-  background-color: black;
+  background-color:	#202020;
   text-align: center;
 }
 
@@ -11,15 +13,16 @@
   margin-top: 7rem;
   width: 330px; 
   /* padding-top: 10%; */
-  font: 25px/330px "Open Sans", sans-serif;
+  font: 40px/330px 'Monoton', cursive;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #fff;
   text-align: center;
   font-weight: 900;
-  background: #c0392b;
+  background: rgb(130,11,11);
+  background: linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%);
   border-radius: 50%;
-  animation: shadow-pulse 3s infinite;
+  animation: shadow-pulse 4s infinite;
   display: inline-block;
   vertical-align: middle;
   justify-content: center;
@@ -31,26 +34,26 @@
 @keyframes shadow-pulse
 {
   0% {
-    box-shadow: 0 0 0 0px #c0392b;
+    box-shadow: 0 0 0 0px rgba(83,6,6,1);
   }
   50% {
-    box-shadow: 0 0 0 15px #c0392b;
+    box-shadow: 0 0 0 15px rgba(83,6,6,1);
   }
   100% {
-    box-shadow: 0 0 0 0px #c0392b;
+    box-shadow: 0 0 0 0px rgba(83,6,6,1);
   }
 }
 
 @keyframes shadow-pulse-big
 {
   0% {
-    box-shadow: 0 0 0 0px #c0392b;
+    box-shadow: 0 0 0 0px rgba(83,6,6,1);
   }
   50% {
-    box-shadow: 0 0 0 15px #c0392b;
+    box-shadow: 0 0 0 15px rgba(83,6,6,1);
   }
   100% {
-    box-shadow: 0 0 0 0px #c0392b;
+    box-shadow: 0 0 0 0px rgba(83,6,6,1);
   }
 }
 

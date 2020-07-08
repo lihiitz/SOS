@@ -26,10 +26,10 @@ export default function Topic() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar style={{ background:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)"}} position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <Menu />
+          <IconButton  color="inherit" aria-label="menu">
+            <Menu/>
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             SOS

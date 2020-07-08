@@ -20,6 +20,7 @@ import { inject, observer } from 'mobx-react'
 import { useContext } from 'react' //import hook from react
 // const MyContext = React.createContext() 
 import { MyContext } from './Topic';
+// import url from 'https://fonts.googleapis.com/css2?family=Amatic+SC&family=Crete+Round&display=swap';
 
 
 const useStyles = makeStyles({
@@ -64,39 +65,39 @@ const Menu = inject("userStore")(observer((props) => {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        <Link to='/main'>
-          <ListItem button key='sos'>
+      <List style={{ background:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)"}}>
+        <Link id="navlinks" style={{textDecoration: "none", color: "white"}} to='/main'>
+          <ListItem  button key='sos'>
             <ListItemIcon> <NotificationsActiveIcon /> </ListItemIcon>
             <ListItemText primary='SOS' />
           </ListItem>
         </Link>
-        <Link to='/profile'>
+        <Link style={{textDecoration: "none", color: "white"}} to='/profile'>
           <ListItem button key='profile'>
             <ListItemIcon> <AccountCircleIcon /> </ListItemIcon>
             <ListItemText primary='Profile' />
           </ListItem>
         </Link>
-        <Link to="/contacts">
+        <Link style={{textDecoration: "none", color: "white"}} to="/contacts">
           <ListItem button key='Contacts'>
             <ListItemIcon> <ContactPhoneIcon /> </ListItemIcon>
             <ListItemText primary='Contacts' />
           </ListItem>
         </Link>
-        <Link to='/timer'>
+        <Link style={{textDecoration: "none", color: "white"}} to='/timer'>
           <ListItem button key='Timer'>
             <ListItemIcon> <TimerIcon /> </ListItemIcon>
             <ListItemText primary='Timer' />
           </ListItem>
         </Link>
-        <Link to='/sosMap'>
+        <Link style={{textDecoration: "none", color: "white"}} to='/sosMap'>
           <ListItem button key='Map'>
             <ListItemIcon> <AddLocationIcon /> </ListItemIcon>
             <ListItemText primary='Map' />
           </ListItem>
         </Link>
         <Divider />
-        <Link to='/'>
+        <Link style={{textDecoration: "none", color: "white"}} to='/'>
           <ListItem button key='logout' onClick={logOut}>
             <ListItemIcon> < ExitToAppIcon /> </ListItemIcon>
             <ListItemText primary='Log Out' />

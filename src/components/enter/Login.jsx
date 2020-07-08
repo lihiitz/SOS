@@ -58,7 +58,7 @@ const Login = inject("userStore")(observer((props) => {
             <div className="textbox">
               <input id="password" label="Password" name='password' placeholder="Password" onChange={handleInput} type="password" />
             </div>
-            <button className="loginBtn" variant="contained" color="primary" disableElevation onClick={login}>Logigit n</button>
+            <button className="loginBtn" variant="contained" color="primary" disableElevation onClick={login}>Login</button>
             {props.isLoged ? <Redirect to='/main' /> : null}
 
         </div>
