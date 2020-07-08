@@ -24,6 +24,8 @@ import { observer, inject } from "mobx-react";
   }
 
   render(){
+    console.log(this.props.userStore.location);
+    
     return (
       <GoogleMap
         defaultZoom={this.props.mapStore.zoom}

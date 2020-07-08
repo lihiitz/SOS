@@ -8,6 +8,7 @@ import { render } from 'react-dom';
 
 
 export class MapContainer {
+    
   @observable containerStyle
   @observable center
   @observable markers = [] //{lat: number, lng: number, color: string}
@@ -120,7 +121,6 @@ export class MapContainer {
       )
     })
     this.zones = temp
-    console.log(this.markers)
   }
 
   @action addColorToZones = () => {

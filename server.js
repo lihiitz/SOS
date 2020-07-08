@@ -20,4 +20,7 @@ io.on('connection', (socket) => {
     socket.on('new marker', () => {
         io.emit('refresh')
     })
+    socket.on('timer', () => {
+        io.emit()
+    })
 })

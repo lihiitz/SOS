@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx'
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 
 import Axios from 'axios'
 const axios = require('axios')
@@ -34,14 +34,14 @@ export class User {
     // this.isLoged = false
   }
 
-  @action connectSocket () {
-    this.socket = io.connect('http://localhost:3001')
-    this.socket.on('refresh', () => {
-      console.log("in socket");
+  // @action connectSocket () {
+  //   this.socket = io.connect('http://localhost:3001')
+  //   this.socket.on('refresh', () => {
+  //     console.log("in socket");
       
-      // window.location.reload(false);
-    })
-  }
+  //     // window.location.reload(false);
+  //   })
+  // }
   @action updateUser = async (newName, newPhone, newPassword, notificationSubscription, timer) => {
     const user = { name: newName, phone: newPhone, password: newPassword }
     if (notificationSubscription) {
