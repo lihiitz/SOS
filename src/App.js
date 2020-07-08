@@ -17,9 +17,10 @@ import { useContext } from 'react' //import hook from react
 import { MyContext } from './components/Topic';
 import ContactSettings from './components/ContactSettings';
 import MapPage from './components/MapPage';
+import {subscribe} from './notifications/notifications-web-push';
 
 
- //create context
+//create context
 @inject('userStore')
 @observer
 class App extends Component {
@@ -40,7 +41,7 @@ class App extends Component {
     // localStorage.setItem(`password`, `${user.password}`);
   }
   getLocation = () => {
-      if(navigator.geolocation){
+    if (navigator.geolocation) {
       console.log("location Available")
       navigator.geolocation.getCurrentPosition((position) => {
         console.log(position.coords);
@@ -50,7 +51,7 @@ class App extends Component {
     } else {
       console.log("Not Available")
     }
-}
+  }
   logout = async () => {
     await this.setState({
       isLoged: false
@@ -61,14 +62,27 @@ class App extends Component {
     const temp = localStorage.getItem('phone')
     if (temp) {
       const func = async () => {
-        this.props.userStore.login(localStorage.getItem('phone'), localStorage.getItem('password'))
+        const user = await this.props.userStore.login(localStorage.getItem('phone'), localStorage.getItem('password'))
+
+        if (user) {
+          const subscription = await subscribe()
+          const userModel = this.props.userStore
+
+          // if the endpoint is different, we need to update the user
+          if (userModel?.notificationSubscription?.endpoint !== subscription?.endpoint) {
+         
+            userModel.updateUser(userModel.name, userModel.phone, userModel.password, subscription)
+          }
+        }
+
         this.setState({
           isLoged: true
         })
       }
-      this.getLocation()
+
       func()
     }
+    this.getLocation()
   }
 
   //TO DO ADD SMTH IF USER PASSWORD WRONG!
@@ -77,7 +91,7 @@ class App extends Component {
     const value = { //object with context
       logout: this.logout,
     }
-    
+
     return (
       <MyContext.Provider value={value}>
         <Router>
@@ -89,7 +103,7 @@ class App extends Component {
           <Route path="/contacts" exact render={() => <Contacts />} />
           <Route path="/contactSettings" exact render={() => <ContactSettings />} />
 
-          <Route path="/sosMap" exact render={() => <MapPage/>} />
+          <Route path="/sosMap" exact render={() => <MapPage />} />
 
         </Router>
       </MyContext.Provider >
