@@ -23,22 +23,27 @@ smalltext{
   font-size: 16px;
 } */
 
-.clockdiv {
+/* .clockdiv {
+
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  position: relative;
+  display: table-column;
+  justify-content: center;
+  align-items: center;
 }
+
 
 li {
   display: inline-block;
   color: white;
   font-size: 1.5em;
   list-style-type: none;
-  padding: 1em;
+  padding: 3px;
   text-transform: uppercase;
 }
 
 li span {
   display: block;
-  font-size: 4.5rem;
+  font-size: 3rem;
 }
+ */

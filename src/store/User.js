@@ -102,14 +102,12 @@ export class User {
     const contact = { contactName: name, contactPhone: phone }
     const id = this.id
     const response = await axios.put(`http://localhost:3001/contactSettingsD/${id}`, contact)
-    debugger
     const userData = response.data
     this.contacts = userData.contacts
   }
 
 
   @action handleSos = async () => {
-    debugger
     const sos = await Axios.post(`http://localhost:3001/sos/${this.id}`, { lat: this.location.latitude, lng: this.location.longitude, name: "sos" })
 
   }

@@ -50,9 +50,10 @@ const TimerInputs = inject("userStore")(observer((props) => {
     <div>
       <Topic/>
       <div className="timerBody">
-      <FormControl className={classes.formControl}>
+      <FormControl style={{background: "linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)"}} className={classes.formControl}>
         <InputLabel className="TimerColor" id="demo-controlled-open-select-label">Hour</InputLabel>
         <Select
+          style={{color: "white"}}
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
           open={open}

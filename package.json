@@ -9,6 +9,7 @@
     "@material-ui/pickers": "^3.2.10",
     "@react-google-maps/api": "^1.9.7",
     "axios": "^0.19.2",
+    "get-google-fonts": "^1.2.2",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
     "moment": "^2.27.0",
