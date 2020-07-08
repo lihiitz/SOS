@@ -318,7 +318,7 @@ const checkUserTimer = async function (user) { //for tests only! duration = 1 mi
     if (endMS <= nowMS) {
         console.log("sos")
         await webpush.sendNotification(user.notificationSubscription, payload)
-        // sosCall(user, null)
+        sosCall(user, null)
         user.timer.isOn = false
         await user.save()
     }

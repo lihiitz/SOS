@@ -9,8 +9,39 @@
 .timerBody{
     width: 100%;
     height: 900px;
-    background-color: black;
+    background-color: #202020;
     text-align: center;
     display: inline-block;
 }
 
+
+.clockdiv {
+
+    box-sizing: border-box;
+    position: relative;
+    display: table-column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  
+  li {
+    position: relative;
+    padding-bottom: 10rem;
+    display: inline-block;
+    color: white;
+    font-size: 1.5em;
+    list-style-type: none;
+    text-transform: uppercase;
+  }
+  
+  li span {
+    display: block;
+    font-size: 3rem;
+  }
+  
+  h1 {
+      margin-bottom: 10px;
+      color: white;
+      font-size: 20px;
+  }

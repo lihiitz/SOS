@@ -54,7 +54,7 @@ class CountDown extends Component {
     return (
       <div>
 
-        <h1>We will send messages in:</h1>
+        <h1>Signal will be sent in:</h1>
         <div id="clockdiv">
           <div>
             <li><span className="hours" id="hour">{hours}:</span></li>
