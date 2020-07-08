@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker'
 import { Provider } from 'mobx-react'
 import { User } from './store/User'
 import { MapContainer } from './store/MapContainer'
+import { Socket } from './store/Socket';
 // import Axios from 'axios'
 const axios = require('axios')
 
@@ -30,7 +31,8 @@ const axios = require('axios')
 
 const mapStore = new MapContainer()
 const userStore = new User()
-const stores = { userStore, mapStore }
+const socketStore = new Socket(userStore, mapStore)
+const stores = { userStore, mapStore, socketStore }
 
 // let pkInstance = new PushKit("BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo", true);
 // // register service worker

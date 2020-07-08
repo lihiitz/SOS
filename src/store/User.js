@@ -1,4 +1,6 @@
 import { observable, action } from 'mobx'
+// import io from 'socket.io-client'
+
 import Axios from 'axios'
 const axios = require('axios')
 // import { GoogleMap, LoadScript } from '@react-google-maps/api'
@@ -11,9 +13,10 @@ export class User {
   @observable timer
   @observable location
   @observable notificationSubscription
-  // @observable isLoged
+  @observable socket
 
   constructor() {
+    this.socket = null
     this.id = ''
     this.name = ''
     this.phone = ''
@@ -31,6 +34,14 @@ export class User {
     // this.isLoged = false
   }
 
+  // @action connectSocket () {
+  //   this.socket = io.connect('http://localhost:3001')
+  //   this.socket.on('refresh', () => {
+  //     console.log("in socket");
+      
+  //     // window.location.reload(false);
+  //   })
+  // }
   @action updateUser = async (newName, newPhone, newPassword, notificationSubscription, timer) => {
     const user = { name: newName, phone: newPhone, password: newPassword }
     if (notificationSubscription) {

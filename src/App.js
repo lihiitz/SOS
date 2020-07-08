@@ -20,8 +20,9 @@ import MapPage from './components/MapPage';
 import {subscribe} from './notifications/notifications-web-push';
 
 
+
 //create context
-@inject('userStore')
+@inject('userStore', 'socketStore')
 @observer
 class App extends Component {
   constructor() {
@@ -29,6 +30,7 @@ class App extends Component {
     this.state = {
       isLoged: false
     }
+    // this.socket = io('http://localhost')
   }
 
   login = async () => {
@@ -44,8 +46,6 @@ class App extends Component {
     if (navigator.geolocation) {
       console.log("location Available")
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position.coords);
-        console.log(position.coords.latitude, position.coords.longitude)
         this.props.userStore.location = position.coords
       })
     } else {
@@ -59,6 +59,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.props.socketStore.connectSocket()
     const temp = localStorage.getItem('phone')
     if (temp) {
       const func = async () => {
