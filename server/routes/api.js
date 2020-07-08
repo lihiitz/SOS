@@ -104,9 +104,7 @@ router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
 
     const d = new Date()
     let user = await User.findById(req.params.id)
-    user.timer.isOn = true
-    user.timer.startTime = { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes(), timeStamp: Date.now() }
-    user.timer.duration = req.body.hours
+    user.timer = { isOn: true, duration: req.body.hours, notificationSent: false, startTime: { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes(), timeStamp: Date.now() } }
     const updatedUser = await user.save()
     if (updatedUser) {
         res.send({ msg: "good", user: updatedUser })
@@ -310,15 +308,17 @@ const checkUserTimer = async function (user) { //for tests only! duration = 1 mi
     const timeBeforeEnd = endMS - 15000
 
     // if (timeBeforeEnd === nowMS || timeBeforeEnd === (nowMS + 1000) || timeBeforeEnd === (nowMS - 1000)) {
-        if (timeBeforeEnd === nowMS) {
-        console.log("WORK!")
+    if (timeBeforeEnd <= nowMS && !user.timer.notificationSent) {
         await webpush.sendNotification(user.notificationSubscription, payload)
+        user.timer.notificationSent = true
+        await user.save()
+        console.log("15 seconds before timer end");
     }
 
     if (endMS <= nowMS) {
         console.log("sos")
         await webpush.sendNotification(user.notificationSubscription, payload)
-       // sosCall(user, null)
+        // sosCall(user, null)
         user.timer.isOn = false
         await user.save()
     }
