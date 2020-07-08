@@ -105,7 +105,7 @@ router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
     const d = new Date()
     let user = await User.findById(req.params.id)
     user.timer.isOn = true
-    user.timer.startTime = { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes() }
+    user.timer.startTime = { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes() , timeStamp:Date.now()}
     user.timer.duration = req.body.hours
     const updatedUser = await user.save()
     if (updatedUser) {
@@ -211,6 +211,7 @@ router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name
 const sosCall = function (user, location) {
     const numbers = user.contacts.map(c => c.contactPhone)
     numbers.forEach(c => {
+        console.log(location)
         const options = {
             'method': 'POST',
             'url': `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location: https://maps.google.com/?q=${location.lat},${location.lng}&to=${c}`,
@@ -239,39 +240,83 @@ const payload = JSON.stringify({
     }
 });
 
-const checkUserTimer = async function (user) {
+const HOURSTOMS = 3600000
+const MINUTESBEFORE = 15
+const MINUTESTOMS = 60000
 
-    const now = new Date()
-    const nowH = now.getHours()
-    const nowM = now.getMinutes()
-    const nowS = now.getSeconds()
-    const nowTotal = (nowH * 3600) + (nowM * 60) + nowS
-    const startH = user.timer.startTime.hours
-    const startM = user.timer.startTime.minutes
-    const startS = user.timer.startTime.seconds
-    const startTotal = (startH * 3600) + (startM * 60) + startS
-    // const duration = user.timer.duration * 3600
-    //************************************************************************ */
-    //TESTING - with minutes instead of hours **input will be in minutes and must be > 5
-    const duration = user.timer.duration * 60
-    //END TESTING******************************************************
-    console.log(`duration: ${duration}, startTotal: ${startTotal}, nowTotal: ${nowTotal}
-        duration + startTotal = ${duration + startTotal}`);
+// const checkUserTimer = async function (user) {
+
+//     const now = new Date()
+//     const nowH = now.getHours()
+//     const nowM = now.getMinutes()
+//     const nowS = now.getSeconds()
+//     const nowTotal = (nowH * 3600) + (nowM * 60) + nowS
+//     const startH = user.timer.startTime.hours
+//     const startM = user.timer.startTime.minutes
+//     const startS = user.timer.startTime.seconds
+//     const startTotal = (startH * 3600) + (startM * 60) + startS
+//     // const duration = user.timer.duration * 3600
+//     //************************************************************************ */
+//     //TESTING - with minutes instead of hours **input will be in minutes and must be > 5
+//     const duration = user.timer.duration * 60
+//     //END TESTING******************************************************
+//     console.log(`duration: ${duration}, startTotal: ${startTotal}, nowTotal: ${nowTotal}
+//         duration + startTotal = ${duration + startTotal}`);
 
 
-    if ((nowTotal - startTotal) === 5) {
+//     if ((nowTotal - startTotal) === 5) {
+//         await webpush.sendNotification(user.notificationSubscription, payload)
+//     }
+
+//     if (duration + startTotal < nowTotal) {
+//         console.log("sos")
+//         // sosCall(user)
+//         user.timer.isOn = false
+//         await user.save()
+//     } else if (duration - (5 * 60) + startTotal === nowTotal) {
+//         console.log("remainder 15 before timer ends")
+//         await webpush.sendNotification(user.notificationSubscription, payload)
+//         //do push notification
+//     }
+// }
+// const checkUserTimer = async function (user) { //origin
+
+//     const nowMS = Date.now()
+//     const startMS = user.timer.startTime.timeStamp
+//     const durationMS = user.timer.duration * HOURSTOMS
+//     const endMS = startMS + durationMS
+//     const timeBeforeEnd = endMS - (MINUTESBEFORE * MINUTESTOMS)
+
+//     if (timeBeforeEnd  === nowMS || timeBeforeEnd  === (nowMS + MINUTESTOMS) || timeBeforeEnd === (nowMS - MINUTESTOMS)) {
+//         await webpush.sendNotification(user.notificationSubscription, payload)
+//     }
+
+//     if (endMS >= nowMS) {
+//         console.log("sos")
+//         sosCall(user)
+//         user.timer.isOn = false
+//         await user.save()
+//     }
+// }
+
+const checkUserTimer = async function (user) { //for tests only! duration = 1 minute and 15 minutes before  = 15 seconds
+
+    const nowMS = Date.now()
+    const startMS = user.timer.startTime.timeStamp
+    const durationMS = MINUTESTOMS
+    const endMS = startMS + durationMS
+    const timeBeforeEnd = endMS - 15000
+
+    if (timeBeforeEnd  === nowMS || timeBeforeEnd  === (nowMS + 1000) || timeBeforeEnd === (nowMS - 1000)) {
+        console.log("WORK!")
         await webpush.sendNotification(user.notificationSubscription, payload)
     }
 
-    if (duration + startTotal < nowTotal) {
+    if (endMS >= nowMS) {
         console.log("sos")
-        // sosCall(user)
+       // sosCall(user)
         user.timer.isOn = false
         await user.save()
-    } else if (duration - (5 * 60) + startTotal === nowTotal) {
-        console.log("remainder 15 before timer ends")
-        await webpush.sendNotification(user.notificationSubscription, payload)
-        //do push notification
     }
 }
 

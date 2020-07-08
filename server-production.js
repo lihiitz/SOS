@@ -5,6 +5,7 @@ const path = require('path')
 const { app } = require('./server-common')
 
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'node_modules')));
 
 // handle every other route with index.html, which will contain
 // a script tag to your application's JavaScript file(s).
