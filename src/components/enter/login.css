@@ -6,6 +6,9 @@ body{
   background: #202020;
   /* background: url(bg.jpg) no-repeat; */
   background-size: cover;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
 }
 .login-box{
   width: 280px;
@@ -28,7 +31,7 @@ body{
   font-size: 20px;
   padding: 8px 0;
   margin: 8px 0;
-  border-bottom: 1px solid #c0392b;
+  /* border-bottom: 1px solid #c0392b; */
 }
 
 .textbox input{
@@ -86,4 +89,14 @@ p {
   font-size: 18px;
   cursor: pointer;
   margin: 12px 0;
+}
+
+.logo{
+  background-image:url('./sos2.png');
+  width: 100px;
+  height: 100px;
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
+margin-left: 90px;
 }

@@ -26,14 +26,15 @@ import { MyContext } from './Topic';
 const useStyles = makeStyles({
   list: {
     width: 250,
-    background:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)",
-    flexDirection: 'unset'
+    // background:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)",
   },
   fullList: {
     width: 'auto',
     // background:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)"
   },
 });
+
+
 
 const Menu = inject("userStore")(observer((props) => {
   const classes = useStyles();

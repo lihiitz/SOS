@@ -50,7 +50,8 @@ const TimerInputs = inject("userStore")(observer((props) => {
     <div>
       <Topic />
       <div className="timerBody">
-        <FormControl style={{ backgroundColor: ' rgba(130,11,11,1) ' }} className={classes.formControl}>
+        <FormControl  className={classes.formControl}>
+        {/* style={{ backgroundColor: ' rgba(130,11,11,1) ' }} */}
           <InputLabel className="TimerColor" id="demo-controlled-open-select-label">Hour</InputLabel>
           <Select
             style={{ color: "white" }}
@@ -63,7 +64,7 @@ const TimerInputs = inject("userStore")(observer((props) => {
             onChange={handleChange}
           >
             {hoursArray.map(h =>
-              <MenuItem style={{ backgroundColor: "rgba(130,11,11,1)" }} key={h} value={h}>{h}</MenuItem>
+              <MenuItem key={h} value={h}>{h}</MenuItem>
             )}
           </Select>
         </FormControl>

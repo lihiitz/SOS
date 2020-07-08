@@ -153,13 +153,14 @@ const Registration = inject("userStore")(observer((props) => {
       }
     }
   }
-  return (<div>
+  return (
+  <div>
+     <Link to='/' style={{ textDecoration: "none" }}> <ArrowBackIosIcon style={{ color: "white", fontSize: "30px", margin: '20px', padding:"10px",backgroundColor: "#c0392b", borderRadius:'50%'}} /> </Link>
     <body>
-      <Link to='/' style={{textDecoration: "none"}}> <ArrowBackIosIcon style={{color:"white", fontSize:"30px", margin:'20px'}}/> </Link>
-      <div className="login-box">
+           <div className="login-box">
         <h1>Registration</h1>
         <div className="textbox">
-          <input
+          <TextField
             error={!!validation.name}
             value={inputUser.name}
             placeholder="Name"
@@ -171,7 +172,7 @@ const Registration = inject("userStore")(observer((props) => {
             helperText={validation.name} />
         </div>
         <div className="textbox">
-          <input
+          <TextField
             error={!!validation.phone}
             value={inputUser.phone}
             onBlur={validatePhone}
@@ -184,7 +185,7 @@ const Registration = inject("userStore")(observer((props) => {
           />
         </div>
         <div className="textbox">
-          <input
+          <TextField
             error={!!validation.password}
             value={inputUser.password}
             onBlur={validatePassword}
@@ -199,7 +200,7 @@ const Registration = inject("userStore")(observer((props) => {
           />
         </div>
         <div className="textbox">
-          <input
+          <TextField
             error={!!validation.contactName}
             onBlur={validateRequiredInput}
             placeholder="Contact Name"
@@ -212,10 +213,10 @@ const Registration = inject("userStore")(observer((props) => {
         </div>
 
         <div className="textbox">
-          <input
+          <TextField
             error={!!validation.contactPhone}
             onBlur={validateContactPhone}
-            // value={inputContact.contactPhone}
+            value={inputContact.contactPhone}
             placeholder="Contact Phone"
             label="Contact Phone"
             name='contactPhone'
@@ -225,10 +226,10 @@ const Registration = inject("userStore")(observer((props) => {
           />
         </div>
 
-        <button className="loginBtn" variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={registration}>Registration</button>
-        <FormControl component="fieldset">
+        <Button className="loginBtn" style={{backgroundColor:"#202020", color:'white', border:'solid #c0392b 1px'}} variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={registration}>Registration</Button>
+        <FormControl component="fieldset" style={{margin:'10px'}}>
           <FormControlLabel
-            control={<Switch disabled={isNotificationsDenied} checked={!!notifications} onChange={handleChange} name="checkedA" />}
+            control={<Switch disabled={isNotificationsDenied} checked={!!notifications} onChange={handleChange} name="checkedA" style={{color:"#c0392b"}}/>}
             label="Enable Notifications"
           />
           {isNotificationsDenied && <FormHelperText error={true}>Push notification denied, see browser settings to enable this</FormHelperText>}

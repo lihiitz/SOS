@@ -13,7 +13,7 @@ const EnterPage = (props) => {
       {/* <Link to='/login'><Button variant="contained" color="primary" disableElevation >LogIn</Button></Link> */}
       <Login  login={props.login} isLoged={props.isLoged} />
       <p></p>
-      <Link to='/registration' style={{textDecoration: "none"}}>  <button className="registerbtn" variant="contained" color="primary" disableElevation >Registration</button></Link>
+      <Link to='/registration' style={{textDecoration: "none"}}>  <Button style={{backgroundColor:"#202020", color:'white', border:'solid #c0392b 1px'}}className="registerbtn" variant="contained" color="primary" disableElevation >Registration</Button></Link>
     </div>
   )
 }

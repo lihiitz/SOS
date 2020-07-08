@@ -48,60 +48,64 @@ const Login = inject("userStore")(observer((props) => {
   }
 
   return (
-    <div>
-      <body>
-        <div className="login-box">
-          <h1>Login</h1>
-          <div className="textbox">
-              <input id="phone" label="Phone" name='phone' placeholder="Phone" onChange={handleInput} />
-          </div>
-            <div className="textbox">
-              <input id="password" label="Password" name='password' placeholder="Password" onChange={handleInput} type="password" />
-            </div>
-            <button className="loginBtn" variant="contained" color="primary" disableElevation onClick={login}>Login</button>
-            {props.isLoged ? <Redirect to='/main' /> : null}
+    // <div>
+    //   <body>
+    //     <div className="login-box">
+    //       <h1>Login</h1>
+    //       <div className="textbox">
+    //           <input id="phone" label="Phone" name='phone' placeholder="Phone" onChange={handleInput} />
+    //       </div>
+    //         <div className="textbox">
+    //           <input id="password" label="Password" name='password' placeholder="Password" onChange={handleInput} type="password" />
+    //         </div>
+    //         <button className="loginBtn" variant="contained" color="primary" disableElevation onClick={login}>Login</button>
+    //         {props.isLoged ? <Redirect to='/main' /> : null}
 
-        </div>
-      </body>
-    </div>
-
-    // <div class="textbox">
-    //   <i class="fas fa-user"></i>
-    //   <input type="text" placeholder="Username">
+    //     </div>
+    //   </body>
     // </div>
 
-    // <div class="textbox">
-    //   <i class="fas fa-lock"></i>
-    //   <input type="password" placeholder="Password">
-    // </div>
+    // // <div class="textbox">
+    // //   <i class="fas fa-user"></i>
+    // //   <input type="text" placeholder="Username">
+    // // </div>
 
-    // <input type="button" class="btn" value="Sign in">
+    // // <div class="textbox">
+    // //   <i class="fas fa-lock"></i>
+    // //   <input type="password" placeholder="Password">
+    // // </div>
 
-    // <form className={classes.root} noValidate autoComplete="on">
-    //   {validation ? <TextField id="phone" label="Phone" name='phone' onChange={handleInput} /> : <TextField
-    //     error
-    //     id="standard-error-helper-text"
-    //     label="Phone" 
-    //     name='phone'
-    //     autoComplete="username"
-    //     helperText="Incorrect entry."
-    //     onChange={handleInput}
-    //   />}
-    //   {validation ? <TextField id="password" label="Password" name='password' onChange={handleInput} type="password" /> : <TextField
-    //     error
-    //     id="standard-error-helper-text"
-    //     label="Password"
-    //     name='password'
-    //     helperText="Incorrect entry."
-    //     type="password"
-    //     autoComplete="current-password"
-    //     onChange={handleInput}
-    //   />}
-    //   {/* <TextField id="phone" label="Phone" name='phone' onChange={handleInput} />
-    //   <TextField id="password" label="Password" name='password' onChange={handleInput} type="password" /> */}
-    //   <Button variant="contained" color="primary" disableElevation onClick={login}>LogIn</Button>
-    //   {props.isLoged ? <Redirect to='/main' /> : null}
-    // </form>
+    // // <input type="button" class="btn" value="Sign in">
+    <body>
+      <div className='logo'></div>
+      <div className="login-box">
+        <form className={classes.root} noValidate autoComplete="on" style={{display:'grid', justifyContent:'center', alignContent:"center"}}>
+          {validation ? <TextField id="phone" label="Phone" name='phone' onChange={handleInput} /> : <TextField
+            error
+            id="standard-error-helper-text"
+            label="Phone"
+            name='phone'
+            autoComplete="username"
+            helperText="Incorrect entry."
+            onChange={handleInput}
+          />}
+          {validation ? <TextField id="password" label="Password" name='password' onChange={handleInput} type="password" /> : <TextField
+            error
+            id="standard-error-helper-text"
+            label="Password"
+            name='password'
+            helperText="Incorrect entry."
+            type="password"
+            autoComplete="current-password"
+            onChange={handleInput}
+          />}
+          {/* <TextField id="phone" label="Phone" name='phone' onChange={handleInput} />
+      <TextField id="password" label="Password" name='password' onChange={handleInput} type="password" /> */}
+          <Button style={{backgroundColor:"#202020", color:'white', border:'solid #c0392b 1px', marginLeft:"20px"}} variant="contained" color="primary" disableElevation onClick={login}>LogIn</Button>
+          {props.isLoged ? <Redirect to='/main' /> : null}
+        </form>
+      </div>
+    </body>
   );
 }))
 
