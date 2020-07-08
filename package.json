@@ -97,7 +97,7 @@
     "yup": "^0.29.1"
   },
   "scripts": {
-    "start": "npm run server-production",
+    "start": "node server-production.js",
     "react-start": "node scripts/start.js",
     "server": "node server.js",
     "server-production": "node server-production.js",
