@@ -68,7 +68,7 @@ export class MapContainer {
     const d = new Date()
     // const date = {year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), hours: d.getHours(), minutes: d.getMinutes() }
     const timeStamp = Date.now()
-    const marker = await Axios.post(`http://localhost:3001/marker/`, { lat: location.latitude, lng: location.longitude, timeStamp, name })
+    const marker = await Axios.post(`/api/marker/`, { lat: location.latitude, lng: location.longitude, timeStamp, name })
   }
 
   @action getColor = (point) => {
@@ -86,7 +86,7 @@ export class MapContainer {
   }
 
   @action getMarkers = async () => {
-    let markers = await Axios.get('http://localhost:3001/markers')
+    let markers = await Axios.get('/api/markers')
     // this.markers = markers.data
     this.markers = markers.data.map(m => {
       let ms = Date.now() - m.timeStamp

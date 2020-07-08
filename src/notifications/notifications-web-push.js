@@ -2,6 +2,10 @@
 
 const applicationServerPublicKey = 'BCue7AbRMDE6GPH0DWhS9kishGryuSKQxGm1Y_otQG9ai8wwUPVsTGGY7_iW-iVp5jxM0Nu2fBz6dDUknd-AHRk';
 
+const serviceWorkerRegistrationPromise = navigator.serviceWorker.register('./serviceWorker.js', {
+    scope: '/'
+})
+
 function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
@@ -19,7 +23,9 @@ function urlBase64ToUint8Array(base64String) {
 
 
 export async function getSubscription() {
-    const serviceWorkerRegistration = await navigator.serviceWorker.register('./serviceWorker.js')
+
+
+    const serviceWorkerRegistration = await serviceWorkerRegistrationPromise
     const pushSubscription = await serviceWorkerRegistration.pushManager.getSubscription()
     return {
         serviceWorkerRegistration,

@@ -265,7 +265,7 @@ const checkUserTimer = async function (user) {
 
     if (duration + startTotal < nowTotal) {
         console.log("sos")
-        sosCall(user)
+        // sosCall(user)
         user.timer.isOn = false
         await user.save()
     } else if (duration - (5 * 60) + startTotal === nowTotal) {
