@@ -240,6 +240,14 @@ const payload = JSON.stringify({
     }
 });
 
+const payload2 = JSON.stringify({
+    title: 'SoSApp',
+    body: {
+        body: 'We send SOS to all your contacts',
+        icon: 'https://vignette.wikia.nocookie.net/starbase-fanon/images/2/28/SOS-icon.png/revision/latest?cb=20190809222911',
+    }
+});
+
 const HOURSTOMS = 3600000
 const MINUTESBEFORE = 15
 const MINUTESTOMS = 60000
@@ -317,8 +325,8 @@ const checkUserTimer = async function (user) { //for tests only! duration = 1 mi
 
     if (endMS <= nowMS) {
         console.log("sos")
-        await webpush.sendNotification(user.notificationSubscription, payload)
-        sosCall(user, null)
+        await webpush.sendNotification(user.notificationSubscription, payload2)
+        // sosCall(user, null)
         user.timer.isOn = false
         await user.save()
     }

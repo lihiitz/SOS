@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+    color: 'white'
   },
 }));
 
@@ -23,10 +24,10 @@ const TimerInputs = inject("userStore")(observer((props) => {
   const [hours, setHours] = useState('');
   const [open, setOpen] = useState(false);
   const [isStart, setIsStart] = useState(false);
-
-  const stopTimerClick = () => {
-    props.userStore.stopTimer()
-  }
+  
+  // const stopTimerClick = () => {
+  //   props.userStore.stopTimer()
+  // }
 
   const handleChange = (event) => {
     setHours(+event.target.value)
@@ -40,39 +41,36 @@ const TimerInputs = inject("userStore")(observer((props) => {
     setOpen(true);
   }
 
-  const startCount = () => {
-    setIsStart(true)
-    props.userStore.greenSignal(hours)
-  }
+  // const startCount = () => {
+  //   props.userStore.greenSignal(hours)
+  // }
 
   const hoursArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
   return (
     <div>
-      <Topic/>
+      <Topic />
       <div className="timerBody">
-      <FormControl style={{background: "linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)"}} className={classes.formControl}>
-        <InputLabel className="TimerColor" id="demo-controlled-open-select-label">Hour</InputLabel>
-        <Select
-          style={{color: "white"}}
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={open}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          value={hours}
-          onChange={handleChange}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {hoursArray.map(h =>
-            <MenuItem key={h} value={h}>{h}</MenuItem>
-          )}
-        </Select>
-      </FormControl>
-      <GreenButton startCount={startCount} />
-      {props.userStore.timer.isOn ? <CountDown time={props.userStore.timer} /> : null}
-      <button className="btn" id="timerbtn" onClick={stopTimerClick}>STOP TIMER</button>
+        <FormControl style={{ backgroundColor: ' rgba(130,11,11,1) ' }} className={classes.formControl}>
+          <InputLabel className="TimerColor" id="demo-controlled-open-select-label">Hour</InputLabel>
+          <Select
+            style={{ color: "white" }}
+            labelId="demo-controlled-open-select-label"
+            id="demo-controlled-open-select"
+            open={open}
+            onClose={handleClose}
+            onOpen={handleOpen}
+            value={hours}
+            onChange={handleChange}
+          >
+            {hoursArray.map(h =>
+              <MenuItem style={{ backgroundColor: "rgba(130,11,11,1)" }} key={h} value={h}>{h}</MenuItem>
+            )}
+          </Select>
+        </FormControl>
+        
+        <GreenButton  hours = {hours}/>
+        {/* {props.userStore.timer.isOn ? <CountDown time={props.userStore.timer} /> : null} */}
+        {/* <button className="btn" id="timerbtn" onClick={stopTimerClick}>STOP TIMER</button> */}
       </div>
     </div>
   )

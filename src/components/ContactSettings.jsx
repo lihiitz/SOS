@@ -49,7 +49,7 @@ const ContactSettings = inject("userStore")(observer((props, ref) => {
     <div>
       <body>
       <Topic />
-      <Link to='/contacts'> <ArrowBackIosIcon /> </Link>
+      <Link to='/contacts' style={{textDecoration: "none"}}> <ArrowBackIosIcon style={{color:"white", fontSize:"30px", margin:'20px'}}/> </Link>
       <div className="textbox">
         <FormControl className={classes.margin}>
           <input

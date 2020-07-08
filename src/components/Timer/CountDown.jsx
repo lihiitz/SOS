@@ -41,6 +41,7 @@ class CountDown extends Component {
   componentDidMount() {
     // 
     const time = this.props.time
+    debugger
     const startH = time.startTime.hours 
     const startM = time.startTime.minutes
     const startS = time.startTime.seconds

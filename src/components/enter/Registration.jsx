@@ -155,7 +155,7 @@ const Registration = inject("userStore")(observer((props) => {
   }
   return (<div>
     <body>
-      <Link to='/'> <ArrowBackIosIcon /> </Link>
+      <Link to='/' style={{textDecoration: "none"}}> <ArrowBackIosIcon style={{color:"white", fontSize:"30px", margin:'20px'}}/> </Link>
       <div className="login-box">
         <h1>Registration</h1>
         <div className="textbox">
