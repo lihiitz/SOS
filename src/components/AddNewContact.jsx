@@ -93,7 +93,7 @@ const AddNewContact = inject("userStore")(observer((props) => {
           id="ContactText"
           helperText={validation.contactPhone}/>
         </div>
-        <button className="loginBtn" variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={addNewContact}>Add New Contact</button>
+        <Button className="loginBtn"style={{backgroundColor:"#202020", color:'white', border:'solid #c0392b 1px', marginBottom:"15px"}} variant="contained" color="primary" disabled={!isFormValid} disableElevation onClick={addNewContact}>Add New Contact</Button>
         </body>
     </div>
   )

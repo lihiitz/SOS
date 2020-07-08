@@ -17,7 +17,14 @@ import { useContext } from 'react' //import hook from react
 import { MyContext } from './components/Topic';
 import ContactSettings from './components/ContactSettings';
 import MapPage from './components/MapPage';
-import {subscribe} from './notifications/notifications-web-push';
+import { subscribe } from './notifications/notifications-web-push';
+import { ThemeProvider } from "@material-ui/styles";
+import {
+  CssBaseline,
+  AppBar,
+  Typography,
+  createMuiTheme
+} from "@material-ui/core";
 
 
 
@@ -71,7 +78,7 @@ class App extends Component {
 
           // if the endpoint is different, we need to update the user
           if (userModel?.notificationSubscription?.endpoint !== subscription?.endpoint) {
-         
+
             userModel.updateUser(userModel.name, userModel.phone, userModel.password, subscription)
           }
         }
@@ -86,28 +93,35 @@ class App extends Component {
     this.getLocation()
   }
 
+
   //TO DO ADD SMTH IF USER PASSWORD WRONG!
 
   render() {
     const value = { //object with context
       logout: this.logout,
     }
-
+    const theme = createMuiTheme({
+      palette: {
+        type: "dark"
+      }
+    });
     return (
-      <MyContext.Provider value={value}>
-        <Router>
-          <Route path="/" exact render={() => <EnterPage login={this.login} isLoged={this.state.isLoged} />} />
-          <Route path="/registration" exact render={() => <Registration login={this.login} isLoged={this.state.isLoged} />} />
-          {this.state.isLoged ? <Route path="/main" exact render={() => <Main />} /> : null}
-          <Route path="/profile" exact render={() => <Profile />} />
-          <Route path="/timer" exact render={() => <Timer />} />
-          <Route path="/contacts" exact render={() => <Contacts />} />
-          <Route path="/contactSettings" exact render={() => <ContactSettings />} />
+      <ThemeProvider theme={theme}>
+        <MyContext.Provider value={value}>
+          <Router>
+            <Route path="/" exact render={() => <EnterPage login={this.login} isLoged={this.state.isLoged} />} />
+            <Route path="/registration" exact render={() => <Registration login={this.login} isLoged={this.state.isLoged} />} />
+            {this.state.isLoged ? <Route path="/main" exact render={() => <Main />} /> : null}
+            <Route path="/profile" exact render={() => <Profile />} />
+            <Route path="/timer" exact render={() => <Timer />} />
+            <Route path="/contacts" exact render={() => <Contacts />} />
+            <Route path="/contactSettings" exact render={() => <ContactSettings />} />
 
-          <Route path="/sosMap" exact render={() => <MapPage />} />
+            <Route path="/sosMap" exact render={() => <MapPage />} />
 
-        </Router>
-      </MyContext.Provider >
+          </Router>
+        </MyContext.Provider >
+      </ThemeProvider>
 
     );
   }

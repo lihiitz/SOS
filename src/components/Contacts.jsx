@@ -44,7 +44,7 @@ const Contacts = inject("userStore")(observer((props) => {
         <Table id="ContactText" className={classes.table} aria-label="simple table">
           <TableBody>
             {rows.map((row) => (
-              <TableRow style={{ backgroundColor: 'black' }} key={row.contactName}>
+              <TableRow key={row.contactName}>
                 <TableCell style={{ color: '#DAD6D6' }} align="center">{row.contactName}</TableCell>
                 <TableCell style={{ color: '#DAD6D6' }} align="center">{row.contactPhone}</TableCell>
                 <TableCell align="center"><Link to={{

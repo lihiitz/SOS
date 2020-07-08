@@ -26,11 +26,15 @@ import { MyContext } from './Topic';
 const useStyles = makeStyles({
   list: {
     width: 250,
+    // background:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)",
   },
   fullList: {
     width: 'auto',
+    // background:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)"
   },
 });
+
+
 
 const Menu = inject("userStore")(observer((props) => {
   const classes = useStyles();
@@ -64,8 +68,10 @@ const Menu = inject("userStore")(observer((props) => {
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
+      // style={{backgroundColor:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)"}}
     >
-      <List style={{ background:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)"}}>
+      {/* style={{ background:"linear-gradient(90deg, rgba(130,11,11,1) 10%, rgba(191,46,31,1) 51%, rgba(83,6,6,1) 100%)"}} */}
+      <List >
         <Link id="navlinks" style={{textDecoration: "none", color: "white"}} to='/main'>
           <ListItem  button key='sos'>
             <ListItemIcon> <NotificationsActiveIcon /> </ListItemIcon>
@@ -112,7 +118,7 @@ const Menu = inject("userStore")(observer((props) => {
   return (
     <div>
       {['left'].map((anchor) => (
-        <React.Fragment key={anchor}>
+        <React.Fragment key={anchor} >
           <MenuIcon onClick={toggleDrawer(anchor, true)} style={{ color: 'white' }} />
           <SwipeableDrawer
             anchor={anchor}
