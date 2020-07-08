@@ -104,9 +104,7 @@ router.post('/timer/:id', async function (req, res) { //body = {hours: Number}
 
     const d = new Date()
     let user = await User.findById(req.params.id)
-    user.timer.isOn = true
-    user.timer.startTime = { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes() , timeStamp:Date.now()}
-    user.timer.duration = req.body.hours
+    user.timer = { isOn: true, duration: req.body.hours, notificationSent: false, startTime: { hours: d.getHours(), seconds: d.getSeconds(), minutes: d.getMinutes(), timeStamp: Date.now() } }
     const updatedUser = await user.save()
     if (updatedUser) {
         res.send({ msg: "good", user: updatedUser })
@@ -212,9 +210,11 @@ const sosCall = function (user, location) {
     const numbers = user.contacts.map(c => c.contactPhone)
     numbers.forEach(c => {
         console.log(location)
+        const url = location ? `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location: https://maps.google.com/?q=${location.lat},${location.lng}&to=${c}` : `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name}&to=${c}`
         const options = {
             'method': 'POST',
-            'url': `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location: https://maps.google.com/?q=${location.lat},${location.lng}&to=${c}`,
+            // 'url': `https://http-api.d7networks.com/send?username=pnwy7599&password=Uw2Lh3cO&dlr-method=POST&dlr-url=https://4ba60af1.ngrok.io/receive&dlr=yes&dlr-level=3&from=SOS-APP&content=SOS from ${user.name} in location: https://maps.google.com/?q=${location.lat},${location.lng}&to=${c}`,
+            'url': url,
             'headers': {
             },
             formData: {
@@ -307,14 +307,18 @@ const checkUserTimer = async function (user) { //for tests only! duration = 1 mi
     const endMS = startMS + durationMS
     const timeBeforeEnd = endMS - 15000
 
-    if (timeBeforeEnd  === nowMS || timeBeforeEnd  === (nowMS + 1000) || timeBeforeEnd === (nowMS - 1000)) {
-        console.log("WORK!")
+    // if (timeBeforeEnd === nowMS || timeBeforeEnd === (nowMS + 1000) || timeBeforeEnd === (nowMS - 1000)) {
+    if (timeBeforeEnd <= nowMS && !user.timer.notificationSent) {
         await webpush.sendNotification(user.notificationSubscription, payload)
+        user.timer.notificationSent = true
+        await user.save()
+        console.log("15 seconds before timer end");
     }
 
-    if (endMS >= nowMS) {
+    if (endMS <= nowMS) {
         console.log("sos")
-       // sosCall(user)
+        await webpush.sendNotification(user.notificationSubscription, payload)
+        // sosCall(user, null)
         user.timer.isOn = false
         await user.save()
     }
