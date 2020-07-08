@@ -2,7 +2,7 @@
 const express = require('express')
 const path = require('path')
 
-const { app } = require('./server')
+const { app } = require('./server-common')
 
 app.use(express.static(path.join(__dirname, 'build')));
 

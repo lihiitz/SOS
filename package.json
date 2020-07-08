@@ -99,7 +99,7 @@
   "scripts": {
     "start": "npm run server-production",
     "react-start": "node scripts/start.js",
-    "server": "node server-dev.js",
+    "server": "node server.js",
     "server-production": "node server-production.js",
     "build": "node scripts/build.js",
     "generateVAPID": "web-push generate-vapid-keys",
