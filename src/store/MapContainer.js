@@ -64,11 +64,11 @@ export class MapContainer {
     this.zoom = 12
   }
 
-  @action handleSos = async (location, name) => {
+  @action handleSos = async (location, name, socket) => {
     const d = new Date()
-    // const date = {year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), hours: d.getHours(), minutes: d.getMinutes() }
     const timeStamp = Date.now()
     const marker = await Axios.post(`/api/marker/`, { lat: location.latitude, lng: location.longitude, timeStamp, name })
+    socket.emit('new marker')
   }
 
   @action getColor = (point) => {

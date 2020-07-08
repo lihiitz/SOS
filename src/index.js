@@ -30,6 +30,7 @@ const axios = require('axios')
 
 const mapStore = new MapContainer()
 const userStore = new User()
+
 const stores = { userStore, mapStore }
 
 // let pkInstance = new PushKit("BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo", true);

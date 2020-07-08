@@ -20,6 +20,7 @@ import MapPage from './components/MapPage';
 import {subscribe} from './notifications/notifications-web-push';
 
 
+
 //create context
 @inject('userStore')
 @observer
@@ -29,6 +30,7 @@ class App extends Component {
     this.state = {
       isLoged: false
     }
+    // this.socket = io('http://localhost')
   }
 
   login = async () => {
@@ -59,6 +61,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.props.userStore.connectSocket()
     const temp = localStorage.getItem('phone')
     if (temp) {
       const func = async () => {
