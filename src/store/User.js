@@ -186,7 +186,7 @@ export class User {
     //   alert(JSON.stringify(error));
     // });
 
-  }
+  // }
 
 
 }
