@@ -62,7 +62,7 @@ class CountDown extends Component {
           </div>
         </div>
 
-        <p id="demo">{time_up}</p>
+        {/* <p id="demo">{time_up}</p> */}
         
       </div>
     )

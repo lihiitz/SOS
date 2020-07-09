@@ -175,8 +175,8 @@ export class User {
   @action makeCall = async () => {
     // Initialize phone number text input plugin
     const data = {
-      phoneNumber: '+972544257318',
-      salesNumber: '+972539528514'
+      phoneNumber: '+972544257318', //contsct
+      salesNumber: '+972539528514' //user
 
     }
     // Call our ajax endpoint on the server to initialize the phone call

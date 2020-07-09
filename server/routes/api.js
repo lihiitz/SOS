@@ -21,7 +21,7 @@ webpush.setVapidDetails("mailto:adelson1606@gmail.com", publicVapidKey, privateV
 
 router.post('/call', function (request, response) {
     var salesNumber = request.body.salesNumber;
-    var url = 'https://36bfcfecb919.ngrok.io' + '/outbound/' + encodeURIComponent(salesNumber); //CHANGE AND RUN NGROK!!!!!
+    var url = 'https://sosmob.herokuapp.com' + '/outbound/' + encodeURIComponent(salesNumber); //CHANGE AND RUN NGROK!!!!!
 
     var options = {
         to: request.body.phoneNumber,
@@ -154,7 +154,7 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
 router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
     const user = await User.findOneAndUpdate({ _id: req.params.id }, { marker: req.body })
     console.log(req.body.lat);
- //   sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
+    sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
     res.send(user)
 })
 
@@ -206,7 +206,15 @@ router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name
     res.send(user)
 })
 
-const sosCall = function (user, location) {
+const sosCall = async function (user, location) {
+    const payload3 = JSON.stringify({
+        title: 'SoSApp',
+        body: {
+            body: 'We send SOS to all your contacts',
+            icon: 'https://vignette.wikia.nocookie.net/starbase-fanon/images/2/28/SOS-icon.png/revision/latest?cb=20190809222911',
+        }
+    });
+    await webpush.sendNotification(user.notificationSubscription, payload3)
     const numbers = user.contacts.map(c => c.contactPhone)
     numbers.forEach(c => {
         console.log(location)

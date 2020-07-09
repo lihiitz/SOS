@@ -5,7 +5,8 @@ import '../styles/RedButton.css'
 const RedButton = inject('userStore', 'mapStore', 'socketStore')(observer((props) => {
   const sendSos = ()=> {
     props.userStore.handleSos()
-    props.mapStore.handleSos(props.userStore.location, "sos", props.socketStore.socket)    
+    props.mapStore.handleSos(props.userStore.location, "sos", props.socketStore.socket)  
+    props.userStore.makeCall()  
   }
   return (
     <div className="body">

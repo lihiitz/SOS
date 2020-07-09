@@ -4,13 +4,12 @@ import RedButton from './RedButton';
 import Topic from './Topic'
 
 
-const Main = inject("userStore")(observer( (props) => {
+const Main = inject("userStore")(observer((props) => {
 
   return (
     <div>
       <Topic />
       <RedButton />
-      <div onClick={props.userStore.makeCall}>TRY CALL</div>
     </div>
   )
 }))
