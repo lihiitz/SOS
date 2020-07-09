@@ -154,7 +154,7 @@ router.post(`/login`, function (req, res) {//body = {phon: string, password: str
 router.post(`/sos/:id`, async function (req, res) { //body = {lat: Number, lng: Number, name: String}
     const user = await User.findOneAndUpdate({ _id: req.params.id }, { marker: req.body })
     console.log(req.body.lat);
-    sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
+ //   sosCall(user, req.body) //DO NOT REMOVE THISSSSSS. UNCOMMENT WHEN ALL SET
     res.send(user)
 })
 

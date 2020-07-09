@@ -51,9 +51,9 @@ const Profile = inject("userStore")(observer((props, ref) => {
       <div style={{ display: 'grid', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ display: "block" }}>
       <div className="textbox">
-      <FormControl  id="profileText" className={classes.margin}>
+      <FormControl  id="profileText" className={classes.margin} >
         <InputLabel id="profileText" htmlFor="input-with-icon-adornment"></InputLabel>
-        <AccountCircle id="123" className="profileIcon"/>
+        <AccountCircle id="123" className="profileIcon"  />
         <input
           placeholder="  Name"
           id="profileText"
@@ -68,7 +68,7 @@ const Profile = inject("userStore")(observer((props, ref) => {
       <div className="textbox">
       <FormControl className={classes.margin}>
         <InputLabel id="profileText" htmlFor="input-with-icon-adornment"></InputLabel>
-        <PhoneIcon className="profileIcon"/>
+        <PhoneIcon className="profileIcon" />
         <input
           placeholder="  Phone"
           id="profileText"

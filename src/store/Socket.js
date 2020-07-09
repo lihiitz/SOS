@@ -17,7 +17,7 @@ export class Socket {
   }
 
   @action connectSocket () {
-    this.socket = io.connect('http://localhost:3001')
+    this.socket = io.connect('/api')
     this.socket.on('refresh', () => {
       console.log("in socket refresh");
       this.map.getMarkers()
