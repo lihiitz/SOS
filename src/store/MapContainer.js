@@ -15,6 +15,8 @@ export class MapContainer {
   @observable zones = []
   
   constructor(){
+    this.radius = 2000//in metersssssssssss
+    this.zoom = 12
     this.center = {
       lat: 31.880099,
       lng: 34.820535
@@ -28,7 +30,10 @@ export class MapContainer {
         circle: {
           radius: 0,
           options: {
-            strokeColor: ""
+            strokeColor: "",
+            strokeOpacity: 0.8,
+            fillColor: "",
+            fillOpacity: 0.35,
           }
         }
       },
@@ -36,7 +41,7 @@ export class MapContainer {
         count: 0,
         color: '',
         lat: 32.072741,
-        lng: 34.771058, //tel aviv
+        lng: 34.771058, //Bialik st 22 tel aviv
         circle: {
           radius: 0,
           options: {
@@ -44,7 +49,36 @@ export class MapContainer {
             strokeOpacity: 0.8,
             fillColor: "",
             fillOpacity: 0.35,
-
+          }
+        }
+      },
+      {
+        count: 0,
+        color: '',
+        lat: 31.986849,
+        lng: 34.850230, //kfar habad
+        circle: {
+          radius: 0,
+          options: {
+            strokeColor: "",
+            strokeOpacity: 0.8,
+            fillColor: "",
+            fillOpacity: 0.35,
+          }
+        }
+      },
+      {
+        count: 0,
+        color: '',
+        lat: 32.036040,
+        lng: 34.762729, //Wolfson medical center
+        circle: {
+          radius: 0,
+          options: {
+            strokeColor: "",
+            strokeOpacity: 0.8,
+            fillColor: "",
+            fillOpacity: 0.35,
           }
         }
       },
@@ -56,13 +90,14 @@ export class MapContainer {
         circle: {
           radius: 0,
           options: {
-            strokeColor: ""
+            strokeColor: "",
+            strokeOpacity: 0.8,
+            fillColor: "",
+            fillOpacity: 0.35,
           }
         }
       }
     ]
-    this.radius = 2000//in metersssssssssss
-    this.zoom = 12
   }
 
   @action handleSos = async (location, name, socket) => {
@@ -130,7 +165,7 @@ export class MapContainer {
       if (count > 10){
         z.color = 'red'
       }else if (count <= 10 && count > 5){
-        z.color = 'purple'
+        z.color = 'orange'
       }else{
         z.color = 'yellow'
       }
