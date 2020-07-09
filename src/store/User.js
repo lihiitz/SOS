@@ -180,7 +180,7 @@ export class User {
 
     }
     // Call our ajax endpoint on the server to initialize the phone call
-    await Axios.post(`/api/call/`, data)
+    await Axios.post(`/call/`, data)
 
     // }).fail(function (error) {
     //   alert(JSON.stringify(error));
