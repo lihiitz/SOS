@@ -17,7 +17,7 @@ export class Socket {
   }
 
   @action connectSocket () {
-    this.socket = io.connect('/api')
+    this.socket = io.connect('/')
     this.socket.on('refresh', () => {
       console.log("in socket refresh");
       this.map.getMarkers()
