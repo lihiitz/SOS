@@ -6,10 +6,12 @@ import { Provider } from 'mobx-react'
 import { User } from './store/User'
 import { MapContainer } from './store/MapContainer'
 import { Socket } from './store/Socket';
+import io from 'socket.io-client';
 // import Axios from 'axios'
 const axios = require('axios')
 
 
+const socket = io();
 
 
 // const startPushReg = async () => {
