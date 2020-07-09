@@ -19,42 +19,42 @@ const privateVapidKey = "SSAMmgW-Ytx0tMlNAfgUuL-h731zMjiQDCmX25NUJZ4";
 webpush.setVapidDetails("mailto:adelson1606@gmail.com", publicVapidKey, privateVapidKey)
 
 
-router.post('/call', function (request, response) {
-    var salesNumber = request.body.salesNumber;
-    var url = 'https://sosmob.herokuapp.com' + '/outbound/' + encodeURIComponent(salesNumber); //CHANGE AND RUN NGROK!!!!!
+// router.post('/call', function (request, response) {
+//     var salesNumber = request.body.salesNumber;
+//     var url = 'https://129134ddc7a0.ngrok.io' + '/outbound/' + encodeURIComponent(salesNumber); //CHANGE AND RUN NGROK!!!!!
+//     console.log(url)
+//     var options = {
+//         to: request.body.phoneNumber,
+//         from: '+18504469060',
+//         url: url
+//     };
 
-    var options = {
-        to: request.body.phoneNumber,
-        from: '+18504469060',
-        url: url
-    };
+//     client.calls.create(options)
+//         .then((message) => {
+//             console.log(message.responseText);
+//             response.send({
+//                 message: 'Thank you! We will be calling you shortly.',
+//             });
+//         })
+//         .catch((error) => {
+//             console.log(error);
+//             response.status(500).send(error);
+//         });
+// });
 
-    client.calls.create(options)
-        .then((message) => {
-            console.log(message.responseText);
-            response.send({
-                message: 'Thank you! We will be calling you shortly.',
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-            response.status(500).send(error);
-        });
-});
+// // Return TwiML instructions for the outbound call
+// router.post('/outbound/:salesNumber', function (request, response) {
+//     var salesNumber = request.params.salesNumber;
+//     console.log(salesNumber)
+//     var twimlResponse = new VoiceResponse();
 
-// Return TwiML instructions for the outbound call
-router.post('/outbound/:salesNumber', function (request, response) {
-    var salesNumber = request.params.salesNumber;
-    console.log(salesNumber)
-    var twimlResponse = new VoiceResponse();
+//     twimlResponse.say('We will connect you as soon as possible',
+//         { voice: 'alice' });
+//     console.log("making call")
+//     twimlResponse.dial(salesNumber);
 
-    twimlResponse.say('We will connect you as soon as possible',
-        { voice: 'alice' });
-    console.log("making call")
-    twimlResponse.dial(salesNumber);
-
-    response.send(twimlResponse.toString());
-});
+//     response.send(twimlResponse.toString());
+// });
 
 
 // client.calls
@@ -215,7 +215,7 @@ router.put(`/contactSettingsD/:id`, async function (req, res) { // body : { name
 })
 
 const sosCall = async function (user, location) {
-   
+
     const numbers = user.contacts.map(c => c.contactPhone)
     numbers.forEach(c => {
         console.log(location)

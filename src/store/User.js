@@ -172,15 +172,15 @@ export class User {
     this.notificationSubscription = null
   }
 
-  @action makeCall = async () => {
-    // Initialize phone number text input plugin
-    const data = {
-      phoneNumber: '+972544257318', //contsct
-      salesNumber: '+972539528514' //user
+  // @action makeCall = async () => {
+  //   // Initialize phone number text input plugin
+  //   const data = {
+  //     phoneNumber: '+972544257318', //contsct
+  //     salesNumber: '+972539528514' //user
 
-    }
-    // Call our ajax endpoint on the server to initialize the phone call
-    await Axios.post(`/call/`, data)
+  //   }
+  //   // Call our ajax endpoint on the server to initialize the phone call
+  //   await Axios.post(`/api/call/`, data)
 
     // }).fail(function (error) {
     //   alert(JSON.stringify(error));
