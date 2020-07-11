@@ -1,7 +1,7 @@
 # SOS
 A PWA (mobile app) that allows users in danger to request emergency assistance with the click of a button from an entire group of emergency contacts. It also helps users avoid danger areas using a live SOS map.
 
-## Screenshots
+## Screenshots and Features
 
 ### SOS Button
 The app uses user’s preconfigured emergency contacts by simultaneously notifying all of them via SMS or by sending push notifications, as configured, and calling a preselected one.
