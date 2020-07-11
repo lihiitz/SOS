@@ -1,68 +1,18 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# SOS
+A PWA (mobile app) that allows users in danger to request emergency assistance with the click of a button from an entire group of emergency contacts. It also helps users avoid danger areas using a live SOS map.
 
-## Available Scripts
+## Screenshots
+The app uses user’s preconfigured emergency contacts by simultaneously notifying all of them via SMS or by sending push notifications, as configured, and calling a preselected one.
+<p align="center"><img src="sos.png" width="300" /></p>
 
-In the project directory, you can run:
+Contacts receive a link that lets them see the user’s location on a map.
+<p align="center"><img src="sosMsg.png" width="300" /></p>
 
-### `npm start`
+Users can see all other recent SOS calls on a live map which updates in real-time, with those from the last hour easily noticeable by a bouncy effect. The map also shows different zones as colored circles, where the color corresponds to the number of SOS calls in that zone. This allows users to avoid danger areas for example.
+<p align="center"><img src="map.png" width="300" /></p>
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Users can also schedule an SOS call ahead of time, in case they walk into a potentially dangerous situation and may not be able to initiate the SOS when they need it. 
+<p align="center"><img src="timer.png" width="300" /></p>
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+The app gives users the chance to cancel the scheduled SOS shortly before it is initiated to avoid unintentionally sending a false alarm.
+<p align="center"><img src="push-notification.jpg" width="300" /></p>
