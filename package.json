@@ -11,7 +11,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/pickers": "^3.2.10",
     "@react-google-maps/api": "^1.9.7",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "get-google-fonts": "^1.2.2",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
